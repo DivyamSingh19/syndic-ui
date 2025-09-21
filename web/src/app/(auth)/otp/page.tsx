@@ -8,11 +8,11 @@ const OTP = () => {
     <AL>
       <div className="flex flex-col gap-4 items-center text-center">
         <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
-          Verify Your Account
+          Verify Account
         </h1>
-        <p className="text-xs sm:text-sm font-medium text-gray-400 px-2">
+        <h4 className="text-xs sm:text-sm font-medium text-gray-400 px-2">
           Enter the verification code sent to your device
-        </p>
+        </h4>
         <div className="w-full flex justify-center mt-2">
           <OtpForm />
         </div>
