@@ -21,8 +21,8 @@ import {
 } from "@/components/ui/form";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import LoaderSpinner from "./LoaderSpinner";
-
+import LoaderSpinner from "../LoaderSpinner";
+import { verifyOtp } from "@/lib/api";
 interface FormData {
   pin: string;
 }
@@ -40,24 +40,17 @@ const OtpForm = () => {
   const onSubmit = async (values: FormData) => {
     try {
       setIsLoading(true);
-      const response = await axios.post(
-        "",
-        {
-          pin: values.pin,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await verifyOtp({
+        pin: values.pin,
+      });
 
       const data = response.data;
       toast.success("OTP submitted successfully!");
       router.push("/");
     } catch (error) {
-      setIsLoading(false);
       toast.error(error?.response?.data?.message || "Error in submitting OTP");
+    } finally {
+      setIsLoading(false);
     }
   };
 

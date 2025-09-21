@@ -15,8 +15,8 @@ import {
 } from "@/components/ui/form";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import LoaderSpinner from "./LoaderSpinner";
-
+import LoaderSpinner from "../LoaderSpinner";
+import { loginUser } from "@/lib/api";
 interface FormData {
   email: string;
   password: string;
@@ -36,25 +36,18 @@ const LoginForm = () => {
   const onSubmit = async (values: FormData) => {
     try {
       setIsLoading(true);
-      const response = await axios.post(
-        "",
-        {
-          email: values.email,
-          password: values.password,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await loginUser({
+        email: values.email,
+        password: values.password,
+      });
 
       const data = response.data;
       toast.success("User Logged successfully!");
       router.push("/");
     } catch (error) {
-      setIsLoading(false);
       toast.error(error?.response?.data?.message || "Error in logging account");
+    } finally {
+      setIsLoading(false);
     }
   };
 

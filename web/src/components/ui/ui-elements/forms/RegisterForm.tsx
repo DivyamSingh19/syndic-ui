@@ -15,8 +15,8 @@ import {
 } from "@/components/ui/form";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import LoaderSpinner from "./LoaderSpinner";
-
+import LoaderSpinner from "../LoaderSpinner";
+import { registerUser } from "@/lib/api";
 interface FormData {
   firstname: string;
   lastname: string;
@@ -40,29 +40,23 @@ const RegisterForm = () => {
   const onSubmit = async (values: FormData) => {
     try {
       setIsLoading(true);
-      const response = await axios.post(
-        "",
-        {
-          firstname: values.firstname,
-          lastname: values.lastname,
-          email: values.email,
-          password: values.password,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+
+      const response = await registerUser({
+        firstname: values.firstname,
+        lastname: values.lastname,
+        email: values.email,
+        password: values.password,
+      });
 
       const data = response.data;
       toast.success("User registered successfully!");
       router.push("/otp");
     } catch (error) {
-      setIsLoading(false);
       toast.error(
         error?.response?.data?.message || "Error in creating account"
       );
+    } finally {
+      setIsLoading(false);
     }
   };
 

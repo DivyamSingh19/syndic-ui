@@ -1,7 +1,7 @@
 import React from "react";
 import RegisterForm from "@/components/ui/ui-elements/forms/RegisterForm";
 import OtpForm from "@/components/ui/ui-elements/forms/OtpForm";
-import Logo from "@/components/ui/logo";
+import Logo from "@/components/ui/ui-elements/logo";
 
 const page = () => {
   return (
