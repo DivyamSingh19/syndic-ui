@@ -57,7 +57,7 @@ const RegisterForm = () => {
 
       const data = response.data;
       toast.success("User registered successfully!");
-      router.push("/");
+      router.push("/otp");
     } catch (error) {
       setIsLoading(false);
       toast.error(

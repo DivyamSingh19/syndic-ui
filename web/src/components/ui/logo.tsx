@@ -9,13 +9,13 @@ const Logo = ({ className, size = "default" }: Props) => {
   const getSizeClass = () => {
     switch (size) {
       case "large":
-        return "text-[8rem] sm:text-[12rem] md:text-[15rem]";
+        return "text-[6rem] sm:text-[8rem] md:text-[10rem]";
       case "massive":
-        return "text-[10rem] sm:text-[15rem] md:text-[20rem]";
+        return "text-[8rem] sm:text-[10rem] md:text-[12rem]";
       case "responsive":
-        return "text-[6rem] sm:text-[8rem] md:text-[12rem] lg:text-[15rem] xl:text-[18rem]";
+        return "text-[4rem] sm:text-[5rem] md:text-[7rem] lg:text-[10rem] xl:text-[14rem]";
       default:
-        return "text-6xl sm:text-7xl md:text-8xl lg:text-9xl";
+        return "text-4xl sm:text-5xl md:text-6xl lg:text-7xl";
     }
   };
 
