@@ -1,11 +1,26 @@
 "use client";
 import React from "react";
-import OtpForm from "@/components/ui/forms/OtpForm";
+import OtpForm from "@/components/ui/ui-elements/forms/OtpForm";
 import Logo from "@/components/ui/logo";
 
 const OTP = () => {
   return (
     <div className="h-screen overflow-hidden relative">
+      <div
+        className="absolute top-0 right-0 pointer-events-none z-0"
+        style={{
+          width: "750px",
+          height: "550px",
+          background: `
+      radial-gradient(ellipse at top right, rgba(255, 100, 40, 0.35) 0%, transparent 70%),
+      radial-gradient(ellipse at 60% 30%, rgba(255, 140, 60, 0.22) 0%, transparent 85%)
+    `,
+          filter: "blur(95px)",
+          transform: "translate(15%, -25%)",
+          mixBlendMode: "screen",
+        }}
+      />
+
       <div className="h-full grid grid-rows-[1fr_auto] lg:grid-rows-1 lg:flex lg:flex-col">
         <div className="flex flex-col gap-2 sm:gap-3 md:gap-4 items-center justify-center lg:justify-start lg:pt-16 xl:pt-20 px-4 sm:px-6 md:px-8">
           <div className="flex flex-col gap-1 sm:gap-1 md:gap-2 text-center">
