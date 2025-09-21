@@ -12,7 +12,7 @@ const BestRoute = ({ onClick, className, disabled }: Props) => {
     <button
       className={`
         group relative flex items-center justify-center gap-2 px-6 py-3 
-        bg-blue-600 hover:bg-blue-700 text-white 
+        bg-orange-600 hover:bg-orange-700 text-white 
         rounded-lg font-medium 
         transform hover:scale-[1.02] active:scale-[0.98]
         transition-all duration-200 ease-in-out
@@ -27,7 +27,7 @@ const BestRoute = ({ onClick, className, disabled }: Props) => {
       onClick={disabled ? undefined : onClick}
       disabled={disabled}
     >
-      <div className="absolute inset-0 -z-10 rounded-lg bg-gradient-to-r from-blue-300 to-indigo-600 opacity-20 group-hover:opacity-30 transition-opacity blur-sm" />
+      <div className="absolute inset-0 -z-10 rounded-lg bg-gradient-to-r from-orange-300 to-orange-600 opacity-20 group-hover:opacity-30 transition-opacity blur-sm" />
       <IconNavigationBolt size={20} />
       <span className="font-semibold group-hover:translate-x-1 transition-transform">
         Get Best Route
