@@ -6,6 +6,7 @@ import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
+  InputOTPSeparator,
 } from "@/components/ui/input-otp";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
@@ -59,42 +60,77 @@ const OtpForm = () => {
       toast.error(error?.response?.data?.message || "Error in submitting OTP");
     }
   };
- return (
-   <Form {...form}>
-     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-       <FormField
-         control={form.control}
-         name="pin"
-         render={({ field }) => (
-           <FormItem className="space-y-5">
-             <FormControl>
-               <div className="flex justify-center">
-                 <InputOTP maxLength={6} {...field}>
-                   <InputOTPGroup>
-                     <InputOTPSlot index={0} />
-                     <InputOTPSlot index={1} />
-                     <InputOTPSlot index={2} />
-                     <InputOTPSlot index={3} />
-                     <InputOTPSlot index={4} />
-                     <InputOTPSlot index={5} />
-                   </InputOTPGroup>
-                 </InputOTP>
-               </div>
-             </FormControl>
-             <FormMessage />
-           </FormItem>
-         )}
-       />
-       <Button type="submit" className="w-full max-w-sm text-md" disabled={isLoading}>
-         {isLoading ? (
-           <LoaderSpinner message="Verifying..." color="white" />
-         ) : (
-           "Submit"
-         )}
-       </Button>
-     </form>
-   </Form>
- );
+
+  return (
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-4 sm:space-y-6 w-full max-w-xs sm:max-w-sm md:max-w-md mx-auto"
+      >
+        <FormField
+          control={form.control}
+          name="pin"
+          render={({ field }) => (
+            <FormItem className="space-y-3 sm:space-y-5">
+              <FormControl>
+                <div className="flex justify-center">
+                  <InputOTP
+                    maxLength={6}
+                    {...field}
+                    className="text-sm sm:text-base"
+                  >
+                    <InputOTPGroup>
+                      <InputOTPSlot
+                        index={0}
+                        className="h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14"
+                      />
+                      <InputOTPSlot
+                        index={1}
+                        className="h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14"
+                      />
+                      <InputOTPSlot
+                        index={2}
+                        className="h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14"
+                      />
+                    </InputOTPGroup>
+                    <InputOTPSeparator />
+                    <InputOTPGroup>
+                      <InputOTPSlot
+                        index={3}
+                        className="h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14"
+                      />
+                      <InputOTPSlot
+                        index={4}
+                        className="h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14"
+                      />
+                      <InputOTPSlot
+                        index={5}
+                        className="h-10 w-10 sm:h-12 sm:w-12 md:h-14 md:w-14"
+                      />
+                    </InputOTPGroup>
+                  </InputOTP>
+                </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <div className="flex justify-center">
+          <Button
+            type="submit"
+            className="w-full max-w-xs sm:max-w-sm h-9 sm:h-10 md:h-11 text-sm sm:text-base font-medium"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <LoaderSpinner message="Verifying..." color="white" />
+            ) : (
+              "Submit"
+            )}
+          </Button>
+        </div>
+      </form>
+    </Form>
+  );
 };
 
 export default OtpForm;

@@ -33,7 +33,7 @@ const LoginForm = () => {
     },
   });
 
-  const onSubmit = async (values:FormData) => {
+  const onSubmit = async (values: FormData) => {
     try {
       setIsLoading(true);
       const response = await axios.post(
@@ -57,32 +57,26 @@ const LoginForm = () => {
       toast.error(error?.response?.data?.message || "Error in logging account");
     }
   };
+
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-4 w-full max-w-sm 
-      sm:max-w-md 
-      md:max-w-lg 
-      lg:max-w-xl 
-      xl:max-w-2xl 
-      mx-auto 
-      px-4 
-      sm:px-6 
-      md:px-30 "
+        className="space-y-3 sm:space-y-4 w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg mx-auto px-2 sm:px-4"
       >
-        <div className="flex flex-col gap-4 w-full">
+        <div className="flex flex-col gap-3 sm:gap-4 w-full">
           <FormField
             control={form.control}
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel className="text-sm sm:text-base">Email</FormLabel>
                 <FormControl>
                   <Input
                     type="email"
                     placeholder="jamesbond@example.com"
                     {...field}
+                    className="h-9 sm:h-10 md:h-11 text-sm sm:text-base"
                   />
                 </FormControl>
                 <FormMessage />
@@ -94,12 +88,13 @@ const LoginForm = () => {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel className="text-sm sm:text-base">Password</FormLabel>
                 <FormControl>
                   <Input
                     type="password"
                     placeholder="••••••••"
                     {...field}
+                    className="h-9 sm:h-10 md:h-11 text-sm sm:text-base"
                   />
                 </FormControl>
                 <FormMessage />
@@ -108,7 +103,11 @@ const LoginForm = () => {
           />
         </div>
 
-        <Button type="submit" disabled={isLoading} className="w-full">
+        <Button
+          type="submit"
+          disabled={isLoading}
+          className="w-full h-9 sm:h-10 md:h-11 text-sm sm:text-base font-medium mt-4 sm:mt-6"
+        >
           {isLoading ? (
             <LoaderSpinner message="Logging In..." color="white" />
           ) : (
