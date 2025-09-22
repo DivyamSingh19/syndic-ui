@@ -2,7 +2,7 @@ import React from "react";
 
 interface Props {
   className?: string;
-  size?: "default" | "large" | "massive" | "responsive";
+  // size?: "default" | "large" | "massive" | "responsive";
 }
 
 const Logo = ({ className }: Props) => {

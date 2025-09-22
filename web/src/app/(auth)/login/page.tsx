@@ -7,10 +7,10 @@ const Login = () => {
   return (
     <AL>
       <div className="flex flex-col gap-2 text-center">
-        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight">
+        <h1 className="text-2xl sm:text-3xl md:text-6xl lg:text-7xl font-bold  max-w-fit mx-auto whitespace-nowrap">
           Welcome Back!
         </h1>
-        <h4 className="text-xs sm:text-sm font-medium text-gray-400 px-2">
+        <h4 className="text-xs sm:text-sm font-medium  text-muted-foreground  px-2">
           Let&apos;s get you signed in securely.
         </h4>
       </div>
