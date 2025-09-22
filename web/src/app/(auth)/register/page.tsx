@@ -7,10 +7,10 @@ const Register = () => {
   return (
     <AL>
       <div className="flex flex-col gap-2 text-center">
-        <h1 className="text-2xl sm:text-3xl md:text-6xl lg:text-7xl font-bold max-w-fit mx-auto whitespace-nowrap">
+        <h1 className="text-2xl sm:text-3xl md:text-6xl lg:text-7xl font-inter max-w-fit mx-auto whitespace-nowrap">
           Create an account
         </h1>
-        <h4 className="text-xs sm:text-sm font-medium text-muted-foreground px-2">
+        <h4 className="font-inter text-xs sm:text-sm font-medium text-muted-foreground px-2">
           Join thousands of users managing their finances with ease
         </h4>
       </div>

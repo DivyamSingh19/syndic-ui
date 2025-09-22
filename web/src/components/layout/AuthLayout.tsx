@@ -14,7 +14,7 @@ const AL: React.FC<AuthLayoutProps> = ({ children }) => {
         <div className="w-full  p-6 ">{children}</div>
       </main>
       <footer className="relative z-10 flex justify-center pb-8">
-        <Logo className="text-white" />
+        <Logo size="responsive" className="text-white" />
       </footer>
     </div>
   );

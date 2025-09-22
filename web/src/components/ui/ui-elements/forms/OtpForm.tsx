@@ -112,17 +112,7 @@ const OtpForm = () => {
         <div className="flex justify-center">
           <Button
             type="submit"
-            className="w-1/2 sm:w-2/3 md:w-1/3 lg:w-1/4 
-    h-9 sm:h-10 md:h-11 lg:h-11
-    text-xs sm:text-sm md:text-base lg:text-base
-    font-medium mt-4 sm:mt-6
-    rounded-3xl 
-    bg-gradient-to-r from-[#221d1a] via-[#251f18] to-[#271f1b] 
-    text-gray-200 hover:text-white hover:shadow-lg
-    border px-4 sm:px-5 py-1 shadow-sm
-    transition-all duration-200
-    disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50
-    focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
+            className="w-1/2 sm:w-2/3 md:w-1/3 h-9 sm:h-10 md:h-11 text-center text-xs sm:text-sm md:text-base lg:text-base font-medium mt-4 sm:mt-6 rounded-3xl bg-gradient-to-r from-[#221d1a] via-[#251f18] to-[#271f1b] text-gray-200 hover:text-white hover:shadow-lg border px-4 sm:px-5 py-1 shadow-sm transition-all duration-200 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
             disabled={isLoading}
           >
             {isLoading ? (

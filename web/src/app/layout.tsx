@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import {Inter,League_Gothic} from "next/font/google"
+import {Inter,League_Gothic,Anton,Roboto_Flex} from "next/font/google"
 import "./globals.css";
 
 const inter = Inter({
@@ -8,10 +8,18 @@ const inter = Inter({
 })
 
 const gothic = League_Gothic({
-  weight:"400",
+  weight: "400",
   subsets: ["latin"],
-})
+});
 
+const anton = Anton({
+  weight: "400",
+  subsets: ["latin"],
+});
+
+const roboto = Roboto_Flex({
+  subsets: ["latin"],
+});
 export const metadata: Metadata = {
   title: "Syndic-ui",
   description: "We ball mofos",
@@ -25,7 +33,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body
-        className={`${inter} ${gothic} antialiased`}
+        className={`${inter} ${anton} antialiased`}
       >
         {children}
       </body>
