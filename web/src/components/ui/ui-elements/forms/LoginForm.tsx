@@ -63,13 +63,13 @@ const LoginForm = () => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-sm sm:text-base">Email</FormLabel>
+                <FormLabel className="text-sm sm:text-base  ">Email</FormLabel>
                 <FormControl>
                   <Input
                     type="email"
                     placeholder="jamesbond@example.com"
                     {...field}
-                    className="h-9 sm:h-10 md:h-11 text-sm sm:text-base"
+                    className="h-9 sm:h-10 md:h-11 text-sm sm:text-base rounded-3xl"
                   />
                 </FormControl>
                 <FormMessage />
@@ -81,13 +81,13 @@ const LoginForm = () => {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-sm sm:text-base">Password</FormLabel>
+                <FormLabel className="text-sm sm:text-base ">Password</FormLabel>
                 <FormControl>
                   <Input
                     type="password"
                     placeholder="••••••••"
                     {...field}
-                    className="h-9 sm:h-10 md:h-11 text-sm sm:text-base"
+                    className="h-9 sm:h-10 md:h-11 text-sm sm:text-base rounded-3xl"
                   />
                 </FormControl>
                 <FormMessage />
@@ -95,18 +95,19 @@ const LoginForm = () => {
             )}
           />
         </div>
-
+      <div className="flex items-center justify-center"> 
         <Button
           type="submit"
           disabled={isLoading}
-          className="w-full h-9 sm:h-10 md:h-11 text-sm sm:text-base font-medium mt-4 sm:mt-6"
+          className="w-1/2 h-9 sm:h-10 md:h-11 text-sm sm:text-base font-medium mt-4 sm:mt-6 rounded-3xl"
         >
           {isLoading ? (
             <LoaderSpinner message="Logging In..." color="white" />
           ) : (
-            "Login"
+            "Login ->"
           )}
         </Button>
+        </div>
       </form>
     </Form>
   );

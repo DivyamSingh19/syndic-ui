@@ -6,8 +6,8 @@ const Gradient = () => {
       <div
         className="absolute top-0 right-0 pointer-events-none z-0"
         style={{
-          width: "750px",
-          height: "550px",
+          width: "1550px",
+          height: "650px",
           background: `
       radial-gradient(ellipse at top right, rgba(255, 100, 40, 0.35) 0%, transparent 70%),
       radial-gradient(ellipse at 60% 30%, rgba(255, 140, 60, 0.22) 0%, transparent 85%)
