@@ -230,14 +230,23 @@ const phoneCodes = [
   { value: "+263", label: "Zimbabwe" },
 ];
 
-const PhoneCodeSelector = () => {
+
+interface PhoneCodeSelectorProps {
+  onValueChange?: (value: string) => void;
+  value?: string;
+}
+
+const PhoneCodeSelector = ({
+  onValueChange,
+  value,
+}: PhoneCodeSelectorProps) => {
   return (
-    <Select>
+    <Select value={value} onValueChange={onValueChange}>
       <SelectTrigger
         size="default"
         className="inline-flex items-center justify-between w-auto min-w-[80px] px-3 py-1 h-9"
       >
-        <SelectValue placeholder="Select Code" />
+        <SelectValue placeholder="Code" />
       </SelectTrigger>
       <SelectContent>
         {phoneCodes.map((phoneCode) => (
