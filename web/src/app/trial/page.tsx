@@ -12,14 +12,17 @@ import Back from "@/components/ui/ui-elements/buttons/back";
 import BestRoute from "@/components/ui/ui-elements/buttons/bestroute";
 import PlatformPin from "@/components/ui/ui-elements/PlatformPin";
 import PaymentSuccess from "@/components/ui/ui-elements/Success";
+import { AppSidebar } from "@/components/app-sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
+
 const page = () => {
   const [pin, setPin] = useState("");
 
   return (
     <div className="flex flex-col gap-4 items-center justify-center min-h-screen">
-      {/* <RegisterForm /> */}
-      {/* <OtpForm/> */}
-      {/* <Logo /> */}
+      <RegisterForm />
+      <OtpForm />
+      <Logo />
       <CountrySelector />
       <FiatSelector />
       <CurrencySelector />
@@ -38,6 +41,9 @@ const page = () => {
         recipient="Test Store"
         onComplete={() => console.log("Success animation completed!")}
       />
+      <SidebarProvider>
+        <AppSidebar />
+      </SidebarProvider>
     </div>
   );
 };

@@ -1,11 +1,11 @@
 import React from 'react'
 
-const PastTransactions = () => {
+const FailedTransactions = () => {
   return (
     <div className="flex flex-col justify-center items-center">
-      Past Transactions
+      Failed Transactions
     </div>
   );
 }
 
-export default PastTransactions
+export default FailedTransactions

@@ -1,27 +1,13 @@
 "use client";
-
 import * as React from "react";
 import {
-  IconCamera,
-  IconChartBar,
-  IconDashboard,
-  IconDatabase,
-  IconFileAi,
-  IconFileDescription,
-  IconFileWord,
-  IconFolder,
-  IconHelp,
-  IconInnerShadowTop,
-  IconListDetails,
-  IconReport,
-  IconSearch,
-  IconSettings,
+  IconSend,
   IconUsers,
+  IconX,
+  IconHistory,
+  IconInnerShadowTop,
 } from "@tabler/icons-react";
-
-import { NavDocuments } from "@/components/nav-documents";
 import { NavMain } from "@/components/nav-main";
-import { NavSecondary } from "@/components/nav-secondary";
 import { NavUser } from "@/components/nav-user";
 import {
   Sidebar,
@@ -31,41 +17,37 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarGroup
 } from "@/components/ui/sidebar";
 
 const data = {
   user: {
-    name: "shadcn",
+    name: "morpheus",
     email: "m@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
   navMain: [
     {
-      title: "Dashboard",
-      url: "/dashboard",
-      icon: IconDashboard,
-    },
-    {
       title: "Create Payment",
       url: "/dashboard/create-payment",
-      icon: IconListDetails,
+      icon: IconSend,
     },
     {
       title: "Contacts",
       url: "/dashboard/contacts",
-      icon: IconChartBar,
+      icon: IconUsers,
     },
     {
       title: "Failed Transactions",
       url: "/dashboard/failed-transactions",
-      icon: IconFolder,
+      icon: IconX,
     },
     {
       title: "Past Transactions",
       url: "/dashboard/past-transactions",
-      icon: IconUsers,
-    }
-  ]
+      icon: IconHistory,
+    },
+  ],
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {

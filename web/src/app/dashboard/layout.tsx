@@ -1,9 +1,11 @@
-import React from 'react'
-
-const Dash = () => {
-  return (
-    <div>Dash</div>
-  )
+import React, { ReactNode } from "react";
+import DL from "@/components/layout/DashboardLayout";
+interface DashProps {
+  children: ReactNode;
 }
 
-export default Dash
+const Dash: React.FC<DashProps> = ({ children }) => {
+  return <DL>{children}</DL>;
+};
+
+export default Dash;
