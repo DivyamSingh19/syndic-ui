@@ -14,19 +14,26 @@ import PlatformPin from "@/components/ui/ui-elements/PlatformPin";
 import PaymentSuccess from "@/components/ui/ui-elements/Success";
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
-
+import PhoneCodeSelector from "@/components/ui/ui-elements/selectors/PhoneCodeSelector";
+import EditProfileForm from "@/components/ui/ui-elements/forms/EditProfileForm";
 const page = () => {
-  const [pin, setPin] = useState("");
+  const [pin, setPin] = useState<number>(0);
 
   return (
     <div className="flex flex-col gap-4 items-center justify-center min-h-screen">
-      <RegisterForm />
+      {/* <RegisterForm />
       <OtpForm />
-      <Logo />
-      <CountrySelector />
-      <FiatSelector />
-      <CurrencySelector />
-      <PlatformSelector />
+      <Logo /> */}
+      <EditProfileForm/>
+
+      {/* <div className="flex justify-center gap-3">
+        <CountrySelector />
+        <FiatSelector />
+        <CurrencySelector />
+        <PlatformSelector />
+        <PhoneCodeSelector />
+      </div>
+
       <Wallet />
       <Back />
       <BestRoute />
@@ -40,10 +47,10 @@ const page = () => {
         currency="₹"
         recipient="Test Store"
         onComplete={() => console.log("Success animation completed!")}
-      />
-      <SidebarProvider>
+      /> */}
+      {/* <SidebarProvider>
         <AppSidebar />
-      </SidebarProvider>
+      </SidebarProvider> */}
     </div>
   );
 };

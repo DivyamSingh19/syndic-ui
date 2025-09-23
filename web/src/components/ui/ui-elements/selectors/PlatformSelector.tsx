@@ -21,9 +21,9 @@ const PlatformSelector = () => {
   return (
     <Select>
       <SelectTrigger className="w-[280px]">
-        <SelectValue placeholder="Select a platform" />
+        <SelectValue placeholder="Select Platform" />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent side="bottom">
         {platforms.map((platform) => (
           <SelectItem value={platform.value} key={platform.value}>
             {platform.label}

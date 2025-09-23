@@ -17,8 +17,8 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarGroup
 } from "@/components/ui/sidebar";
+import Back from "./ui/ui-elements/buttons/back";
 
 const data = {
   user: {
@@ -54,6 +54,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
+        <Back/>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton

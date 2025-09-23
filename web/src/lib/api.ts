@@ -14,4 +14,7 @@ export const loginUser = (payload: any) =>
 export const verifyOtp = (payload: any) =>
   api.post(process.env.NEXT_PUBLIC_API_OTP_VERIFY!, payload);
 
+export const editProfile = (payload: any) =>
+  api.post(process.env.NEXT_PUBLIC_API_EDIT_PROFILE!, payload);
+
 export default api;

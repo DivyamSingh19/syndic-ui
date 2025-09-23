@@ -22,7 +22,7 @@ const FiatSelector = () => {
   return (
      <Select>
          <SelectTrigger className="w-[280px]">
-           <SelectValue placeholder="Select receiver's form of currency" />
+           <SelectValue placeholder="Select Receiver Currency" />
          </SelectTrigger>
          <SelectContent>
            {fiats.map((fiat) => (

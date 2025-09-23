@@ -20,7 +20,7 @@ const CurrencySelector = () => {
   return (
     <Select>
       <SelectTrigger className="w-[280px]">
-        <SelectValue placeholder="Select a currency" />
+        <SelectValue placeholder="Select Currency" />
       </SelectTrigger>
       <SelectContent>
         {currencies.map((currency) => (
