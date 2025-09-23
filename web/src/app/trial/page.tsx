@@ -17,32 +17,33 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import PhoneCodeSelector from "@/components/ui/ui-elements/selectors/PhoneCodeSelector";
 import EditProfileForm from "@/components/ui/ui-elements/forms/EditProfileForm";
 const page = () => {
-  const [pin, setPin] = useState<number>(0);
+  const [pin, setPin] = useState("  ");
 
   return (
     <div className="flex flex-col gap-4 items-center justify-center min-h-screen">
       {/* <RegisterForm />
       <OtpForm />
       <Logo /> */}
-      <EditProfileForm/>
+      {/* <EditProfileForm/> */}
 
       {/* <div className="flex justify-center gap-3">
         <CountrySelector />
         <FiatSelector />
         <CurrencySelector />
-        <PlatformSelector />
-        <PhoneCodeSelector />
-      </div>
 
-      <Wallet />
+        <PhoneCodeSelector />
+      </div> */}
+
+      {/* <Wallet />
       <Back />
-      <BestRoute />
+      <BestRoute /> */}
+      <PlatformSelector />
       <PlatformPin
         selectedPlatform="paypal"
         value={pin}
         onValueChange={setPin}
       />
-      <PaymentSuccess
+      {/* <PaymentSuccess
         amount="1,500"
         currency="₹"
         recipient="Test Store"

@@ -17,8 +17,8 @@ type PlatformKey = keyof typeof platformConfig;
 
 interface PlatformPinProps {
   selectedPlatform?: string;
-  value?: number;
-  onValueChange?: (value: number) => void;
+  value?: string;
+  onValueChange?: (value: string) => void;
   className?: string;
 }
 
@@ -67,13 +67,11 @@ const PlatformPin = ({
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
           <Lock className="h-4 w-4 text-gray-400" />
         </div>
+
         <input
           type={showPin ? "text" : "password"}
-          value={value?.toString() || ""} 
-          onChange={(e) => {
-            const numValue = parseInt(e.target.value) || 0; 
-            onValueChange?.(numValue);
-          }}
+          value={value || ""}
+          onChange={(e) => onValueChange?.(e.target.value)}
           placeholder="Enter your PIN"
           maxLength={6}
           className="w-full pl-10 pr-12 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-transparent text-center tracking-widest"

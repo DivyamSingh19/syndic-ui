@@ -19,7 +19,8 @@ import CountrySelector from "../selectors/CountrySelector";
 import PhoneCodeSelector from "../selectors/PhoneCodeSelector";
 import { Textarea } from "@/components/ui/textarea";
 import { editProfile } from "@/lib/api";
-
+import PlatformSelector from "../selectors/PlatformSelector";
+import PlatformPin from "../PlatformPin";
 interface FormData {
   firstname: string;
   lastname: string;
