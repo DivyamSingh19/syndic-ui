@@ -22,8 +22,10 @@ import {
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import LoaderSpinner from "../LoaderSpinner";
-import { verifyOtp } from "@/lib/api";
+// import { verifyOtp } from "@/lib/api"; 
+// import { resendOtp } from "@/lib/api";
 import { ArrowRightCircle } from "lucide-react";
+
 interface FormData {
   pin: string;
 }
@@ -31,6 +33,8 @@ interface FormData {
 const OtpForm = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [isResending, setIsResending] = useState(false);
+  const [resendTimer, setResendTimer] = useState(0);
 
   const form = useForm<FormData>({
     defaultValues: {
@@ -45,13 +49,37 @@ const OtpForm = () => {
         pin: values.pin,
       });
 
-      const data = response.data;
       toast.success("OTP submitted successfully!");
-      router.push("/");
+      router.push("/onboarding/address");
     } catch (error) {
       toast.error(error?.response?.data?.message || "Error in submitting OTP");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleResend = async () => {
+    if (resendTimer > 0) return; // Prevent multiple clicks during the cooldown
+
+    try {
+      setIsResending(true);
+      await resendOtp({}); // **Call your resend OTP API**
+      toast.success("New OTP sent to your email!");
+      setResendTimer(60); // Set a 60-second cooldown
+
+      const interval = setInterval(() => {
+        setResendTimer((prevTimer) => {
+          if (prevTimer <= 1) {
+            clearInterval(interval);
+            return 0;
+          }
+          return prevTimer - 1;
+        });
+      }, 1000);
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Failed to resend OTP");
+    } finally {
+      setIsResending(false);
     }
   };
 
@@ -109,19 +137,30 @@ const OtpForm = () => {
             </FormItem>
           )}
         />
-        <div className="flex justify-center">
-          <Button
-            type="submit"
-            className="w-1/2 sm:w-2/3 md:w-1/3 h-9 sm:h-10 md:h-11 text-center text-xs sm:text-sm md:text-base lg:text-base font-medium mt-4 sm:mt-6 rounded-3xl bg-gradient-to-r from-[#221d1a] via-[#251f18] to-[#271f1b] text-gray-200 hover:text-white hover:shadow-lg border px-4 sm:px-5 py-1 shadow-sm transition-all duration-200 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
-            disabled={isLoading}
-          >
+        <div className="flex flex-col items-center gap-4">
+          <div className="text-sm text-gray-500 text-center">
+            Didn't receive a code?
+            <Button
+              type="button"
+              variant="link"
+              onClick={handleResend}
+              disabled={resendTimer > 0 || isResending}
+              className="px-1 text-sm"
+            >
+              {isResending ? (
+                <LoaderSpinner message="Sending..." color="white" />
+              ) : resendTimer > 0 ? (
+                `Resend in ${resendTimer}s`
+              ) : (
+                "Resend Code"
+              )}
+            </Button>
+          </div>
+          <Button type="submit" className="w-1/2" disabled={isLoading}>
             {isLoading ? (
-              <LoaderSpinner message="Verifying" color="white" />
+              <LoaderSpinner message="Verifying" color="black" />
             ) : (
-              <span className="flex items-center gap-4">
-                <p className="text-sm">Submit</p>
-                <ArrowRightCircle className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-orange-400 transform -rotate-45" />
-              </span>
+              <span className="flex items-center gap-4">Verify</span>
             )}
           </Button>
         </div>

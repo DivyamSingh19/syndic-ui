@@ -3,7 +3,7 @@ import { clsx } from "clsx";
 
 export type LoaderSpinnerProps = {
   message?: string;
-  color?: "green-500" | "blue-500" | "gray-500" | "red-500" | "white";
+  color?: "green-500" | "blue-500" | "gray-500" | "red-500" | "white" |"black";
 };
 
 const LoaderSpinner: FC<LoaderSpinnerProps> = ({

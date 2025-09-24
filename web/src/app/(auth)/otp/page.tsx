@@ -1,23 +1,22 @@
 "use client";
 import React from "react";
 import OtpForm from "@/components/ui/ui-elements/forms/OtpForm";
-import AL from "@/components/layout/AuthLayout";
 
 const OTP = () => {
   return (
-    <AL>
-      <div className="flex flex-col gap-4 items-center text-center">
-        <h1 className=" font-inter text-2xl sm:text-3xl md:text-6xl lg:text-7xl font-bold  max-w-fit mx-auto whitespace-nowrap">
+    <div className="min-h-screen flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8">
+      <div className="flex flex-col gap-4 sm:gap-6 items-center text-center max-w-md w-full">
+        <h1 className="font-inter text-3xl sm:text-4xl md:text-5xl font-bold leading-tight">
           Verify Account
         </h1>
-        <h4 className=" font-inter text-xs sm:text-sm font-medium text-muted-foreground px-2">
+        <p className="font-inter text-muted-foreground text-sm sm:text-base text-balance max-w-sm">
           Enter the verification code sent to your device
-        </h4>
-        <div className="w-full flex justify-center mt-2">
+        </p>
+        <div className="w-full flex justify-center mt-2 sm:mt-4">
           <OtpForm />
         </div>
       </div>
-    </AL>
+    </div>
   );
 };
 

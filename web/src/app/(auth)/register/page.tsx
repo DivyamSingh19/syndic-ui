@@ -1,25 +1,24 @@
-"use client";
-import React from "react";
-import AL from "@/components/layout/AuthLayout";
-import RegisterForm from "@/components/ui/ui-elements/forms/RegisterForm";
+import { GalleryVerticalEnd } from "lucide-react";
 
-const Register = () => {
+import { RegisterForm } from "@/components/ui/ui-elements/forms/RegisterForm";
+
+export default function RegisterPage() {
   return (
-    <AL>
-      <div className="flex flex-col gap-2 text-center">
-        <h1 className="text-2xl sm:text-3xl md:text-6xl lg:text-7xl font-inter max-w-fit mx-auto whitespace-nowrap">
-          Create an account
-        </h1>
-        <h4 className="font-inter text-xs sm:text-sm font-medium text-muted-foreground px-2">
-          Join thousands of users managing their finances with ease
-        </h4>
+    <div className="grid min-h-svh lg:grid-cols-2">
+      <div className="flex flex-col gap-4 p-6 md:p-10">
+        <div className="flex flex-1 items-center justify-center">
+          <div className="w-full max-w-xs">
+            <RegisterForm />
+          </div>
+        </div>
       </div>
-
-      <div className="w-full flex justify-center mt-8">
-        <RegisterForm />
+      <div className="bg-muted relative hidden lg:block">
+        <img
+          src="/placeholder.svg"
+          alt="Image"
+          className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+        />
       </div>
-    </AL>
+    </div>
   );
-};
-
-export default Register;
+}

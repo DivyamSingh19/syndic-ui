@@ -1,64 +1,59 @@
-//@ts-nocheck
 "use client";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import LoaderSpinner from "../LoaderSpinner";
+import LoaderSpinner from "@/components/ui/ui-elements/LoaderSpinner";
 import { registerUser } from "@/lib/api";
-import { Eye, EyeOff } from "lucide-react";
-import { ArrowRightCircle } from "lucide-react";
-interface FormData {
-  firstname: string;
-  lastname: string;
-  email: string;
-  password: string;
-}
+import { toast } from "sonner";
 
-const RegisterForm = () => {
+
+export function RegisterForm({
+  className,
+  ...props
+}: React.ComponentProps<"form">) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    firstname: "",
+    lastname: "",
+    email: "",
+    password: "",
+  });
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  const form = useForm<FormData>({
-    defaultValues: {
-      firstname: "",
-      lastname: "",
-      email: "",
-      password: "",
-    },
-  });
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
-  const onSubmit = async (values: FormData) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
     try {
       setIsLoading(true);
-
       const response = await registerUser({
-        firstname: values.firstname,
-        lastname: values.lastname,
-        email: values.email,
-        password: values.password,
+        firstname: formData.firstname,
+        lastname: formData.lastname,
+        email: formData.email,
+        password: formData.password,
       });
 
       const data = response.data;
       toast.success("User registered successfully!");
       router.push("/otp");
-    } catch (error) {
+    } catch (error: any) {
       toast.error(
         error?.response?.data?.message || "Error in creating account"
       );
@@ -67,122 +62,116 @@ const RegisterForm = () => {
     }
   };
 
-  return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-3 sm:space-y-4 w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-sm xl:max-w-md mx-auto px-2 sm:px-4"
-      >
-        <div className="flex flex-col gap-2 sm:gap-4 w-full">
-          <div className="flex gap-2 sm:gap-3 md:gap-4">
-            <FormField
-              control={form.control}
-              name="firstname"
-              render={({ field }) => (
-                <FormItem className="flex-1">
-                  <FormLabel className="text-sm">First Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="James"
-                      {...field}
-                      className="h-9 sm:h-10 text-sm rounded-3xl px-5"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+  const handleLogin = () => {
+    router.push("/login");
+  };
 
-            <FormField
-              control={form.control}
-              name="lastname"
-              render={({ field }) => (
-                <FormItem className="flex-1">
-                  <FormLabel className="text-sm">Last Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Bond"
-                      {...field}
-                      className="h-9 sm:h-10 text-sm rounded-3xl px-5"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+  return (
+    <form
+      className={cn("flex flex-col gap-6", className)}
+      {...props}
+      onSubmit={handleSubmit}
+    >
+      <div className="flex flex-col items-center gap-2 text-center">
+        <h1 className="text-2xl font-bold">Register to your account</h1>
+        <p className="text-muted-foreground text-sm text-balance">
+          Fill in the details to be a part of the Syndic Universe
+        </p>
+      </div>
+      <div className="grid gap-6">
+        <div className="grid grid-cols-2 gap-3">
+          <div className="grid gap-2">
+            <Label htmlFor="firstname">First Name</Label>
+            <Input
+              id="firstname"
+              name="firstname"
+              type="text"
+              placeholder="james"
+              value={formData.firstname}
+              onChange={handleInputChange}
+              required
             />
           </div>
-
-          <FormField
-            control={form.control}
+          <div className="grid gap-2">
+            <Label htmlFor="lastname">Last Name</Label>
+            <Input
+              id="lastname"
+              name="lastname"
+              type="text"
+              placeholder="bond"
+              value={formData.lastname}
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+        </div>
+        <div className="grid gap-3">
+          <Label htmlFor="email">Email</Label>
+          <Input
+            id="email"
             name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-sm">Email</FormLabel>
-                <FormControl>
-                  <Input
-                    type="email"
-                    placeholder="jamesbond@example.com"
-                    {...field}
-                    className="h-9 sm:h-10 text-sm rounded-3xl px-5"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-sm">Password</FormLabel>
-                <FormControl>
-                  <div className="relative">
-                    <Input
-                      type={showPassword ? "text" : "password"}
-                      placeholder="••••••••"
-                      {...field}
-                      className="h-9 sm:h-10 text-sm rounded-3xl px-5 pr-12"
-                    />
-                    <button
-                      type="button"
-                      onClick={togglePasswordVisibility}
-                      className="absolute right-7 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-                      tabIndex={-1}
-                    >
-                      {showPassword ? (
-                        <EyeOff className="h-4 w-4" />
-                      ) : (
-                        <Eye className="h-4 w-4" />
-                      )}
-                    </button>
-                  </div>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            type="email"
+            placeholder="m@example.com"
+            value={formData.email}
+            onChange={handleInputChange}
+            required
           />
         </div>
-        <div className="flex justify-center items-center">
-          <Button
-            type="submit"
-            disabled={isLoading}
-            className="w-1/2 sm:w-2/3 md:w-1/3 h-9 sm:h-10 md:h-11 text-center text-xs sm:text-sm md:text-base lg:text-base font-medium mt-4 sm:mt-6 rounded-3xl bg-gradient-to-r from-[#221d1a] via-[#251f18] to-[#271f1b] text-gray-200 hover:text-white hover:shadow-lg border px-4 sm:px-5 py-1 shadow-sm transition-all duration-200 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]"
-          >
-            {isLoading ? (
-              <LoaderSpinner message="Registering" color="white" />
-            ) : (
-              <span className="flex items-center gap-4">
-                <p className="text-sm">Register</p>
-                <ArrowRightCircle className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-orange-400 transform -rotate-45" />
-              </span>
-            )}
-          </Button>
+        <div className="grid gap-3">
+          <div className="flex items-center">
+            <Label htmlFor="password">Password</Label>
+            <a
+              href="#"
+              onClick={(e) => e.preventDefault()}
+              className="ml-auto text-sm underline-offset-4 hover:underline"
+            >
+              Forgot your password?
+            </a>
+          </div>
+          <div className="relative">
+            <Input
+              id="password"
+              name="password"
+              type={showPassword ? "text" : "password"}
+              value={formData.password}
+              onChange={handleInputChange}
+              required
+            />
+            <button
+              type="button"
+              onClick={togglePasswordVisibility}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+              tabIndex={-1}
+            >
+              {showPassword ? (
+                <EyeOff className="h-4 w-4" />
+              ) : (
+                <Eye className="h-4 w-4" />
+              )}
+            </button>
+          </div>
         </div>
-      </form>
-    </Form>
+        <Button type="submit" className="w-full" disabled={isLoading}>
+          {isLoading ? (
+            <LoaderSpinner message="Registering" color="black" />
+          ) : (
+            <span className="flex items-center gap-4">Register</span>
+          )}
+        </Button>
+      </div>
+      <div className="text-center text-sm">
+        Already have an account?
+        <a
+          href="#"
+          className="underline underline-offset-4"
+          onClick={(e) => {
+            e.preventDefault();
+            handleLogin();
+          }}
+        >
+          Login
+        </a>
+      </div>
+    </form>
   );
-};
-
-export default RegisterForm;
+}

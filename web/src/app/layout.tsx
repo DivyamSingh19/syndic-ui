@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import {Inter,League_Gothic,Anton,Roboto_Flex} from "next/font/google"
-import { Toaster } from "sonner"; 
 import "./globals.css";
-
+import { Toaster } from "@/components/ui/sonner";
+ 
 const inter = Inter({
   weight:"700",
   subsets: ["latin"],

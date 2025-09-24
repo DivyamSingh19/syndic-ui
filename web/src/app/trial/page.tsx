@@ -1,6 +1,5 @@
-"use client"
+"use client";
 import React, { useState } from "react";
-import RegisterForm from "@/components/ui/ui-elements/forms/RegisterForm";
 import OtpForm from "@/components/ui/ui-elements/forms/OtpForm";
 import Logo from "@/components/ui/ui-elements/logo";
 import CountrySelector from "@/components/ui/ui-elements/selectors/CountrySelector";
@@ -20,12 +19,15 @@ import Retry from "@/components/ui/ui-elements/buttons/retry";
 import InitializePayment from "@/components/ui/ui-elements/buttons/initializeTransaction";
 import SetupPin from "@/components/ui/ui-elements/SetupPin";
 import LocationForm from "@/components/ui/ui-elements/forms/LocationForm";
+import { RegisterForm } from "@/components/ui/ui-elements/forms/RegisterForm";
 
 const page = () => {
   // const [pin, setPin] = useState("  ");
 
   return (
     <div className="flex flex-col gap-4 items-center justify-center min-h-screen">
+      <RegisterForm />
+
       {/* <LocationForm/> */}
       {/* <SetupPin/> */}
       {/* <InitializePayment/>
@@ -42,12 +44,12 @@ const page = () => {
 
         <PhoneCodeSelector />
       </div> */}
-
-      {/* <Wallet />
+      {/* 
+      <Wallet />
       <Back />
       <BestRoute />
-      <PlatformSelector />
-      <PlatformPin/> */}
+      <PlatformSelector /> */}
+      {/* <PlatformPin/> */}
       {/* <PaymentSuccess
         amount="1,500"
         currency="₹"
