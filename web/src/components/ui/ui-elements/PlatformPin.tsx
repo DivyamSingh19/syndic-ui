@@ -17,7 +17,6 @@ interface PlatformPinProps {
   className?: string;
   pinLength?: number;
   attemptsRemaining?: number;
-  onForgotPin?: () => void;
 }
 
 const PlatformPin = ({
@@ -26,7 +25,6 @@ const PlatformPin = ({
   className,
   pinLength = 6,
   attemptsRemaining = 3,
-  onForgotPin,
 }: PlatformPinProps) => {
   const router = useRouter();
   const [internalPin, setInternalPin] = useState<string[]>(
@@ -35,7 +33,6 @@ const PlatformPin = ({
   const [isLoading, setIsLoading] = useState(false);
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
 
-  
   useEffect(() => {
     if (value && value.length === pinLength) {
       setInternalPin(value.split(""));
@@ -103,45 +100,35 @@ const PlatformPin = ({
 
     setIsLoading(true);
     try {
-      const response = await fetch("", {
+      const response = await fetch("/api/authorize-transaction", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           pin: fullPin,
-          // Add other transaction data here, like amount, recipient, etc.
         }),
       });
 
       if (response.ok) {
-        // Transaction successful
-        const result = await response.json();
         toast.success("Transaction authorized successfully!");
-        // Navigate to step 4 with success status
-        // router.push(`/step4?status=success&transactionId=${result.id}`);
-        router.push("/dashboard/create-transaction/step-4")
+        router.push("/dashboard/create-transaction/step-4");
       } else {
-        // Transaction failed
         const errorData = await response.json();
         toast.error(errorData.message || "Transaction failed.");
-        // Navigate to step 4 with failure status
-        // router.push(
-        //   `/step4?status=failed&error=${encodeURIComponent(errorData.message)}`
-        // );
-          router.push("/dashboard/create-transaction/step-4");
+        router.push("/dashboard/create-transaction/step-4");
       }
     } catch (error) {
       console.error("Transaction error:", error);
       toast.error("An unexpected error occurred. Please try again.");
-      // Navigate to step 4 with a generic error status
-      // router.push(
-      //   `/step4?status=failed&error=${encodeURIComponent("Network Error")}`
-      // );
-        router.push("/dashboard/create-transaction/step-4");
+      router.push("/dashboard/create-transaction/step-4");
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleForgotPin = () => {
+    router.push("/resetPin");
   };
 
   return (
@@ -151,8 +138,8 @@ const PlatformPin = ({
       }`}
     >
       <Shield size={48} className="text-indigo-600 mb-4" />
-      <h2 className="text-xl font-semibold text-gray-100 mb-2">
-        Enter your Platform PIN
+      <h2 className="text-2xl font-semibold text-gray-100 mb-2">
+        Enter Your Platform PIN
       </h2>
       <p className="text-sm text-gray-500 text-center mb-6">
         Enter your {pinLength}-digit PIN to authorize this payment.
@@ -164,7 +151,7 @@ const PlatformPin = ({
             type="password"
             inputMode="numeric"
             pattern="[0-9]*"
-            maxLength={1} 
+            maxLength={1}
             value={digit}
             onChange={(e) => handleChange(e, index)}
             onKeyDown={(e) => handleKeyDown(e, index)}
@@ -189,7 +176,7 @@ const PlatformPin = ({
         {isLoading ? "Authorizing..." : "Authorize Transaction"}
       </Button>
       <button
-        onClick={onForgotPin}
+        onClick={handleForgotPin}
         className="mt-4 text-sm text-indigo-600 hover:text-indigo-700 hover:underline"
       >
         Forgot PIN?

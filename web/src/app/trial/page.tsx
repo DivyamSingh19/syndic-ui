@@ -20,13 +20,15 @@ import InitializePayment from "@/components/ui/ui-elements/buttons/initializeTra
 import SetupPin from "@/components/ui/ui-elements/SetupPin";
 import LocationForm from "@/components/ui/ui-elements/forms/LocationForm";
 import { RegisterForm } from "@/components/ui/ui-elements/forms/RegisterForm";
+import ResetPin from "@/components/ui/ui-elements/ResetPlatformPin";
 
 const page = () => {
   // const [pin, setPin] = useState("  ");
 
   return (
     <div className="flex flex-col gap-4 items-center justify-center min-h-screen">
-      <RegisterForm />
+      <ResetPin />
+      {/* <RegisterForm /> */}
 
       {/* <LocationForm/> */}
       {/* <SetupPin/> */}
@@ -49,7 +51,7 @@ const page = () => {
       <Back />
       <BestRoute />
       <PlatformSelector /> */}
-      {/* <PlatformPin/> */}
+      <PlatformPin />
       {/* <PaymentSuccess
         amount="1,500"
         currency="₹"
