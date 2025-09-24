@@ -17,4 +17,7 @@ export const verifyOtp = (payload: any) =>
 export const editProfile = (payload: any) =>
   api.post(process.env.NEXT_PUBLIC_API_EDIT_PROFILE!, payload);
 
+export const optimizer = (payload: any) =>
+  api.post(process.env.NEXT_PUBLIC_API_OPTIMIZER!, payload);
+
 export default api;

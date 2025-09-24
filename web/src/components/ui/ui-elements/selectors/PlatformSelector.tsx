@@ -23,7 +23,7 @@ const PlatformSelector = () => {
       <SelectTrigger className="w-[280px]">
         <SelectValue placeholder="Select Platform" />
       </SelectTrigger>
-      <SelectContent side="bottom">
+      <SelectContent position="popper" side="bottom">
         {platforms.map((platform) => (
           <SelectItem value={platform.value} key={platform.value}>
             {platform.label}

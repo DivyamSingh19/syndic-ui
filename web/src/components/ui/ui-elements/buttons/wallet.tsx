@@ -35,10 +35,10 @@ const Wallet = ({ className, onClick, disabled }: WalletProps) => {
         alt="Phantom Wallet Icon"
         width={24}
         height={24}
-        className="relative z-10 rounded"
+        className="relative z-10 rounded group-hover:translate-y-1 transition-transform"
       />
 
-      <span className="relative z-10 text-lg font-semibold tracking-wide group-hover:translate-x-1 transition-transform">
+      <span className="relative z-10 text-lg font-semibold tracking-wide group-hover:translate-y-1 transition-transform">
         Phantom Wallet
       </span>
     </button>

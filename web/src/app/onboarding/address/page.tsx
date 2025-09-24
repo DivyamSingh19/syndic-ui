@@ -1,8 +1,10 @@
 import React from 'react'
-
+import LocationForm from '@/components/ui/ui-elements/forms/LocationForm'
 const Address = () => {
   return (
-    <div>Address</div>
+    <div>
+      <LocationForm/>
+    </div>
   )
 }
 

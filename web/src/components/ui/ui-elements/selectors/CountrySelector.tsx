@@ -201,12 +201,30 @@ const countries = [
   { value: "zwe", label: "Zimbabwe" },
 ];
 
-const CountrySelector = () => {
+interface CountrySelectorProps {
+  value?: string;
+  onValueChange: (value: string) => void;
+  onBlur?: React.FocusEventHandler<HTMLButtonElement>;
+  name?: string;
+  disabled?: boolean;
+}
+
+const CountrySelector = React.forwardRef<
+  React.ElementRef<typeof SelectTrigger>,
+  CountrySelectorProps
+>(({ value, onValueChange, onBlur, name, disabled }, ref) => {
   return (
-    <Select>
+    <Select
+      value={value}
+      onValueChange={onValueChange}
+      disabled={disabled}
+      name={name}
+    >
       <SelectTrigger
+        ref={ref}
         size="default"
         className="inline-flex w-auto min-w-[280px] items-center justify-between px-3 py-1 rounded-md whitespace-nowrap"
+        onBlur={onBlur}
       >
         <SelectValue placeholder="Select Country" />
       </SelectTrigger>
@@ -220,6 +238,8 @@ const CountrySelector = () => {
       </SelectContent>
     </Select>
   );
-};
+});
+
+CountrySelector.displayName = "CountrySelector";
 
 export default CountrySelector;

@@ -248,7 +248,7 @@ const PhoneCodeSelector = ({
       >
         <SelectValue placeholder="Code" />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent position="popper" side="bottom">
         {phoneCodes.map((phoneCode) => (
           <SelectItem
             value={`${phoneCode.value}-${phoneCode.label}`}

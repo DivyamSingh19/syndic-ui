@@ -14,7 +14,7 @@ const Back = ({ onClick, className, disabled }: BackProps) => {
   const handleClick = () => {
     if (disabled) return;
     if (onClick) onClick();
-    else router.back();
+    else router.back(); 
   };
 
   return (

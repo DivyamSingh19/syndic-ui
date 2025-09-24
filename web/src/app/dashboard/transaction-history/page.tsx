@@ -170,7 +170,7 @@ const PastTransactions = () => {
     <div className="h-full p-6 space-y-4">
       {/* Page Header */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-6xl font-semibold">Past Transactions</h1>
+        <h1 className="text-6xl font-semibold">Transaction History</h1>
         <div className="inline-flex gap-2">
           <Button
             variant={quickRange === "7d" ? "default" : "outline"}

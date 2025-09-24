@@ -5,7 +5,6 @@ import {
   IconUsers,
   IconX,
   IconHistory,
-  IconInnerShadowTop,
 } from "@tabler/icons-react";
 import { NavMain } from "@/components/nav-main";
 import { NavUser } from "@/components/nav-user";
@@ -14,9 +13,6 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import Back from "./ui/ui-elements/buttons/back";
 
@@ -28,14 +24,9 @@ const data = {
   },
   navMain: [
     {
-      title: "Create Payment",
-      url: "/dashboard/create-payment",
+      title: "Create Transaction",
+      url: "/dashboard/create-transaction/step-1",
       icon: IconSend,
-    },
-    {
-      title: "Contacts",
-      url: "/dashboard/contacts",
-      icon: IconUsers,
     },
     {
       title: "Failed Transactions",
@@ -43,9 +34,14 @@ const data = {
       icon: IconX,
     },
     {
-      title: "Past Transactions",
-      url: "/dashboard/past-transactions",
+      title: "Transaction History",
+      url: "/dashboard/transaction-history",
       icon: IconHistory,
+    },
+    {
+      title: "Contacts",
+      url: "/dashboard/contacts",
+      icon: IconUsers,
     },
   ],
 };
@@ -54,20 +50,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
-        <Back/>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              className="data-[slot=sidebar-menu-button]:!p-1.5"
-            >
-              <a href="/dashboard">
-                <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">Syndic</span>
-              </a>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+        <Back />
+        <a
+          href="/dashboard"
+          className="flex justify-center items-center py-2 hover:opacity-80 transition-opacity"
+        >
+          <span className="text-5xl font-semibold">Syndic</span>
+        </a>
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />

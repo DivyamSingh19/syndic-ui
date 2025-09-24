@@ -16,11 +16,20 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import PhoneCodeSelector from "@/components/ui/ui-elements/selectors/PhoneCodeSelector";
 import EditProfileForm from "@/components/ui/ui-elements/forms/EditProfileForm";
+import Retry from "@/components/ui/ui-elements/buttons/retry";
+import InitializePayment from "@/components/ui/ui-elements/buttons/initializeTransaction";
+import SetupPin from "@/components/ui/ui-elements/SetupPin";
+import LocationForm from "@/components/ui/ui-elements/forms/LocationForm";
+
 const page = () => {
-  const [pin, setPin] = useState("  ");
+  // const [pin, setPin] = useState("  ");
 
   return (
     <div className="flex flex-col gap-4 items-center justify-center min-h-screen">
+      {/* <LocationForm/> */}
+      {/* <SetupPin/> */}
+      {/* <InitializePayment/>
+      <Retry/> */}
       {/* <RegisterForm />
       <OtpForm />
       <Logo /> */}
@@ -36,13 +45,9 @@ const page = () => {
 
       {/* <Wallet />
       <Back />
-      <BestRoute /> */}
+      <BestRoute />
       <PlatformSelector />
-      <PlatformPin
-        selectedPlatform="paypal"
-        value={pin}
-        onValueChange={setPin}
-      />
+      <PlatformPin/> */}
       {/* <PaymentSuccess
         amount="1,500"
         currency="₹"

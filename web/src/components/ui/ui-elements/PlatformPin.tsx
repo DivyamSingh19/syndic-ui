@@ -1,94 +1,199 @@
-"use client"
-import React, { useState } from "react";
-import { Eye, EyeOff, Shield, Lock } from "lucide-react";
-
-const platformConfig = {
-  plaid: { requiresPin: false, name: "Plaid" },
-  razorpay: { requiresPin: true, name: "Razorpay" },
-  phonepe: { requiresPin: true, name: "PhonePe" },
-  paypal: { requiresPin: true, name: "PayPal" },
-  wise: { requiresPin: false, name: "Wise (TransferWise)" },
-  revolut: { requiresPin: true, name: "Revolut" },
-  coinbase: { requiresPin: true, name: "Coinbase" },
-  binance: { requiresPin: true, name: "Binance Pay" },
-} as const;
-
-type PlatformKey = keyof typeof platformConfig;
+"use client";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  ChangeEvent,
+  KeyboardEvent,
+} from "react";
+import { Shield } from "lucide-react";
+import { Button } from "../button";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 interface PlatformPinProps {
-  selectedPlatform?: string;
   value?: string;
   onValueChange?: (value: string) => void;
   className?: string;
+  pinLength?: number;
+  attemptsRemaining?: number;
+  onForgotPin?: () => void;
 }
 
 const PlatformPin = ({
-  selectedPlatform,
   value,
   onValueChange,
   className,
+  pinLength = 6,
+  attemptsRemaining = 3,
+  onForgotPin,
 }: PlatformPinProps) => {
-  const [showPin, setShowPin] = useState(false);
+  const router = useRouter();
+  const [internalPin, setInternalPin] = useState<string[]>(
+    Array(pinLength).fill("")
+  );
+  const [isLoading, setIsLoading] = useState(false);
+  const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
 
-  const platformData = selectedPlatform
-    ? platformConfig[selectedPlatform as PlatformKey]
-    : undefined;
+  
+  useEffect(() => {
+    if (value && value.length === pinLength) {
+      setInternalPin(value.split(""));
+    }
+  }, [value, pinLength]);
 
-  if (!selectedPlatform || !platformData) {
-    return null;
-  }
+  const updatePin = (newPin: string[]) => {
+    setInternalPin(newPin);
+    onValueChange?.(newPin.join(""));
+  };
 
-  if (!platformData.requiresPin) {
-    return (
-      <div
-        className={`w-[280px] p-3 bg-green-50 border border-green-200 rounded-md ${
-          className || ""
-        }`}
-      >
-        <div className="flex items-center gap-2 text-green-800 text-sm">
-          <Shield size={14} />
-          <span className="font-medium">No PIN Required</span>
-        </div>
-        <p className="text-xs text-green-700 mt-1">
-          {platformData.name} uses secure authentication
-        </p>
-      </div>
-    );
-  }
+  const handleChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
+    const val = e.target.value.replace(/\D/g, "");
+    if (!val) {
+      updatePin([
+        ...internalPin.slice(0, index),
+        "",
+        ...internalPin.slice(index + 1),
+      ]);
+      return;
+    }
+
+    const chars = val.split("").slice(0, pinLength - index);
+    const newPin = [...internalPin];
+    chars.forEach((c, i) => {
+      newPin[index + i] = c;
+    });
+
+    updatePin(newPin);
+
+    const nextIndex = index + chars.length;
+    if (nextIndex < pinLength) {
+      inputRefs.current[nextIndex]?.focus();
+    }
+  };
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>, index: number) => {
+    if (e.key === "Backspace") {
+      if (internalPin[index]) {
+        const newPin = [...internalPin];
+        newPin[index] = "";
+        updatePin(newPin);
+      } else if (index > 0) {
+        inputRefs.current[index - 1]?.focus();
+      }
+    } else if (e.key === "ArrowLeft" && index > 0) {
+      inputRefs.current[index - 1]?.focus();
+    } else if (e.key === "ArrowRight" && index < pinLength - 1) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleFocus = (index: number) => {
+    inputRefs.current[index]?.select();
+  };
+
+  const fullPin = internalPin.join("");
+  const isPinComplete = internalPin.every((digit) => digit !== "");
+
+  const handleAuthorizeTransaction = async () => {
+    if (!isPinComplete) {
+      toast.error("Please enter a complete PIN.");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const response = await fetch("", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          pin: fullPin,
+          // Add other transaction data here, like amount, recipient, etc.
+        }),
+      });
+
+      if (response.ok) {
+        // Transaction successful
+        const result = await response.json();
+        toast.success("Transaction authorized successfully!");
+        // Navigate to step 4 with success status
+        // router.push(`/step4?status=success&transactionId=${result.id}`);
+        router.push("/dashboard/create-transaction/step-4")
+      } else {
+        // Transaction failed
+        const errorData = await response.json();
+        toast.error(errorData.message || "Transaction failed.");
+        // Navigate to step 4 with failure status
+        // router.push(
+        //   `/step4?status=failed&error=${encodeURIComponent(errorData.message)}`
+        // );
+          router.push("/dashboard/create-transaction/step-4");
+      }
+    } catch (error) {
+      console.error("Transaction error:", error);
+      toast.error("An unexpected error occurred. Please try again.");
+      // Navigate to step 4 with a generic error status
+      // router.push(
+      //   `/step4?status=failed&error=${encodeURIComponent("Network Error")}`
+      // );
+        router.push("/dashboard/create-transaction/step-4");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <div className={`w-[280px] ${className || ""}`}>
-      <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-        <Shield size={16} className="text-orange-600" />
-        {platformData.name} PIN
-      </label>
-
-      <div className="relative">
-        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <Lock className="h-4 w-4 text-gray-400" />
-        </div>
-
-        <input
-          type={showPin ? "text" : "password"}
-          value={value || ""}
-          onChange={(e) => onValueChange?.(e.target.value)}
-          placeholder="Enter your PIN"
-          maxLength={6}
-          className="w-full pl-10 pr-12 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-orange-500 focus:border-transparent text-center tracking-widest"
-        />
-
-        <button
-          type="button"
-          onClick={() => setShowPin(!showPin)}
-          className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
-        >
-          {showPin ? <EyeOff size={16} /> : <Eye size={16} />}
-        </button>
+    <div
+      className={`flex flex-col items-center justify-center p-8 bg-background shadow-lg rounded-lg max-w-sm mx-auto ${
+        className || ""
+      }`}
+    >
+      <Shield size={48} className="text-indigo-600 mb-4" />
+      <h2 className="text-xl font-semibold text-gray-100 mb-2">
+        Enter your Platform PIN
+      </h2>
+      <p className="text-sm text-gray-500 text-center mb-6">
+        Enter your {pinLength}-digit PIN to authorize this payment.
+      </p>
+      <div className="flex space-x-2 mb-6">
+        {internalPin.map((digit, index) => (
+          <input
+            key={index}
+            type="password"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            maxLength={1} 
+            value={digit}
+            onChange={(e) => handleChange(e, index)}
+            onKeyDown={(e) => handleKeyDown(e, index)}
+            onFocus={() => handleFocus(index)}
+            ref={(el) => {
+              inputRefs.current[index] = el;
+            }}
+            className="w-10 h-10 text-center text-lg font-bold border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            autoComplete="off"
+            aria-label={`Digit ${index + 1} of ${pinLength}`}
+          />
+        ))}
       </div>
-
-      <div className="mt-1 text-xs text-gray-500">
-        Required for {platformData.name} transactions
-      </div>
+      <p className="text-sm text-gray-500 mb-6">
+        You have {attemptsRemaining} attempts remaining.
+      </p>
+      <Button
+        onClick={handleAuthorizeTransaction}
+        disabled={!isPinComplete || attemptsRemaining <= 0 || isLoading}
+        className="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-medium py-2 rounded-md transition-colors"
+      >
+        {isLoading ? "Authorizing..." : "Authorize Transaction"}
+      </Button>
+      <button
+        onClick={onForgotPin}
+        className="mt-4 text-sm text-indigo-600 hover:text-indigo-700 hover:underline"
+      >
+        Forgot PIN?
+      </button>
     </div>
   );
 };

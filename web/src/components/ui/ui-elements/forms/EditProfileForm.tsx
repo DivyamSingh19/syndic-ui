@@ -21,6 +21,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { editProfile } from "@/lib/api";
 import PlatformSelector from "../selectors/PlatformSelector";
 import PlatformPin from "../PlatformPin";
+import axios from "axios";
 interface FormData {
   firstname: string;
   lastname: string;

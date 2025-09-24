@@ -20,19 +20,19 @@ const fiats = [
 ];
 const FiatSelector = () => {
   return (
-     <Select>
-         <SelectTrigger className="w-[280px]">
-           <SelectValue placeholder="Select Receiver Currency" />
-         </SelectTrigger>
-         <SelectContent>
-           {fiats.map((fiat) => (
-             <SelectItem value={fiat.value} key={fiat.value}>
-               {fiat.label}
-             </SelectItem>
-           ))}
-         </SelectContent>
-       </Select>
-  )
+    <Select>
+      <SelectTrigger className="w-[280px]">
+        <SelectValue placeholder="Select Receiver Currency" />
+      </SelectTrigger>
+      <SelectContent position="popper" side="bottom">
+        {fiats.map((fiat) => (
+          <SelectItem value={fiat.value} key={fiat.value}>
+            {fiat.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
 }
 
 export default FiatSelector
