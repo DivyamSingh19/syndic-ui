@@ -124,7 +124,7 @@ const SetupPin = ({
             placeholder="Enter PIN"
             maxLength={pinLength}
             disabled={isLoading}
-            className="w-full rounded-lg border border-gray-300 py-3 pl-4 pr-12 text-gray-700 placeholder-gray-400 focus:border-blue-500 focus:outline-none bg-transparent disabled:opacity-50"
+            className="w-full rounded-lg border border-gray-300 py-2 pl-4 pr-12 text-gray-700 placeholder-gray-400 focus:border-blue-500 focus:outline-none bg-transparent disabled:opacity-50"
           />
           <span
             className="absolute right-4 flex cursor-pointer items-center"
@@ -156,7 +156,7 @@ const SetupPin = ({
             placeholder="Confirm PIN"
             maxLength={pinLength}
             disabled={isLoading}
-            className="w-full rounded-lg border border-gray-300 py-3 pl-4 pr-12 text-gray-700 placeholder-gray-400 focus:border-blue-500 focus:outline-none bg-transparent disabled:opacity-50"
+            className="w-full rounded-lg border border-gray-300 py-2 pl-4 pr-12 text-gray-700 placeholder-gray-400 focus:border-blue-500 focus:outline-none bg-transparent disabled:opacity-50"
           />
           <span
             className="absolute right-4 flex cursor-pointer items-centers"

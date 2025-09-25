@@ -105,7 +105,7 @@ const RP = () => {
               placeholder="Old PIN"
               value={formData.oldPin}
               onChange={handleInputChange}
-              className="w-full rounded-lg border border-gray-300 py-3 pl-4 pr-12 text-gray-700 placeholder-gray-400 focus:border-blue-500 focus:outline-none"
+              className="w-full rounded-lg border border-gray-300 py-2 pl-4 pr-12 text-gray-700 placeholder-gray-400 focus:border-blue-500 focus:outline-none"
               required
               maxLength={6}
             />
@@ -128,7 +128,7 @@ const RP = () => {
               placeholder="New PIN"
               value={formData.newPin}
               onChange={handleInputChange}
-              className="w-full rounded-lg border border-gray-300 py-3 pl-4 pr-12 text-gray-700 placeholder-gray-400 focus:border-blue-500 focus:outline-none"
+              className="w-full rounded-lg border border-gray-300 py-2 pl-4 pr-12 text-gray-700 placeholder-gray-400 focus:border-blue-500 focus:outline-none"
               required
               maxLength={6}
             />
@@ -151,7 +151,7 @@ const RP = () => {
               placeholder="Confirm New PIN"
               value={formData.confirmPin}
               onChange={handleInputChange}
-              className="w-full rounded-lg border border-gray-300 py-3 pl-4 pr-12 text-gray-700 placeholder-gray-400 focus:border-blue-500 focus:outline-none"
+              className="w-full rounded-lg border border-gray-300 py-2 pl-4 pr-12 text-gray-700 placeholder-gray-400 focus:border-blue-500 focus:outline-none"
               required
               maxLength={6}
             />

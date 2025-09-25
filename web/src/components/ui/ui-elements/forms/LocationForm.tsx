@@ -14,13 +14,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
-import dynamic from "next/dynamic";
 import CountrySelector from "@/components/ui/ui-elements/selectors/CountrySelector";
+import dynamic from "next/dynamic";
 
-// Dynamic import for the map component to avoid SSR errors
 const MapComponent = dynamic(() => import("@/components/ui/ui-elements/Map"), {
   ssr: false,
 });
+
 
 interface FormData {
   address: string;
@@ -194,7 +194,7 @@ const LocationForm = () => {
               <div className="flex gap-4">
                 <Button
                   type="submit"
-                  className="w-1/2 h-10 bg-orange-500 hover:bg-orange-600 text-white"
+                  className="w-1/2 h-10 bg-primary hover:bg-primary/50 text-white"
                 >
                   Continue
                 </Button>

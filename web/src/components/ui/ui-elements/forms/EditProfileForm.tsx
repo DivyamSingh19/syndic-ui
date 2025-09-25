@@ -210,7 +210,7 @@ const EditProfileForm = () => {
           <Button
             type="submit"
             disabled={isLoading}
-            className="flex justify-center items-center w-1/3 h-10 text-sm sm:text-base font-medium mt-6 bg-gradient-to-r from-[#ab5e2e] via-[#ba7a31] to-[#a04517] text-gray-200 hover:text-white hover:shadow-lg border shadow-sm transition-all duration-200"
+            className="flex justify-center items-center w-1/3 h-10 text-sm sm:text-base font-medium mt-6 bg-primary text-gray-200 hover:text-white hover:shadow-lg border shadow-sm transition-all duration-200"
           >
             {isLoading ? (
               <LoaderSpinner message="Updating" color="white" />
