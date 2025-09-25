@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import OtpForm from "@/components/ui/ui-elements/forms/OtpForm";
+import OtpForm from "@/components/ui-elements/forms/OtpForm";
 
 const OTP = () => {
   return (

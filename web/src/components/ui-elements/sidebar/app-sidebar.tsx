@@ -1,8 +1,8 @@
 "use client";
 import * as React from "react";
 import { IconSend, IconUsers, IconX, IconHistory } from "@tabler/icons-react";
-import { NavMain } from "@/components/ui/ui-elements/sidebar/nav-main";
-import { NavUser } from "@/components/ui/ui-elements/sidebar/nav-user";
+import { NavMain } from "@/components/ui-elements/sidebar/nav-main";
+import { NavUser } from "@/components/ui-elements/sidebar/nav-user";
 import {
   Sidebar,
   SidebarContent,

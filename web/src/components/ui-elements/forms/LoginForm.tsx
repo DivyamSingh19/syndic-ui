@@ -7,10 +7,9 @@ import { Label } from "@/components/ui/label";
 import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import LoaderSpinner from "@/components/ui/ui-elements/LoaderSpinner";
+import LoaderSpinner from "@/components/ui-elements/LoaderSpinner";
 import { loginUser } from "@/lib/api";
 import { toast } from "sonner";
-
 
 export function LoginForm({
   className,
@@ -41,15 +40,15 @@ export function LoginForm({
 
     try {
       setIsLoading(true);
-        const response = await axios.post(
-              "http://localhost:4000/api/v1/auth/login",
-              formData,
-              {
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              }
-            );
+      const response = await axios.post(
+        "http://localhost:4000/api/v1/auth/login",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
       // const response = await loginUser({
       //   email: formData.email,
       //   password: formData.password,
@@ -68,10 +67,9 @@ export function LoginForm({
     }
   };
 
-   const handleRegister = () => {
-     router.push("/register");
-   };
-
+  const handleRegister = () => {
+    router.push("/register");
+  };
 
   return (
     <form

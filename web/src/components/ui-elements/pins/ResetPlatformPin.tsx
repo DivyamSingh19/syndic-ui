@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import LoaderSpinner from "@/components/ui/ui-elements/LoaderSpinner";
+import LoaderSpinner from "@/components/ui-elements/LoaderSpinner";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -29,61 +29,61 @@ const RP = () => {
     }));
   };
 
- const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-   e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-   // Validation
-   if (!formData.oldPin || !formData.newPin || !formData.confirmPin) {
-     toast.error("Please fill in all fields");
-     return;
-   }
+    // Validation
+    if (!formData.oldPin || !formData.newPin || !formData.confirmPin) {
+      toast.error("Please fill in all fields");
+      return;
+    }
 
-   if (formData.newPin !== formData.confirmPin) {
-     toast.error("New PIN and confirmation PIN do not match");
-     return;
-   }
+    if (formData.newPin !== formData.confirmPin) {
+      toast.error("New PIN and confirmation PIN do not match");
+      return;
+    }
 
-   if (formData.newPin.length < 4) {
-     toast.error("PIN must be at least 4 digits");
-     return;
-   }
+    if (formData.newPin.length < 4) {
+      toast.error("PIN must be at least 4 digits");
+      return;
+    }
 
-   if (formData.oldPin === formData.newPin) {
-     toast.error("New PIN must be different from old PIN");
-     return;
-   }
+    if (formData.oldPin === formData.newPin) {
+      toast.error("New PIN must be different from old PIN");
+      return;
+    }
 
-   setIsLoading(true);
+    setIsLoading(true);
 
-   try {
-     // Replace with your actual API endpoint
-     const response = await fetch("/api/reset-pin", {
-       method: "POST",
-       headers: {
-         "Content-Type": "application/json",
-       },
-       body: JSON.stringify({
-         oldPin: formData.oldPin,
-         newPin: formData.newPin,
-       }),
-     });
+    try {
+      // Replace with your actual API endpoint
+      const response = await fetch("/api/reset-pin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          oldPin: formData.oldPin,
+          newPin: formData.newPin,
+        }),
+      });
 
-     if (response.ok) {
-       const result = await response.json();
-       toast.success("PIN reset successfully!");
-       // Navigate to the specified route
-       router.push("/dashboard/create-transactions/step-3");
-     } else {
-       const errorData = await response.json();
-       toast.error(errorData.message || "Failed to reset PIN");
-     }
-   } catch (error) {
-     console.error("Reset PIN error:", error);
-     toast.error("An unexpected error occurred. Please try again.");
-   } finally {
-     setIsLoading(false);
-   }
- };
+      if (response.ok) {
+        const result = await response.json();
+        toast.success("PIN reset successfully!");
+        // Navigate to the specified route
+        router.push("/dashboard/create-transactions/step-3");
+      } else {
+        const errorData = await response.json();
+        toast.error(errorData.message || "Failed to reset PIN");
+      }
+    } catch (error) {
+      console.error("Reset PIN error:", error);
+      toast.error("An unexpected error occurred. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="flex min-h-screen items-center justify-center p-4">

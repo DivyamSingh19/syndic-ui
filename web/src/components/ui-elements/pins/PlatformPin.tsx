@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Shield, Eye, EyeOff } from "lucide-react";
-import { Button } from "../../button";
+import { Button } from "../../ui/button";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 

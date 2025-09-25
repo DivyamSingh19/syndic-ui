@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import LoaderSpinner from "@/components/ui/ui-elements/LoaderSpinner";
+import LoaderSpinner from "@/components/ui-elements/LoaderSpinner";
 import { registerUser } from "@/lib/api";
 import { toast } from "sonner";
 

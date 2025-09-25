@@ -10,9 +10,11 @@ import {
   MobileNavHeader,
   MobileNavToggle,
   MobileNavMenu,
-} from "@/components/ui/ui-elements/landing/navbar";
+} from "@/components/ui-elements/landing/navbar";
 import { Home, Info, Mail } from "lucide-react";
-import Footer from "@/components/ui/ui-elements/landing/footer";
+import Footer from "@/components/ui-elements/landing/footer";
+import { HeroSection } from "@/components/ui-elements/landing/hero";
+import FAQ from "@/components/ui-elements/landing/faq";
 
 const navItems = [
   { name: "Home", link: "#", icon: Home },
@@ -23,7 +25,7 @@ const navItems = [
 export default function Page() {
   const [activeTab, setActiveTab] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const toggleMobileMenu = () => setIsMobileMenuOpen((prev) => !prev);
   const handleLogin = () => setIsLoggedIn(true);
@@ -31,14 +33,12 @@ export default function Page() {
 
   return (
     <>
-      <main style={{ height: "300vh" }}>
-        {/* Added style to allow scrolling */}
+      <main className="flex flex-col">
         <Navbar
           isLoggedIn={isLoggedIn}
           onLogin={handleLogin}
           onLogout={handleLogout}
         >
-          {/* Desktop Navbar (Resizes on scroll) */}
           <NavBody isLoggedIn={isLoggedIn} onLogout={handleLogout}>
             <NavbarLogo />
             <NavItems
@@ -52,8 +52,6 @@ export default function Page() {
               <NavbarButton onClick={handleLogin}>Login</NavbarButton>
             )}
           </NavBody>
-
-          {/* Mobile Navbar */}
           <MobileNav>
             <MobileNavHeader>
               <NavbarLogo />
@@ -68,7 +66,7 @@ export default function Page() {
               activeTab={activeTab}
               setActiveTab={setActiveTab}
               isLoggedIn={isLoggedIn}
-              onLogin={handleLogin} 
+              onLogin={handleLogin}
               onLogout={handleLogout}
             >
               {navItems.map((item) => {
@@ -96,9 +94,21 @@ export default function Page() {
           </MobileNav>
         </Navbar>
 
-        {/* <p style={{ textAlign: "center", marginTop: "20px" }}>
-          {isLoggedIn ? "You are logged in." : "You are logged out."}
-        </p> */}
+        <section className="relative py-20 lg:py-24">
+          <div className="container mx-auto px-4 pl-8">
+            <HeroSection />
+          </div>
+        </section>
+
+        {/* FAQ Section */}
+        <section className="py-20 lg:py-24">
+          <div className="container mx-auto max-w-3xl px-4">
+            <h2 className="text-3xl font-bold text-center mb-8">
+              Frequently Asked Questions
+            </h2>
+            <FAQ />
+          </div>
+        </section>
       </main>
       <Footer />
     </>

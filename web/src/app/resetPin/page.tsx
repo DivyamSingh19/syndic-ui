@@ -1,5 +1,5 @@
 import React from "react";
-import RP from "@/components/ui/ui-elements/pins/ResetPlatformPin";
+import RP from "@/components/ui-elements/pins/ResetPlatformPin";
 
 const ResetPin = () => {
   return (

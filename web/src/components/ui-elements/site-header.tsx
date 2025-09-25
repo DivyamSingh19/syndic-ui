@@ -1,7 +1,7 @@
-import { Separator } from "@/components/ui/separator"
-import { SidebarTrigger } from "@/components/ui/sidebar"
-import Wallet from "@/components/ui/ui-elements/buttons/wallet"
-import { cn } from "@/lib/utils"; 
+import { Separator } from "@/components/ui/separator";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import Wallet from "@/components/ui-elements/buttons/wallet";
+import { cn } from "@/lib/utils";
 
 export function SiteHeader() {
   return (

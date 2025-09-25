@@ -20,7 +20,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import InitializeTransaction from "@/components/ui/ui-elements/buttons/initializeTransaction";
+import InitializeTransaction from "@/components/ui-elements/buttons/initializeTransaction";
 
 interface Platform {
   name: string;

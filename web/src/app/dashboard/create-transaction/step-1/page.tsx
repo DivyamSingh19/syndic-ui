@@ -1,17 +1,17 @@
 //@ts-nocheck
 "use client";
 import React, { useState } from "react";
-import CountrySelector from "@/components/ui/ui-elements/selectors/CountrySelector";
-import CurrencySelector from "@/components/ui/ui-elements/selectors/CurrencySelector";
-import FiatSelector from "@/components/ui/ui-elements/selectors/FiatSelector";
-import PlatformSelector from "@/components/ui/ui-elements/selectors/PlatformSelector";
-import BestRoute from "@/components/ui/ui-elements/buttons/bestroute";
+import CountrySelector from "@/components/ui-elements/selectors/CountrySelector";
+import CurrencySelector from "@/components/ui-elements/selectors/CurrencySelector";
+import FiatSelector from "@/components/ui-elements/selectors/FiatSelector";
+import PlatformSelector from "@/components/ui-elements/selectors/PlatformSelector";
+import BestRoute from "@/components/ui-elements/buttons/bestroute";
 import axios from "axios";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 const Step1 = () => {
-  const router = useRouter(); 
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleBestRoute = async () => {

@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
-import Logo from "../ui/ui-elements/logo";
-import Gradient from "../ui/ui-elements/gradient";
+import Logo from "../ui-elements/logo";
+import Gradient from "../ui-elements/gradient";
 
 interface AuthLayoutProps {
   children: ReactNode;

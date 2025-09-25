@@ -14,13 +14,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
-import CountrySelector from "@/components/ui/ui-elements/selectors/CountrySelector";
+import CountrySelector from "@/components/ui-elements/selectors/CountrySelector";
 import dynamic from "next/dynamic";
 
-const MapComponent = dynamic(() => import("@/components/ui/ui-elements/Map"), {
+const MapComponent = dynamic(() => import("@/components/ui-elements/Map"), {
   ssr: false,
 });
-
 
 interface FormData {
   address: string;

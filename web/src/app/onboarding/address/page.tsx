@@ -1,12 +1,12 @@
-import React from 'react'
-import LocationForm from '@/components/ui/ui-elements/forms/LocationForm'
+import React from "react";
+import LocationForm from "@/components/ui-elements/forms/LocationForm";
 
 const Address = () => {
   return (
     <div>
-      <LocationForm/>
+      <LocationForm />
     </div>
-  )
-}
+  );
+};
 
-export default Address
+export default Address;

@@ -19,7 +19,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Card, CardContent } from "@/components/ui/card";
-import PhoneCodeSelector from "@/components/ui/ui-elements/selectors/PhoneCodeSelector";
+import PhoneCodeSelector from "@/components/ui-elements/selectors/PhoneCodeSelector";
 
 // Define Friend type
 interface Friend {
