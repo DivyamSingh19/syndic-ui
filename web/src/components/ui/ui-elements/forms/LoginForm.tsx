@@ -41,10 +41,19 @@ export function LoginForm({
 
     try {
       setIsLoading(true);
-      const response = await loginUser({
-        email: formData.email,
-        password: formData.password,
-      });
+        const response = await axios.post(
+              "http://localhost:4000/api/v1/auth/login",
+              formData,
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+      // const response = await loginUser({
+      //   email: formData.email,
+      //   password: formData.password,
+      // });
 
       const data = response.data;
       toast.success("User logged in successfully!");

@@ -11,7 +11,6 @@ import LoaderSpinner from "@/components/ui/ui-elements/LoaderSpinner";
 import { registerUser } from "@/lib/api";
 import { toast } from "sonner";
 
-
 export function RegisterForm({
   className,
   ...props
@@ -20,8 +19,8 @@ export function RegisterForm({
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    firstname: "",
-    lastname: "",
+    firstName: "",
+    lastName: "",
     email: "",
     password: "",
   });
@@ -43,12 +42,21 @@ export function RegisterForm({
 
     try {
       setIsLoading(true);
-      const response = await registerUser({
-        firstname: formData.firstname,
-        lastname: formData.lastname,
-        email: formData.email,
-        password: formData.password,
-      });
+      const response = await axios.post(
+        "http://localhost:4000/api/v1/auth/register",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      // const response = await registerUser({
+      //   firstname: formData.firstName,
+      //   lastname: formData.lastName,
+      //   email: formData.email,
+      //   password: formData.password,
+      // });
 
       const data = response.data;
       toast.success("User registered successfully!");
@@ -81,25 +89,25 @@ export function RegisterForm({
       <div className="grid gap-6">
         <div className="grid grid-cols-2 gap-3">
           <div className="grid gap-2">
-            <Label htmlFor="firstname">First Name</Label>
+            <Label htmlFor="firstName">First Name</Label>
             <Input
-              id="firstname"
-              name="firstname"
+              id="firstName"
+              name="firstName"
               type="text"
               placeholder="james"
-              value={formData.firstname}
+              value={formData.firstName}
               onChange={handleInputChange}
               required
             />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="lastname">Last Name</Label>
+            <Label htmlFor="lastName">Last Name</Label>
             <Input
-              id="lastname"
-              name="lastname"
+              id="lastName"
+              name="lastName"
               type="text"
               placeholder="bond"
-              value={formData.lastname}
+              value={formData.lastName}
               onChange={handleInputChange}
               required
             />

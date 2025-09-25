@@ -22,7 +22,7 @@ import {
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import LoaderSpinner from "../LoaderSpinner";
-// import { verifyOtp } from "@/lib/api"; 
+// import { verifyOtp } from "@/lib/api";
 // import { resendOtp } from "@/lib/api";
 import { ArrowRightCircle } from "lucide-react";
 
@@ -45,9 +45,18 @@ const OtpForm = () => {
   const onSubmit = async (values: FormData) => {
     try {
       setIsLoading(true);
-      const response = await verifyOtp({
-        pin: values.pin,
-      });
+      const response = await axios.post(
+        "http://localhost:4000/api/v1/auth/verify-otp",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      // const response = await verifyOtp({
+      //   pin: values.pin,
+      // });
 
       toast.success("OTP submitted successfully!");
       router.push("/onboarding/address");

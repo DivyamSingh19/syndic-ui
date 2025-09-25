@@ -4,6 +4,7 @@ import { Lock, Eye, EyeOff } from "lucide-react";
 import { Button } from "../button";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import axios from "axios";
 
 interface SetupPinProps {
   pinLength?: number;
@@ -23,6 +24,7 @@ const SetupPin = ({
   const [showCreatePin, setShowCreatePin] = useState(false);
   const [showConfirmPin, setShowConfirmPin] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -47,18 +49,44 @@ const SetupPin = ({
       return;
     }
 
-    // You can add your API call here to save the new PIN
-    // const response = await fetch('/api/set-pin', { ... });
-    // if (!response.ok) {
-    //   setError('Failed to set PIN. Please try again.');
-    //   return;
-    // }
+    try {
+      setIsLoading(true);
+      setError(null);
 
-    setError(null);
-    onPinCreated?.(createPin);
+      // API call to create PIN
+      const response = await axios.post(
+        "http://localhost:4000/api/v1/pin/createPin",
+        {
+          pin: createPin,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            // Add authorization header if needed
+            // 'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+          },
+        }
+      );
 
-    toast.success("PIN created successfully!");
-    router.push("/dashboard");
+      console.log("PIN created successfully:", response.data);
+
+      // Call the optional callback
+      onPinCreated?.(createPin);
+
+      toast.success("PIN created successfully!");
+      router.push("/dashboard");
+    } catch (error: any) {
+      console.error("Failed to create PIN:", error);
+      console.error("Error details:", error.response?.data);
+
+      const errorMessage =
+        error.response?.data?.message ||
+        "Failed to create PIN. Please try again.";
+      setError(errorMessage);
+      toast.error(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -95,7 +123,8 @@ const SetupPin = ({
             onChange={(e) => handleInputChange(e, setCreatePin)}
             placeholder="Enter PIN"
             maxLength={pinLength}
-            className="w-full rounded-lg border border-gray-300 py-3 pl-4 pr-12 text-gray-700 placeholder-gray-400 focus:border-blue-500 focus:outline-none bg-transparent"
+            disabled={isLoading}
+            className="w-full rounded-lg border border-gray-300 py-3 pl-4 pr-12 text-gray-700 placeholder-gray-400 focus:border-blue-500 focus:outline-none bg-transparent disabled:opacity-50"
           />
           <span
             className="absolute right-4 flex cursor-pointer items-center"
@@ -126,10 +155,11 @@ const SetupPin = ({
             onChange={(e) => handleInputChange(e, setConfirmPin)}
             placeholder="Confirm PIN"
             maxLength={pinLength}
-            className="w-full rounded-lg border border-gray-300 py-3 pl-4 pr-12 text-gray-700 placeholder-gray-400 focus:border-blue-500 focus:outline-none bg-transparent"
+            disabled={isLoading}
+            className="w-full rounded-lg border border-gray-300 py-3 pl-4 pr-12 text-gray-700 placeholder-gray-400 focus:border-blue-500 focus:outline-none bg-transparent disabled:opacity-50"
           />
           <span
-            className="absolute right-4 flex cursor-pointer items-center"
+            className="absolute right-4 flex cursor-pointer items-centers"
             onClick={() => setShowConfirmPin(!showConfirmPin)}
           >
             {showConfirmPin ? (
@@ -150,11 +180,13 @@ const SetupPin = ({
       <Button
         onClick={handleCreatePin}
         disabled={
-          createPin.length !== pinLength || confirmPin.length !== pinLength
+          createPin.length !== pinLength ||
+          confirmPin.length !== pinLength ||
+          isLoading
         }
-        className="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-medium py-2 rounded-md transition-colors"
+        className="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-medium py-2 rounded-md transition-colors disabled:opacity-50"
       >
-        Create PIN
+        {isLoading ? "Creating PIN..." : "Create PIN"}
       </Button>
 
       <p className="text-xs text-gray-500 text-center mt-6 max-w-xs">
