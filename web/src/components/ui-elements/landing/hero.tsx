@@ -62,13 +62,6 @@ export function HeroSection() {
           <Globe />
         </div>
       </div>
-
-      {/* Mobile Globe */}
-      <div className="md:hidden mt-12 container mx-auto px-4">
-        <div className="w-full max-w-md mx-auto">
-          <Globe />
-        </div>
-      </div>
     </>
   );
 }

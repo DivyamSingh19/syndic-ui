@@ -9,19 +9,17 @@ import {
   useMotionValueEvent,
 } from "motion/react";
 
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import { LucideIcon } from "lucide-react";
 
 // --- INTERFACES ---
 
-// The NavItem structure now also includes the icon
 interface NavItemType {
   name: string;
   link: string;
   icon?: LucideIcon;
 }
 
-// Updated NavItemsProps to include link properties and active state management
 interface NavItemsProps {
   items: NavItemType[];
   className?: string;
@@ -62,16 +60,14 @@ interface MobileNavMenuProps {
   className?: string;
   isOpen: boolean;
   onClose: () => void;
-  // Pass active state to the mobile menu to render Tubelight effect
   activeTab: string | null;
   setActiveTab: React.Dispatch<React.SetStateAction<string | null>>;
-  // Pass auth state to mobile menu
   isLoggedIn: boolean;
-  onLogin: () => void; // Added onLogin to mobile menu
+  onLogin: () => void;
   onLogout: () => void;
 }
 
-// --- MAIN NAVBAR COMPONENT (FIXED SCROLL DETECTION) ---
+// --- MAIN NAVBAR WRAPPER ---
 
 export const Navbar = ({
   children,
@@ -81,7 +77,6 @@ export const Navbar = ({
   onLogout,
 }: NavbarProps) => {
   const ref = useRef<HTMLDivElement>(null);
-
   const { scrollY } = useScroll({
     offset: ["start start", "end start"],
   });
@@ -90,29 +85,18 @@ export const Navbar = ({
   const [activeTab, setActiveTab] = useState<string | null>(null);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
-    if (latest > 100) {
-      setVisible(true);
-    } else {
-      setVisible(false);
-    }
+    setVisible(latest > 100);
   });
 
   return (
     <motion.div
       ref={ref}
-      className={cn("sticky inset-x-0 top-0 md:top-0 z-40 w-full", className)}
+      className={cn("sticky inset-x-0 top-0 z-40 w-full", className)}
     >
       {React.Children.map(children, (child) => {
         if (!React.isValidElement(child)) return child;
 
-        const propsToPass: {
-          visible?: boolean;
-          activeTab?: string | null;
-          setActiveTab?: React.Dispatch<React.SetStateAction<string | null>>;
-          isLoggedIn?: boolean;
-          onLogin?: () => void;
-          onLogout?: () => void;
-        } = { visible };
+        const propsToPass: any = { visible };
 
         if (child.type === NavBody || child.type === MobileNav) {
           propsToPass.visible = visible;
@@ -134,45 +118,30 @@ export const Navbar = ({
           propsToPass.onLogout = onLogout;
         }
 
-        return React.cloneElement(
-          child as React.ReactElement<any>,
-          propsToPass
-        );
+        return React.cloneElement(child, propsToPass);
       })}
     </motion.div>
   );
 };
 
-// --- NAV BODY COMPONENT (RESIZE ANIMATION) ---
+// --- NAV BODY (DESKTOP NAV) ---
 
-export const NavBody = ({
-  children,
-  className,
-  visible,
-  isLoggedIn,
-  onLogout,
-}: NavBodyProps) => {
+export const NavBody = ({ children, className, visible }: NavBodyProps) => {
   return (
     <motion.div
       animate={{
         backdropFilter: visible ? "blur(10px)" : "none",
         boxShadow: visible
-          ? "0 0 24px rgba(34, 42, 53, 0.06), 0 1px 1px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(34, 42, 53, 0.04), 0 0 4px rgba(34, 42, 53, 0.08), 0 16px 68px rgba(47, 48, 55, 0.05), 0 1px 0 rgba(255, 255, 255, 0.1) inset"
+          ? "0 0 24px rgba(34, 42, 53, 0.06), 0 1px 1px rgba(0, 0, 0, 0.05)"
           : "none",
         width: visible ? "40%" : "100%",
         y: visible ? 20 : 0,
       }}
-      transition={{
-        type: "spring",
-        stiffness: 200,
-        damping: 50,
-      }}
-      style={{
-        minWidth: "800px",
-      }}
+      transition={{ type: "spring", stiffness: 200, damping: 50 }}
+      style={{ minWidth: "800px" }}
       className={cn(
-        "relative z-[60] mx-auto hidden w-full max-w-7xl flex-row items-center justify-between self-start rounded-full bg-transparent px-4 py-2 lg:flex dark:bg-neutral-950/80",
-        visible && "bg-white/80 dark:bg-neutral-950/80",
+        "relative z-[60] mx-auto hidden w-full max-w-7xl flex-row items-center justify-between self-start rounded-full px-4 py-2 lg:flex",
+        visible ? "bg-white dark:bg-neutral-950" : "bg-transparent",
         className
       )}
     >
@@ -181,7 +150,7 @@ export const NavBody = ({
   );
 };
 
-// --- NAV ITEMS COMPONENT (TUBELIGHT EFFECT) ---
+// --- NAV ITEMS (TUBELIGHT EFFECT) ---
 
 export const NavItems = ({
   items,
@@ -199,15 +168,14 @@ export const NavItems = ({
     >
       {items.map((item, idx) => {
         const isActive = activeTab === item.name;
-
         return (
           <Link
+            key={idx}
+            href={item.link}
             onClick={() => {
               setActiveTab(item.name);
-              if (onItemClick) onItemClick();
+              onItemClick?.();
             }}
-            href={item.link}
-            key={`link-${idx}`}
             className={cn(
               "relative px-4 py-2 text-neutral-600 dark:text-neutral-300 transition-colors rounded-full",
               isActive && "text-black dark:text-white font-bold"
@@ -229,7 +197,6 @@ export const NavItems = ({
                 </div>
               </motion.div>
             )}
-
             <span className="relative z-20">{item.name}</span>
           </Link>
         );
@@ -238,59 +205,44 @@ export const NavItems = ({
   );
 };
 
-// --- MOBILE COMPONENTS (SIDEBAR and ICONS) ---
-
-export const MobileNav = ({ children, className, visible }: MobileNavProps) => {
+// --- MOBILE NAV (TOP WRAPPER) ---
+export const MobileNav = ({ children, className }: MobileNavProps) => {
   return (
-    <motion.div
-      animate={{
-        backdropFilter: visible ? "blur(10px)" : "none",
-        boxShadow: visible
-          ? "0 0 24px rgba(34, 42, 53, 0.06), 0 1px 1px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(34, 42, 53, 0.04), 0 0 4px rgba(34, 42, 53, 0.08), 0 16px 68px rgba(47, 48, 55, 0.05), 0 1px 0 rgba(255, 255, 255, 0.1) inset"
-          : "none",
-        width: visible ? "90%" : "100%",
-        paddingRight: visible ? "12px" : "0px",
-        paddingLeft: visible ? "12px" : "0px",
-        borderRadius: visible ? "4px" : "2rem",
-        y: visible ? 20 : 0,
-      }}
-      transition={{ type: "spring", stiffness: 200, damping: 50 }}
+    <div
       className={cn(
-        "relative z-50 mx-auto flex w-full max-w-[calc(100vw-2rem)] flex-col items-center justify-between bg-transparent px-0 py-2 lg:hidden",
-        visible && "bg-white/80 dark:bg-neutral-950/80",
+        "sticky top-0 z-50 mx-auto flex w-full flex-col items-center justify-between px-0 py-2 lg:hidden",
+        "bg-white dark:bg-neutral-950 shadow-sm", // always solid
         className
       )}
     >
       {children}
-    </motion.div>
-  );
-};
-
-export const MobileNavHeader = ({
-  children,
-  className,
-}: MobileNavHeaderProps) => {
-  return (
-    <div
-      className={cn(
-        "flex w-full flex-row items-center justify-between",
-        className
-      )}
-    >
-      {" "}
-      {children}{" "}
     </div>
   );
 };
 
-// Updated to be a sidebar
+
+// --- MOBILE NAV HEADER ---
+
+export const MobileNavHeader = ({
+  children,
+  className,
+}: MobileNavHeaderProps) => (
+  <div
+    className={cn(
+      "flex w-full flex-row items-center justify-between",
+      className
+    )}
+  >
+    {children}
+  </div>
+);
+
+// --- MOBILE NAV MENU (SIDEBAR) ---
 export const MobileNavMenu = ({
   children,
   className,
   isOpen,
   onClose,
-  activeTab,
-  setActiveTab,
   isLoggedIn,
   onLogin,
   onLogout,
@@ -298,9 +250,9 @@ export const MobileNavMenu = ({
   const BackDrop = () => (
     <motion.div
       initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+      animate={{ opacity: 0.4 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black z-40 "
+      className="fixed inset-0 bg-black z-40"
       onClick={onClose}
     />
   );
@@ -314,15 +266,14 @@ export const MobileNavMenu = ({
         exit={{ x: "100%" }}
         transition={{ type: "spring", stiffness: 200, damping: 25 }}
         className={cn(
-          "fixed top-0 right-0 z-50 flex h-full w-full max-w-xs flex-col px-6 py-8 shadow-lg",
-          "bg-white dark:bg-neutral-950",
+          "fixed top-0 right-0 z-50 flex h-full w-full flex-col px-6 py-8 shadow-lg",
+          "bg-white dark:bg-neutral-950", // always opaque
           className
         )}
       >
         <button className="absolute top-4 right-4" onClick={onClose}>
           <IconX size={24} className="text-foreground" />
         </button>
-        {/* Added flex and gap for proper spacing */}
         <div className="flex flex-col gap-10 py-10">
           {children}
           {isLoggedIn ? (
@@ -349,35 +300,35 @@ export const MobileNavMenu = ({
     </>
   );
 };
+
+// --- TOGGLE (HAMBURGER / CLOSE) ---
+
 export const MobileNavToggle = ({
   isOpen,
   onClick,
 }: {
   isOpen: boolean;
   onClick: () => void;
-}) => {
-  return isOpen ? (
+}) =>
+  isOpen ? (
     <IconX className="text-black dark:text-white" onClick={onClick} />
   ) : (
     <IconMenu2 className="text-black dark:text-white" onClick={onClick} />
   );
-};
-export const NavbarLogo = () => {
-  return (
-    <a
-      href="#"
-      className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-black"
-    >
-      {/* <img
-        src="https://assets.aceternity.com/logo-dark.png"
-        alt="logo"
-        width={30}
-        height={30}
-      /> */}
-      <span className="font-medium text-black dark:text-white">Syndic</span>
-    </a>
-  );
-};
+
+// --- LOGO ---
+
+export const NavbarLogo = () => (
+  <a
+    href="#"
+    className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal"
+  >
+    <span className="font-medium text-black dark:text-white">Syndic</span>
+  </a>
+);
+
+// --- NAVBAR BUTTON ---
+
 export const NavbarButton = ({
   href,
   as: Tag = "a",
@@ -396,12 +347,12 @@ export const NavbarButton = ({
   | React.ComponentPropsWithoutRef<"button">
 )) => {
   const baseStyles =
-    "px-4 py-2 rounded-md bg-white button bg-white text-black text-sm font-bold relative cursor-pointer hover:-translate-y-0.5 transition duration-200 inline-block text-center";
+    "px-4 py-2 rounded-md bg-white text-black text-sm font-bold relative cursor-pointer hover:-translate-y-0.5 transition duration-200 inline-block text-center";
   const variantStyles = {
     primary:
       "shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,255,0.1)_inset]",
     secondary: "bg-transparent shadow-none dark:text-white",
-    dark: "bg-black text-white shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,255,0.1)_inset]",
+    dark: "bg-black text-white shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05)]",
     gradient:
       "bg-gradient-to-b from-blue-500 to-blue-700 text-white shadow-[0px_2px_0px_0px_rgba(255,255,255,0.3)_inset]",
   };
@@ -411,8 +362,7 @@ export const NavbarButton = ({
       className={cn(baseStyles, variantStyles[variant], className)}
       {...props}
     >
-      {" "}
-      {children}{" "}
+      {children}
     </Tag>
   );
 };

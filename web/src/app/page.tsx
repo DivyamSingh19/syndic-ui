@@ -11,7 +11,7 @@ import {
   MobileNavToggle,
   MobileNavMenu,
 } from "@/components/ui-elements/landing/navbar";
-import { Home, Info, Mail } from "lucide-react";
+import { Home, Info, HelpCircle, Sparkles } from "lucide-react"; 
 import Footer from "@/components/ui-elements/landing/footer";
 import { HeroSection } from "@/components/ui-elements/landing/hero";
 import FAQ from "@/components/ui-elements/landing/faq";
@@ -28,9 +28,10 @@ const lineVariants = {
 };
 
 const navItems = [
-  { name: "Home", link: "#", icon: Home },
-  { name: "About", link: "#", icon: Info },
-  { name: "Features", link: "#", icon: Mail },
+  { name: "Home", link: "#home", icon: Home },
+  { name: "Features", link: "#features", icon: Sparkles },
+  { name: "FAQ", link: "#faq", icon: HelpCircle },
+  { name: "About", link: "#about", icon: Info },
 ];
 
 export default function Page() {
@@ -79,6 +80,7 @@ export default function Page() {
               isLoggedIn={isLoggedIn}
               onLogin={handleLogin}
               onLogout={handleLogout}
+              className="w-full"
             >
               {navItems.map((item) => {
                 const Icon = item.icon;
@@ -90,11 +92,11 @@ export default function Page() {
                       setActiveTab(item.name);
                       toggleMobileMenu();
                     }}
-                    className={
+                    className={`flex items-center gap-2 ${
                       item.name === activeTab
-                        ? "text-primary font-bold flex items-center gap-2"
-                        : "text-foreground flex items-center gap-2"
-                    }
+                        ? "text-primary font-bold"
+                        : "text-foreground"
+                    }`}
                   >
                     {Icon && <Icon size={20} />}
                     {item.name}
@@ -105,17 +107,28 @@ export default function Page() {
           </MobileNav>
         </Navbar>
 
-        <section className="relative py-20 lg:py-24">
-          <div className="container mx-auto px-4 pl-8">
+        {/* Hero Section */}
+        <section id="home" className="relative py-20 lg:py-24">
+          <div className="container mx-auto px-4">
             <HeroSection />
           </div>
         </section>
 
+        {/* Features placeholder */}
+        <section id="features" className="py-20 lg:py-24">
+          <div className="container mx-auto px-4 text-center">
+            <h2 className="text-3xl font-bold mb-6">Features</h2>
+            <p className="text-gray-600 dark:text-gray-300">
+              Highlight Syndic’s key features here.
+            </p>
+          </div>
+        </section>
+
         {/* FAQ Section */}
-        <section className="py-20 lg:py-24">
+        <section id="faq" className="py-20 lg:py-24">
           <div className="container mx-auto max-w-3xl px-4">
             <motion.h3
-              className="text-lg md:text-4xl font-bold text-center mb-8 text-white  relative"
+              className="text-lg md:text-4xl font-bold text-center mb-8 text-gray-900 dark:text-white relative"
               variants={headingVariants}
               initial="hidden"
               whileInView="visible"
@@ -128,6 +141,19 @@ export default function Page() {
               />
             </motion.h3>
             <FAQ />
+          </div>
+        </section>
+
+        {/* About Section */}
+        <section id="about" className="py-20 lg:py-24">
+          <div className="container mx-auto max-w-3xl px-4 text-center">
+            <h2 className="text-3xl font-bold mb-6">About Syndic</h2>
+            <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+              Syndic is building the future of global payments by making
+              transfers instant, affordable, and transparent. Our mission is to
+              remove barriers in cross-border money movement and empower people
+              everywhere.
+            </p>
           </div>
         </section>
       </main>
