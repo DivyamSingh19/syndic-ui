@@ -35,6 +35,7 @@
     "clsx": "^2.1.1",
     "cobe": "^0.6.5",
     "ethers": "^6.15.0",
+    "framer-motion": "^12.23.21",
     "input-otp": "^1.4.2",
     "leaflet": "^1.9.4",
     "lottie-react": "^2.4.1",

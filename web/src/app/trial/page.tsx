@@ -21,14 +21,33 @@ import SetupPin from "@/components/ui/ui-elements/pins/SetupPin";
 import LocationForm from "@/components/ui/ui-elements/forms/LocationForm";
 import { RegisterForm } from "@/components/ui/ui-elements/forms/RegisterForm";
 import ResetPin from "@/components/ui/ui-elements/pins/ResetPlatformPin";
-import Navbar from "@/components/ui/ui-elements/landing/navbar";
+// import Navbar from "@/components/ui/ui-elements/landing/navbar";
 import Footer from "@/components/ui/ui-elements/landing/footer";
+// import {
+//   Navbar,
+//   NavBody,
+//   NavItems,
+//   NavbarLogo,
+//   NavbarButton,
+//   MobileNav,
+//   MobileNavHeader,
+//   MobileNavMenu,
+//   MobileNavToggle,
+// } from "@/components/ui/resizable-navbar";
+import { NavBar } from "@/components/ui/tubelight-navbar";
+import { Home, Settings, User } from "lucide-react";
+
 const page = () => {
   // const [pin, setPin] = useState("  ");
-
+  const navItems = [
+    { name: "Home", url: "#", icon: Home },
+    { name: "Profile", url: "#", icon: User },
+    { name: "Settings", url: "#", icon: Settings },
+  ];
   return (
     <div className="flex flex-col gap-4 items-center justify-center min-h-screen">
-      <Navbar />
+      <NavBar items={navItems} />
+      {/* <Navbar /> */}
       {/* <Footer/> */}
       {/* <ResetPin /> */}
       {/* <RegisterForm /> */}
@@ -69,3 +88,20 @@ const page = () => {
 };
 
 export default page;
+
+{
+  /* <Navbar>
+  <NavBody>
+    {/* Your navbar content here */
+}
+// <NavbarLogo />
+// <NavItems
+//   items={[
+//     { name: "Home", link: "#" },
+//     { name: "About", link: "#about" },
+//     { name: "Contact", link: "#contact" },
+//   ]}
+// />
+// <NavbarButton href="#cta">Get Started</NavbarButton>
+// </NavBody>
+// </Navbar>; */}
