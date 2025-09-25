@@ -3,7 +3,9 @@ import { Iphone15Pro,Iphone15ProProps } from '@/components/ui/iphone-15-pro'
 
 const Features = () => {
   return (
-    <div>Features</div>
+    <div>
+      <Iphone15Pro className='bg-white'/>
+    </div>
   )
 }
 

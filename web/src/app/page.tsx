@@ -15,6 +15,17 @@ import { Home, Info, Mail } from "lucide-react";
 import Footer from "@/components/ui-elements/landing/footer";
 import { HeroSection } from "@/components/ui-elements/landing/hero";
 import FAQ from "@/components/ui-elements/landing/faq";
+import { motion } from "framer-motion";
+
+const headingVariants = {
+  hidden: { opacity: 0, y: -20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+};
+
+const lineVariants = {
+  hidden: { width: 0 },
+  visible: { width: "85%", transition: { duration: 0.8, delay: 0.2 } },
+};
 
 const navItems = [
   { name: "Home", link: "#", icon: Home },
@@ -103,9 +114,19 @@ export default function Page() {
         {/* FAQ Section */}
         <section className="py-20 lg:py-24">
           <div className="container mx-auto max-w-3xl px-4">
-            <h2 className="text-3xl font-bold text-center mb-8">
+            <motion.h3
+              className="text-lg md:text-4xl font-bold text-center mb-8 text-white  relative"
+              variants={headingVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: false }}
+            >
               Frequently Asked Questions
-            </h2>
+              <motion.span
+                className="block h-[3px] bg-blue-400 mx-auto mt-2 rounded-full"
+                variants={lineVariants}
+              />
+            </motion.h3>
             <FAQ />
           </div>
         </section>
