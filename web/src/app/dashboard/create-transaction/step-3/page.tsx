@@ -4,10 +4,10 @@ import React from "react";
 import axios from "axios";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import PlatformPin from "@/components/ui/ui-elements/PlatformPin";
+import PlatformPin from "@/components/ui/ui-elements/pins/PlatformPin";
 
 const Step3 = () => {
-  const router = useRouter(); 
+  const router = useRouter();
   return (
     <div className="flex-1 flex flex-col justify-center items-center">
       <PlatformPin />

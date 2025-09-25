@@ -1,20 +1,15 @@
 "use client";
 import * as React from "react";
-import {
-  IconSend,
-  IconUsers,
-  IconX,
-  IconHistory,
-} from "@tabler/icons-react";
-import { NavMain } from "@/components/nav-main";
-import { NavUser } from "@/components/nav-user";
+import { IconSend, IconUsers, IconX, IconHistory } from "@tabler/icons-react";
+import { NavMain } from "@/components/ui/ui-elements/sidebar/nav-main";
+import { NavUser } from "@/components/ui/ui-elements/sidebar/nav-user";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
 } from "@/components/ui/sidebar";
-import Back from "./ui/ui-elements/buttons/back";
+import Back from "../buttons/back";
 
 const data = {
   user: {

@@ -36,7 +36,7 @@ export function NavUser({
   const router = useRouter();
 
   const handleEditProfile = () => {
-    router.push("/dashboard/edit-profile");
+    // router.push("/dashboard/edit-profile");
   };
 
   const handleLogout = () => {

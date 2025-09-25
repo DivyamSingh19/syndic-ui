@@ -9,25 +9,28 @@ import CurrencySelector from "@/components/ui/ui-elements/selectors/CurrencySele
 import Wallet from "@/components/ui/ui-elements/buttons/wallet";
 import Back from "@/components/ui/ui-elements/buttons/back";
 import BestRoute from "@/components/ui/ui-elements/buttons/bestroute";
-import PlatformPin from "@/components/ui/ui-elements/PlatformPin";
+import PlatformPin from "@/components/ui/ui-elements/pins/PlatformPin";
 import PaymentSuccess from "@/components/ui/ui-elements/Success";
-import { AppSidebar } from "@/components/app-sidebar";
+import { AppSidebar } from "@/components/ui/ui-elements/sidebar/app-sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import PhoneCodeSelector from "@/components/ui/ui-elements/selectors/PhoneCodeSelector";
 import EditProfileForm from "@/components/ui/ui-elements/forms/EditProfileForm";
 import Retry from "@/components/ui/ui-elements/buttons/retry";
 import InitializePayment from "@/components/ui/ui-elements/buttons/initializeTransaction";
-import SetupPin from "@/components/ui/ui-elements/SetupPin";
+import SetupPin from "@/components/ui/ui-elements/pins/SetupPin";
 import LocationForm from "@/components/ui/ui-elements/forms/LocationForm";
 import { RegisterForm } from "@/components/ui/ui-elements/forms/RegisterForm";
-import ResetPin from "@/components/ui/ui-elements/ResetPlatformPin";
-
+import ResetPin from "@/components/ui/ui-elements/pins/ResetPlatformPin";
+import Navbar from "@/components/ui/ui-elements/landing/navbar";
+import Footer from "@/components/ui/ui-elements/landing/footer";
 const page = () => {
   // const [pin, setPin] = useState("  ");
 
   return (
     <div className="flex flex-col gap-4 items-center justify-center min-h-screen">
-      <ResetPin />
+      <Navbar />
+      {/* <Footer/> */}
+      {/* <ResetPin /> */}
       {/* <RegisterForm /> */}
 
       {/* <LocationForm/> */}
@@ -51,7 +54,7 @@ const page = () => {
       <Back />
       <BestRoute />
       <PlatformSelector /> */}
-      <PlatformPin />
+      {/* <PlatformPin /> */}
       {/* <PaymentSuccess
         amount="1,500"
         currency="₹"

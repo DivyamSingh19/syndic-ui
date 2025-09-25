@@ -20,7 +20,7 @@ import PhoneCodeSelector from "../selectors/PhoneCodeSelector";
 import { Textarea } from "@/components/ui/textarea";
 import { editProfile } from "@/lib/api";
 import PlatformSelector from "../selectors/PlatformSelector";
-import PlatformPin from "../PlatformPin";
+import PlatformPin from "../pins/PlatformPin";
 import axios from "axios";
 interface FormData {
   firstname: string;
@@ -71,7 +71,7 @@ const EditProfileForm = () => {
   };
 
   return (
-    <Form {...form} >
+    <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-4 w-full max-w-lg mx-auto px-4 "
