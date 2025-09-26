@@ -42,6 +42,7 @@ import { motion } from "motion/react";
 import Features from "@/components/ui-elements/landing/features";
 import  AboutSection  from "@/components/ui-elements/landing/about";
 import { CryptoSwapComponent } from "@/components/ui/crypto-swap";
+import SelectorsCard from "@/components/ui-elements/selectors/SelectorsCard";
 
 const page = () => {
   // const [pin, setPin] = useState("  ");
@@ -52,6 +53,7 @@ const page = () => {
   // ];
   return (
     <div className="flex flex-col gap-4 items-center justify-center min-h-screen">
+      <SelectorsCard/>
       <CryptoSwapComponent/>
       {/* <AboutSection/>
       <Features/> */}
@@ -112,11 +114,11 @@ const page = () => {
 
         <PhoneCodeSelector />
       </div> */}
-      {/* 
+{/*       
       <Wallet />
-      <Back />
-      <BestRoute />
-      <PlatformSelector /> */}
+      <Back /> */}
+      {/* <BestRoute /> */}
+      {/* <PlatformSelector /> */}
       {/* <PlatformPin /> */}
       {/* <PaymentSuccess
         amount="1,500"
