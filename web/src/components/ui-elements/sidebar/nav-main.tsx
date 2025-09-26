@@ -1,6 +1,6 @@
 "use client";
 import { type Icon } from "@tabler/icons-react";
-import { cn } from "@/lib/utils"; 
+import { cn } from "@/lib/utils";
 import {
   SidebarGroup,
   SidebarGroupContent,
@@ -8,7 +8,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-
+  
 export function NavMain({
   items,
 }: {
@@ -21,7 +21,7 @@ export function NavMain({
   return (
     <SidebarGroup>
       <SidebarGroupContent>
-        <SidebarMenu className={cn("gap-5")}> 
+        <SidebarMenu className={cn("gap-5")}>
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton tooltip={item.title}>

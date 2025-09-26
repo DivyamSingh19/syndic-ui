@@ -21,14 +21,13 @@ const Back = ({ onClick, className, disabled }: BackProps) => {
     <div
       onClick={handleClick}
       className={`
-        flex items-center gap-2 px-3 py-2 rounded-md hover:text-black
-        hover:bg-gray-100 transition-colors duration-200
+        flex items-center gap-2 px-3 py-2 rounded-md 
         ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
         ${className || ""}
       `}
     >
       <ChevronLeft size={20} />
-      <span className="font-medium">Back</span>
+      {/* <span className="font-medium">Back</span> */}
     </div>
   );
 };

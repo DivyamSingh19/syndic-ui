@@ -27,7 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Calendar } from "lucide-react";
+import { Calendar as CalendarIcon, Search } from "lucide-react";
 
 type Txn = {
   id: number;
@@ -47,45 +47,89 @@ const PastTransactions = () => {
       {
         id: 1,
         type: "received",
-        description: "Payment from John Doe",
+        description: "Payment from Rajesh Kumar",
         amount: 1250,
         date: "2025-09-20T10:12:00Z",
         status: "completed",
         reference: "INV-23901",
-        contact: "John Doe",
+        contact: "Rajesh Kumar",
         method: "UPI",
       },
       {
         id: 2,
         type: "sent",
-        description: "Payment to TechCorp",
+        description: "Payment to Flipkart",
         amount: 850,
         date: "2025-09-19T08:34:00Z",
         status: "pending",
         reference: "BILL-88421",
-        contact: "TechCorp",
+        contact: "Flipkart",
         method: "Bank",
       },
       {
         id: 3,
         type: "sent",
-        description: "Subscription to Streamio",
-        amount: 19,
+        description: "Subscription to Hotstar",
+        amount: 499,
         date: "2025-09-19T06:02:00Z",
         status: "completed",
         reference: "SUB-77231",
-        contact: "Streamio",
+        contact: "Hotstar",
         method: "Card",
       },
       {
         id: 4,
         type: "received",
-        description: "Refund from ACME",
+        description: "Refund from Amazon India",
         amount: 300,
         date: "2025-09-18T13:50:00Z",
         status: "completed",
         reference: "RFD-40211",
-        contact: "ACME",
+        contact: "Amazon India",
+        method: "Wallet",
+      },
+      {
+        id: 5,
+        type: "sent",
+        description: "Electricity Bill Payment",
+        amount: 1200,
+        date: "2025-09-17T11:20:00Z",
+        status: "completed",
+        reference: "BILL-90012",
+        contact: "BSES Delhi",
+        method: "UPI",
+      },
+      {
+        id: 6,
+        type: "received",
+        description: "Salary Credited",
+        amount: 75000,
+        date: "2025-09-15T09:00:00Z",
+        status: "completed",
+        reference: "SAL-2025",
+        contact: "Infosys Ltd",
+        method: "Bank",
+      },
+      {
+        id: 7,
+        type: "sent",
+        description: "Payment to Zomato",
+        amount: 450,
+        date: "2025-09-21T20:30:00Z",
+        status: "completed",
+        reference: "ORD-11234",
+        contact: "Zomato",
+        method: "UPI",
+      },
+      {
+        id: 8,
+        type: "sent",
+        description: "Mobile Recharge",
+        amount: 299,
+        date: "2025-09-16T15:00:00Z",
+        status: "failed",
+        reference: "RCH-55678",
+        contact: "Jio",
         method: "Wallet",
       },
     ],
@@ -167,11 +211,13 @@ const PastTransactions = () => {
   };
 
   return (
-    <div className="h-full p-6 space-y-4">
+    <div className="h-full flex flex-col p-4 md:p-6 lg:p-8 space-y-6">
       {/* Page Header */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-6xl font-semibold">Transaction History</h1>
-        <div className="inline-flex gap-2">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 flex-shrink-0">
+        <h1 className="text-3xl font-bold tracking-tight">
+          Transaction History
+        </h1>
+        <div className="flex items-center gap-2 flex-wrap">
           <Button
             variant={quickRange === "7d" ? "default" : "outline"}
             size="sm"
@@ -197,20 +243,20 @@ const PastTransactions = () => {
       </div>
 
       {/* Search & Filters */}
-      <div className="rounded-md border p-4 grid grid-cols-1 gap-4">
-        <div className="w-full">
-          <Label>Search</Label>
+      <div className="rounded-lg border p-4 grid gap-4 bg-[#17181c] flex-shrink-0">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
           <Input
-            placeholder="Search by contact, description, or reference"
+            placeholder="Search by contact, description, or reference..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
+            className="pl-10"
           />
         </div>
-        <div className="flex flex-wrap items-end gap-4">
-          {/* Date range group */}
-          <div className="flex items-end gap-3">
-            <div className="grid gap-1 relative">
-              <Label htmlFor="from">From</Label>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          <div className="grid gap-2">
+            <Label htmlFor="from">From Date</Label>
+            <div className="relative">
               <Input
                 id="from"
                 type="date"
@@ -219,17 +265,15 @@ const PastTransactions = () => {
                 ref={fromRef}
                 className="pr-8 custom-date"
               />
-              <Calendar
-                className="absolute right-2 bottom-2 h-4 w-4 text-white cursor-pointer"
-                onClick={() => {
-                  const el = fromRef.current as any;
-                  if (el?.showPicker) el.showPicker();
-                  else el?.focus();
-                }}
+              <CalendarIcon
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground cursor-pointer"
+                onClick={() => fromRef.current?.showPicker?.()}
               />
             </div>
-            <div className="grid gap-1 relative">
-              <Label htmlFor="to">To</Label>
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="to">To Date</Label>
+            <div className="relative">
               <Input
                 id="to"
                 type="date"
@@ -238,225 +282,182 @@ const PastTransactions = () => {
                 ref={toRef}
                 className="pr-8 custom-date"
               />
-              <Calendar
-                className="absolute right-2 bottom-2 h-4 w-4 text-white cursor-pointer"
-                onClick={() => {
-                  const el = toRef.current as any;
-                  if (el?.showPicker) el.showPicker();
-                  else el?.focus();
-                }}
+              <CalendarIcon
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground cursor-pointer"
+                onClick={() => toRef.current?.showPicker?.()}
               />
             </div>
           </div>
-          {/* Type/Status/Method group */}
-          <div className="flex items-end gap-3 flex-wrap">
-            <div>
-              <Label>Type</Label>
-              <Select value={type} onValueChange={(v: any) => setType(v)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Any" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All</SelectItem>
-                  <SelectItem value="sent">Sent</SelectItem>
-                  <SelectItem value="received">Received</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label>Status</Label>
-              <Select value={status} onValueChange={(v: any) => setStatus(v)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Any" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All</SelectItem>
-                  <SelectItem value="completed">Completed</SelectItem>
-                  <SelectItem value="pending">Pending</SelectItem>
-                  <SelectItem value="failed">Failed</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label>Method</Label>
-              <Select value={method} onValueChange={(v: any) => setMethod(v)}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Any" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All</SelectItem>
-                  <SelectItem value="UPI">UPI</SelectItem>
-                  <SelectItem value="Card">Card</SelectItem>
-                  <SelectItem value="Wallet">Wallet</SelectItem>
-                  <SelectItem value="Bank">Bank</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+          <div className="grid gap-2">
+            <Label>Type</Label>
+            <Select value={type} onValueChange={(v: any) => setType(v)}>
+              <SelectTrigger>
+                <SelectValue placeholder="All" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All</SelectItem>
+                <SelectItem value="sent">Sent</SelectItem>
+                <SelectItem value="received">Received</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
-          {/* Min/Max group at end */}
-          <div className="flex items-end gap-3 ml-auto">
-            <div className="grid gap-1">
-              <Label htmlFor="min">Min</Label>
-              <Input
-                id="min"
-                type="number"
-                value={minAmt}
-                onChange={(e) => setMinAmt(e.target.value)}
-                placeholder="0"
-              />
-            </div>
-            <div className="grid gap-1">
-              <Label htmlFor="max">Max</Label>
-              <Input
-                id="max"
-                type="number"
-                value={maxAmt}
-                onChange={(e) => setMaxAmt(e.target.value)}
-                placeholder="1000"
-              />
-            </div>
+          <div className="grid gap-2">
+            <Label>Status</Label>
+            <Select value={status} onValueChange={(v: any) => setStatus(v)}>
+              <SelectTrigger>
+                <SelectValue placeholder="All" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All</SelectItem>
+                <SelectItem value="completed">Completed</SelectItem>
+                <SelectItem value="pending">Pending</SelectItem>
+                <SelectItem value="failed">Failed</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="grid gap-2">
+            <Label>Method</Label>
+            <Select value={method} onValueChange={(v: any) => setMethod(v)}>
+              <SelectTrigger>
+                <SelectValue placeholder="All" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All</SelectItem>
+                <SelectItem value="UPI">UPI</SelectItem>
+                <SelectItem value="Card">Card</SelectItem>
+                <SelectItem value="Wallet">Wallet</SelectItem>
+                <SelectItem value="Bank">Bank</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
       </div>
 
-      <div className="rounded-md border bg-background">
+      {/* Table - UPDATED SECTION */}
+      <div className="rounded-lg border bg-[#17181c] flex-1 overflow-auto relative">
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead className="w-[70px]">Sr No</TableHead>
-              <TableHead>Date & time</TableHead>
-              <TableHead>TransactionDetails</TableHead>
+            {/* The sticky class keeps the header fixed to the top of the scroll container */}
+            <TableRow className="sticky top-0 z-10 bg-[#17181c] hover:bg-[#17181c]">
+              <TableHead className="w-[80px]">Sr No</TableHead>
+              <TableHead>Date & Time</TableHead>
+              <TableHead>Transaction Details</TableHead>
               <TableHead>Type</TableHead>
               <TableHead className="text-right">Amount</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Method</TableHead>
-              <TableHead className="w-[110px]">Actions</TableHead>
+              <TableHead className="w-[100px]">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {pageData.map((t, idx) => (
-              <TableRow key={t.id}>
-                <TableCell className="font-medium">
-                  {(page - 1) * pageSize + idx + 1}
-                </TableCell>
-                <TableCell>{formatDMY(t.date)}</TableCell>
-                <TableCell>
-                  <div className="flex flex-col">
-                    <span className="text-sm font-medium">{t.description}</span>
-                    <span className="text-xs text-muted-foreground">
+            {pageData.length > 0 ? (
+              pageData.map((t, idx) => (
+                <TableRow key={t.id}>
+                  <TableCell className="font-medium">
+                    {(page - 1) * pageSize + idx + 1}
+                  </TableCell>
+                  <TableCell>{formatDMY(t.date)}</TableCell>
+                  <TableCell>
+                    <div className="font-medium">{t.description}</div>
+                    <div className="text-sm text-muted-foreground">
                       {t.contact}
-                    </span>
-                  </div>
-                </TableCell>
-                <TableCell className="capitalize">{t.type}</TableCell>
-                <TableCell
-                  className={`text-right ${
-                    t.type === "received" ? "text-emerald-600" : "text-rose-600"
-                  }`}
-                >
-                  {formatAmountINR(t.amount, t.type)}
-                </TableCell>
-                <TableCell className="capitalize">
-                  <Badge
-                    variant={t.status === "completed" ? "default" : "secondary"}
+                    </div>
+                  </TableCell>
+                  <TableCell className="capitalize">{t.type}</TableCell>
+                  <TableCell
+                    className={`text-right font-semibold ${
+                      t.type === "received"
+                        ? "text-emerald-500"
+                        : "text-rose-500"
+                    }`}
                   >
-                    {t.status}
-                  </Badge>
-                </TableCell>
-                <TableCell>{t.method}</TableCell>
-                <TableCell>
-                  <Dialog onOpenChange={(open) => !open && setSelected(null)}>
-                    <DialogTrigger asChild>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => setSelected(t)}
-                      >
-                        View
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>Transaction Details</DialogTitle>
-                        <DialogDescription>
-                          Detailed information for this transaction.
-                        </DialogDescription>
-                      </DialogHeader>
-                      <div className="grid gap-3 text-sm">
-                        <div className="flex items-center justify-between">
-                          <span className="text-muted-foreground">
-                            Reference
-                          </span>
-                          <span className="font-medium">
-                            {selected?.reference}
-                          </span>
+                    {formatAmountINR(t.amount, t.type)}
+                  </TableCell>
+                  <TableCell>
+                    <Badge
+                      variant={
+                        t.status === "completed"
+                          ? "default"
+                          : t.status === "pending"
+                          ? "secondary"
+                          : "destructive"
+                      }
+                      className="capitalize"
+                    >
+                      {t.status}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>{t.method}</TableCell>
+                  <TableCell>
+                    <Dialog onOpenChange={(open) => !open && setSelected(null)}>
+                      <DialogTrigger asChild>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => setSelected(t)}
+                        >
+                          View
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Transaction Details</DialogTitle>
+                          <DialogDescription>
+                            Detailed information for this transaction.
+                          </DialogDescription>
+                        </DialogHeader>
+                        <div className="grid gap-3 text-sm py-4">
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">
+                              Reference ID
+                            </span>
+                            <span>{selected?.reference}</span>
+                          </div>
+                          {/* Add other details similarly */}
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">
+                              Amount
+                            </span>
+                            <span>
+                              {selected
+                                ? formatAmountINR(
+                                    selected.amount,
+                                    selected.type
+                                  )
+                                : ""}
+                            </span>
+                          </div>
+                          {/* ... more details ... */}
                         </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-muted-foreground">Contact</span>
-                          <span>{selected?.contact}</span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-muted-foreground">Type</span>
-                          <span className="capitalize">{selected?.type}</span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-muted-foreground">Amount</span>
-                          <span>
-                            {selected?.type === "received" ? "+" : "-"}$
-                            {selected?.amount}
-                          </span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-muted-foreground">Date</span>
-                          <span>
-                            {selected ? formatDMY(selected.date) : ""}
-                          </span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-muted-foreground">Status</span>
-                          <Badge
-                            variant={
-                              selected?.status === "completed"
-                                ? "default"
-                                : "secondary"
-                            }
-                          >
-                            {selected?.status}
-                          </Badge>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-muted-foreground">Method</span>
-                          <span>{selected?.method}</span>
-                        </div>
-                        <div>
-                          <span className="text-muted-foreground">
-                            Description
-                          </span>
-                          <p className="mt-1">{selected?.description}</p>
-                        </div>
-                      </div>
-                    </DialogContent>
-                  </Dialog>
+                      </DialogContent>
+                    </Dialog>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={8} className="h-24 text-center">
+                  No results found.
                 </TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </div>
 
       {/* Pagination */}
-      <div className="flex items-center justify-between pt-2">
+      <div className="flex items-center justify-between flex-shrink-0">
         <div className="text-sm text-muted-foreground">
           Page {page} of {totalPages}
         </div>
-        <div className="inline-flex gap-2">
+        <div className="flex items-center gap-2">
           <Button
             variant="outline"
             size="sm"
             onClick={() => setPage((p) => Math.max(1, p - 1))}
             disabled={page === 1}
           >
-            Prev
+            Previous
           </Button>
           <Button
             variant="outline"
@@ -468,11 +469,15 @@ const PastTransactions = () => {
           </Button>
         </div>
       </div>
-      {/* Hide native date picker icon and keep white icon clickable */}
+
       <style jsx global>{`
         input[type="date"].custom-date::-webkit-calendar-picker-indicator {
           opacity: 0;
-          display: none;
+          position: absolute;
+          right: 0;
+          width: 100%;
+          height: 100%;
+          cursor: pointer;
         }
         input[type="date"].custom-date {
           color-scheme: dark;
@@ -483,15 +488,3 @@ const PastTransactions = () => {
 };
 
 export default PastTransactions;
-
-/* Hide native calendar indicator so only the white icon shows */
-/* styled-jsx global to affect shadcn Input under this page */
-<style jsx global>{`
-  input[type="date"].custom-date::-webkit-calendar-picker-indicator {
-    opacity: 0;
-    display: none;
-  }
-  input[type="date"].custom-date {
-    color-scheme: dark;
-  }
-`}</style>;

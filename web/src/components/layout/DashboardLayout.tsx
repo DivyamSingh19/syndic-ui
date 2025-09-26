@@ -6,15 +6,20 @@ import { SiteHeader } from "../ui-elements/site-header";
 
 interface DashboardLayoutProps {
   children: ReactNode;
+  className?: string
 }
 
-const DL: React.FC<DashboardLayoutProps> = ({ children }) => {
+const DL: React.FC<DashboardLayoutProps> = ({ children,className }) => {
   return (
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
         <SiteHeader />
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>
+        <div
+          className={`flex flex-1 flex-col gap-4 p-4 pt-0 ${className || ""}`}
+        >
+          {children}
+        </div>
       </SidebarInset>
     </SidebarProvider>
   );

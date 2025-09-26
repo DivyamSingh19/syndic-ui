@@ -28,9 +28,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Calendar, Copy, Headphones } from "lucide-react";
+import { Calendar as CalendarIcon, Search } from "lucide-react";
 
 type FailedTxn = {
+  id: string;
   reference: string;
   date: string; // ISO
   recipient: string;
@@ -72,29 +73,31 @@ const FailedTransactions = () => {
         id: "3",
         reference: "REF-33451",
         date: "2025-09-18T08:05:00Z",
-        recipient: "ACME",
+        recipient: "ACME Inc.",
         amount: 300,
         method: "Card",
         reason: "Card declined",
         status: "failed",
       },
+      {
+        id: "4",
+        reference: "REF-99876",
+        date: "2025-09-17T15:20:00Z",
+        recipient: "Jane Smith",
+        amount: 5000,
+        method: "UPI",
+        reason: "Invalid UPI ID",
+        status: "failed",
+      },
+
     ],
     []
   );
 
   const [query, setQuery] = useState("");
-  const [reason, setReason] = useState<
-    | "all"
-    | "Insufficient balance"
-    | "Network error"
-    | "Invalid UPI ID"
-    | "Card declined"
-    | "Expired"
-  >("all");
+  const [reason, setReason] = useState<any>("all");
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
-  const [minAmt, setMinAmt] = useState("");
-  const [maxAmt, setMaxAmt] = useState("");
   const [selected, setSelected] = useState<FailedTxn | null>(null);
   const fromRef = useRef<HTMLInputElement | null>(null);
   const toRef = useRef<HTMLInputElement | null>(null);
@@ -104,18 +107,19 @@ const FailedTransactions = () => {
   const filtered = useMemo(() => {
     return data.filter((t) => {
       const q = query.trim().toLowerCase();
-      if (q && !t.recipient.toLowerCase().includes(q)) return false;
+      if (
+        q &&
+        !t.recipient.toLowerCase().includes(q) &&
+        !t.reference.toLowerCase().includes(q)
+      )
+        return false;
       if (reason !== "all" && t.reason !== reason) return false;
       const dt = new Date(t.date);
       if (from && dt < new Date(from)) return false;
       if (to && dt > new Date(to)) return false;
-      const min = minAmt ? Number(minAmt) : null;
-      const max = maxAmt ? Number(maxAmt) : null;
-      if (min !== null && t.amount < min) return false;
-      if (max !== null && t.amount > max) return false;
       return true;
     });
-  }, [data, query, reason, from, to, minAmt, maxAmt]);
+  }, [data, query, reason, from, to]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const pageData = filtered.slice((page - 1) * pageSize, page * pageSize);
@@ -125,102 +129,47 @@ const FailedTransactions = () => {
       style: "currency",
       currency: "INR",
     }).format(n);
+
   const dmy = (iso: string) => {
     const d = new Date(iso);
-    const dd = String(d.getDate()).padStart(2, "0");
-    const mm = String(d.getMonth() + 1).padStart(2, "0");
-    const yyyy = d.getFullYear();
-    const hh = String(d.getHours()).padStart(2, "0");
-    const mi = String(d.getMinutes()).padStart(2, "0");
-    return `${dd}-${mm}-${yyyy} ${hh}:${mi}`;
+    return `${String(d.getDate()).padStart(2, "0")}-${String(
+      d.getMonth() + 1
+    ).padStart(2, "0")}-${d.getFullYear()} ${String(d.getHours()).padStart(
+      2,
+      "0"
+    )}:${String(d.getMinutes()).padStart(2, "0")}`;
   };
 
-  const empty = filtered.length === 0;
-  const last30 = data.filter(
-    (t) => new Date(t.date) >= new Date(Date.now() - 30 * 86400000)
-  ).length;
-  const topReason = Object.entries(
-    data.reduce<Record<string, number>>((acc, t) => {
-      acc[t.reason] = (acc[t.reason] || 0) + 1;
-      return acc;
-    }, {})
-  ).sort((a, b) => b[1] - a[1])[0]?.[0];
-
   return (
-    <div className="h-full p-6 space-y-4">
-      {/* Header */}
-      <div className="flex flex-col gap-1">
-        <h1 className="text-6xl font-semibold">Failed Transactions</h1>
+    <div className="h-full flex flex-col p-4 md:p-6 lg:p-8 space-y-6">
+      <div className="flex-shrink-0">
+        <h1 className="text-3xl font-bold tracking-tight">
+          Failed Transactions
+        </h1>
         <p className="text-sm text-muted-foreground">
-          Only unsuccessful payments are shown.
+          Review and manage all unsuccessful payments.
         </p>
       </div>
 
-      {/* Filters */}
-      <div className="rounded-md border p-4 grid grid-cols-1 gap-4">
-        {/* Row 1: Search */}
-        <div className="w-full">
-          <Label>Search</Label>
+      <div className="rounded-lg border p-4 grid gap-4 bg-[#17181c] flex-shrink-0">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
           <Input
-            placeholder="Search by recipient"
+            placeholder="Search by recipient or reference ID..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
+            className="pl-10"
           />
         </div>
-
-        {/* Row 2: Groups */}
-        <div className="flex flex-wrap items-end gap-4">
-          {/* Date range */}
-          <div className="flex items-end gap-3">
-            <div className="grid gap-1 relative">
-              <Label htmlFor="from">From</Label>
-              <Input
-                id="from"
-                type="date"
-                value={from}
-                onChange={(e) => setFrom(e.target.value)}
-                ref={fromRef}
-                className="pr-8 custom-date"
-              />
-              <Calendar
-                className="absolute right-2 bottom-2 h-4 w-4 text-white cursor-pointer"
-                onClick={() => {
-                  const el = fromRef.current as any;
-                  if (el?.showPicker) el.showPicker();
-                  else el?.focus();
-                }}
-              />
-            </div>
-            <div className="grid gap-1 relative">
-              <Label htmlFor="to">To</Label>
-              <Input
-                id="to"
-                type="date"
-                value={to}
-                onChange={(e) => setTo(e.target.value)}
-                ref={toRef}
-                className="pr-8 custom-date"
-              />
-              <Calendar
-                className="absolute right-2 bottom-2 h-4 w-4 text-white cursor-pointer"
-                onClick={() => {
-                  const el = toRef.current as any;
-                  if (el?.showPicker) el.showPicker();
-                  else el?.focus();
-                }}
-              />
-            </div>
-          </div>
-
-          {/* Reason */}
-          <div>
-            <Label>Failure reason</Label>
-            <Select value={reason} onValueChange={(v: any) => setReason(v)}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid gap-2">
+            <Label>Failure Reason</Label>
+            <Select value={reason} onValueChange={(v) => setReason(v)}>
               <SelectTrigger>
-                <SelectValue placeholder="Any" />
+                <SelectValue placeholder="All" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All</SelectItem>
+                <SelectItem value="all">All Reasons</SelectItem>
                 <SelectItem value="Insufficient balance">
                   Insufficient balance
                 </SelectItem>
@@ -231,142 +180,128 @@ const FailedTransactions = () => {
               </SelectContent>
             </Select>
           </div>
-
-          {/* Min/Max */}
-          <div className="flex items-end gap-3 ml-auto">
-            <div className="grid gap-1">
-              <Label htmlFor="min">Min</Label>
+          <div className="grid gap-2">
+            <Label htmlFor="from">From Date</Label>
+            <div className="relative">
               <Input
-                id="min"
-                type="number"
-                value={minAmt}
-                onChange={(e) => setMinAmt(e.target.value)}
-                placeholder="0"
+                id="from"
+                type="date"
+                value={from}
+                onChange={(e) => setFrom(e.target.value)}
+                ref={fromRef}
+                className="pr-8 custom-date"
+              />
+              <CalendarIcon
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground cursor-pointer"
+                onClick={() => fromRef.current?.showPicker?.()}
               />
             </div>
-            <div className="grid gap-1">
-              <Label htmlFor="max">Max</Label>
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="to">To Date</Label>
+            <div className="relative">
               <Input
-                id="max"
-                type="number"
-                value={maxAmt}
-                onChange={(e) => setMaxAmt(e.target.value)}
-                placeholder="1000"
+                id="to"
+                type="date"
+                value={to}
+                onChange={(e) => setTo(e.target.value)}
+                ref={toRef}
+                className="pr-8 custom-date"
+              />
+              <CalendarIcon
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground cursor-pointer"
+                onClick={() => toRef.current?.showPicker?.()}
               />
             </div>
           </div>
         </div>
       </div>
 
-      {/* Empty state */}
-      {empty ? (
-        <div className="rounded-md border p-8 text-center text-sm text-muted-foreground">
-          No failed transactions recently.
-        </div>
-      ) : (
-        <div className="rounded-md border bg-background">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Date & time</TableHead>
-                <TableHead>Recipient</TableHead>
-                <TableHead className="text-right">Amount attempted</TableHead>
-                <TableHead>Reason</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="w-[200px]">Action</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filtered.map((t) => (
-                <TableRow key={t.reference}>
+      <div className="rounded-lg border bg-[#17181c] flex-1 overflow-auto relative">
+        <Table>
+          <TableHeader>
+            <TableRow className="sticky top-0 z-10 bg-[#17181c] hover:bg-[#17181c]">
+              <TableHead>Date & Time</TableHead>
+              <TableHead>Recipient</TableHead>
+              <TableHead>Amount</TableHead>
+              <TableHead>Reason & Status</TableHead>
+              <TableHead>Action</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {pageData.length > 0 ? (
+              pageData.map((t) => (
+                <TableRow key={t.id}>
                   <TableCell>{dmy(t.date)}</TableCell>
-                  <TableCell>{t.recipient}</TableCell>
-                  <TableCell className="text-right">{inr(t.amount)}</TableCell>
-                  <TableCell>{t.reason}</TableCell>
-                  <TableCell className="capitalize">
-                    <Badge variant="destructive">{t.status}</Badge>
-                  </TableCell>
+                  <TableCell className="font-medium">{t.recipient}</TableCell>
+                  <TableCell>{inr(t.amount)}</TableCell>
                   <TableCell>
-                    <div className="flex flex-wrap gap-2">
-                      <Dialog
-                        onOpenChange={(open) => !open && setSelected(null)}
+                    <div className="flex flex-col gap-1">
+                      <span>{t.reason}</span>
+                      {/* Restored colorful status badges */}
+                      <Badge
+                        variant={
+                          t.status === "failed"
+                            ? "destructive"
+                            : t.status === "declined"
+                            ? "secondary"
+                            : "outline"
+                        }
+                        className="capitalize w-fit"
                       >
-                        <DialogTrigger asChild>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => setSelected(t)}
-                          >
-                            Details
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                          <DialogHeader>
-                            <DialogTitle>Failure details</DialogTitle>
-                            <DialogDescription>
-                              What happened and how to fix it.
-                            </DialogDescription>
-                          </DialogHeader>
-                          <div className="grid gap-3 text-sm">
-                            <div className="flex items-center justify-between">
-                              <span className="text-muted-foreground">
-                                Date
-                              </span>
-                              <span>{selected ? dmy(selected.date) : ""}</span>
-                            </div>
-                            <div className="flex items-center justify-between">
-                              <span className="text-muted-foreground">
-                                Recipient
-                              </span>
-                              <span>{selected?.recipient}</span>
-                            </div>
-                            <div className="flex items-center justify-between">
-                              <span className="text-muted-foreground">
-                                Amount
-                              </span>
-                              <span>
-                                {selected ? inr(selected.amount) : ""}
-                              </span>
-                            </div>
-                            <div className="flex items-center justify-between">
-                              <span className="text-muted-foreground">
-                                Method
-                              </span>
-                              <span>{selected?.method}</span>
-                            </div>
-                            <div className="flex items-center justify-between">
-                              <span className="text-muted-foreground">
-                                Reason
-                              </span>
-                              <span>{selected?.reason}</span>
-                            </div>
-                            <div>
-                              <span className="text-muted-foreground">
-                                Suggested next steps
-                              </span>
-                              <ul className="mt-1 list-disc pl-5">
-                                <li>Retry now</li>
-                                <li>
-                                  If card declined: update card or contact bank
-                                </li>
-                                <li>
-                                  If network error: try again in a few minutes
-                                </li>
-                              </ul>
-                            </div>
-                          </div>
-                        </DialogContent>
-                      </Dialog>
+                        {t.status}
+                      </Badge>
                     </div>
                   </TableCell>
+                  <TableCell>
+                    {/* Restored original Action column */}
+                    <Dialog onOpenChange={(open) => !open && setSelected(null)}>
+                      <DialogTrigger asChild>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => setSelected(t)}
+                        >
+                          Details
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>Failure Details</DialogTitle>
+                          <DialogDescription>
+                            What happened and how to fix it.
+                          </DialogDescription>
+                        </DialogHeader>
+                        {/* Original simple modal content */}
+                        <div className="grid gap-3 text-sm">
+                          <div className="flex items-center justify-between">
+                            <span className="text-muted-foreground">Date</span>
+                            <span>{selected ? dmy(selected.date) : ""}</span>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-muted-foreground">
+                              Recipient
+                            </span>
+                            <span>{selected?.recipient}</span>
+                          </div>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
+                  </TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      )}
-      {/* Pagination */}
-      <div className="flex items-center justify-between ">
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={5} className="h-24 text-center">
+                  No failed transactions match your filters.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </div>
+
+      <div className="flex items-center justify-between flex-shrink-0">
         <div className="text-sm text-muted-foreground">
           Page {page} of {totalPages}
         </div>
@@ -390,11 +325,14 @@ const FailedTransactions = () => {
         </div>
       </div>
 
-      {/* Hide native indicator for date inputs */}
       <style jsx global>{`
         input[type="date"].custom-date::-webkit-calendar-picker-indicator {
           opacity: 0;
-          display: none;
+          position: absolute;
+          right: 0;
+          width: 100%;
+          height: 100%;
+          cursor: pointer;
         }
         input[type="date"].custom-date {
           color-scheme: dark;
