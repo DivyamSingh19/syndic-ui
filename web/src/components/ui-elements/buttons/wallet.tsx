@@ -11,34 +11,32 @@ const Wallet = ({ className, onClick, disabled }: WalletProps) => {
   return (
     <button
       className={`
-        group relative flex items-center gap-3 px-4 py-3 rounded-lg 
-        bg-gradient-to-r from-purple-500 to-indigo-600 
-        hover:from-purple-600 hover:to-indigo-700 
-        active:from-purple-700 active:to-indigo-800  
-        transform hover:scale-[1.02] active:scale-[0.98]
+        relative flex items-center gap-3 px-4 py-2.5 rounded-xl
+        bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600
+        hover:from-sky-400 hover:via-blue-500 hover:to-indigo-500
+        active:from-sky-600 active:via-blue-700 active:to-indigo-700
+        text-white font-medium shadow-md
         transition-all duration-200 ease-in-out
-        border border-purple-400/20 text-white
-        ${
-          disabled
-            ? "opacity-50 cursor-not-allowed hover:scale-100"
-            : "cursor-pointer"
-        } 
+        ${disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
         ${className || ""}
       `}
       onClick={disabled ? undefined : onClick}
       disabled={disabled}
     >
-      <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-purple-400 to-indigo-500 opacity-20 group-hover:opacity-30 transition-opacity blur-sm" />
+      {/* Glow overlay */}
+      <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-sky-300/30 to-indigo-400/30 opacity-0 hover:opacity-100 transition-opacity blur-md" />
 
+      {/* Wallet Icon */}
       <Image
         src="/images/PhantomIcon.png"
         alt="Phantom Wallet Icon"
         width={24}
         height={24}
-        className="relative z-10 rounded group-hover:translate-y-1 transition-transform"
+        className="relative z-10"
       />
 
-      <span className="relative z-10 text-lg font-semibold tracking-wide group-hover:translate-y-1 transition-transform">
+      {/* Text */}
+      <span className="relative z-10 text-sm sm:text-base font-semibold tracking-wide">
         Phantom Wallet
       </span>
     </button>

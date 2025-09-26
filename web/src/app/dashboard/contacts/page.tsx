@@ -247,7 +247,7 @@ const Contacts = () => {
 
       {/* Table */}
       <div className="rounded-lg  border bg-[#17181c] flex-1 relative overflow-auto max-h-[calc(100vh-220px)]">
-        <Table className="w-full border-collapse">
+        <Table className="w-full ">
           <TableHeader>
             <TableRow className="sticky top-0 z-10 bg-[#17181c] hover:bg-[#17181c]">
               <TableHead className="w-[60px] text-center">Sr No</TableHead>
