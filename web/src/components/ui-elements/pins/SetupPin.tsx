@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Lock, Eye, EyeOff } from "lucide-react";
-import { Button } from "../button";
+import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import axios from "axios";
@@ -91,7 +91,7 @@ const SetupPin = ({
 
   return (
     <div
-      className={`flex flex-col items-center justify-center p-8 bg-background shadow-lg rounded-lg max-w-sm mx-auto ${
+      className={`flex flex-col items-center justify-center p-8 bg-card/80  shadow-lg rounded-lg max-w-sm mx-auto ${
         className || ""
       }`}
     >

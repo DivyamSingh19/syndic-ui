@@ -22,6 +22,8 @@ import {
 } from "@/components/ui/dialog";
 import InitializeTransaction from "@/components/ui-elements/buttons/initializeTransaction";
 
+// ... (Platform interface and platforms array remain the same) ...
+
 interface Platform {
   name: string;
   description: string;
@@ -87,102 +89,111 @@ const Step2 = () => {
   };
 
   return (
-    <div className="p-4">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Route Names</TableHead>
-            <TableHead className="text-right">Action</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {platforms.map((platform) => (
-            <TableRow key={platform.name}>
-              <TableCell className="font-medium">{platform.name}</TableCell>
-              <TableCell className="text-right">
-                <Dialog
-                  onOpenChange={(open) => {
-                    if (open) {
-                      setSelectedPlatform(platform);
-                    } else {
-                      setSelectedPlatform(null);
-                    }
-                  }}
-                >
-                  <DialogTrigger asChild>
-                    <Button variant="outline">Select</Button>
-                  </DialogTrigger>
-                  <DialogContent className="sm:max-w-[425px]">
-                    {/* The content below will be shown in the dialog */}
-                    {selectedPlatform && (
-                      <>
-                        <DialogHeader>
-                          <DialogTitle>
-                            {selectedPlatform.name} Route Details
-                          </DialogTitle>
-                          <DialogDescription>
-                            A summary of the selected route and its associated
-                            fees.
-                          </DialogDescription>
-                        </DialogHeader>
-                        <div className="grid gap-4 py-4">
-                          {/* Platform Details */}
-                          <div className="flex justify-between items-center">
-                            <span className="font-medium">Platform:</span>
-                            <span>{selectedPlatform.name}</span>
-                          </div>
-                          <div className="flex justify-between items-center">
-                            <span className="font-medium">Fee:</span>
-                            <span>{selectedPlatform.fee}</span>
-                          </div>
-                          <div className="flex justify-between items-center">
-                            <span className="font-medium">Time:</span>
-                            <span>{selectedPlatform.time}</span>
-                          </div>
-                          <div className="flex justify-between items-center">
-                            <span className="font-medium">Rating:</span>
-                            <span>{selectedPlatform.rating} ⭐</span>
-                          </div>
-                          <div className="flex justify-between items-center">
-                            <span className="font-medium">Success Rate:</span>
-                            <span>{selectedPlatform.successRate}</span>
-                          </div>
+    // This new wrapper centers everything within the page's content area.
+    <div className="w-full h-full flex flex-col items-center justify-center p-4">
+      <div className="w-full max-w-3xl mb-8 text-center">
+        <h1 className="text-4xl font-bold tracking-tight">
+          Select the Best Route
+        </h1>
+        <p className="text-muted-foreground mt-2">
+          We've found the best routes for your transaction. Review the details
+          and proceed.
+        </p>
+      </div>
 
-                          {/* Fee Breakdown */}
-                          <div className="border-t pt-4">
-                            <h4 className="font-bold text-lg mb-2">
-                              Fee Breakdown
-                            </h4>
+      {/* Your original component is placed inside the centering wrapper */}
+      <div className="p-6 bg-card/80 border border-border/50 rounded-2xl w-full max-w-3xl">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Route Name</TableHead>
+              <TableHead>Fee</TableHead>
+              <TableHead>Time</TableHead>
+              <TableHead className="text-right">Action</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {platforms.map((platform) => (
+              <TableRow key={platform.name}>
+                <TableCell className="font-medium">
+                  <div className="flex flex-col">
+                    <span>{platform.name}</span>
+                    <span className="text-xs text-muted-foreground">
+                      {platform.description}
+                    </span>
+                  </div>
+                </TableCell>
+                <TableCell>{platform.fee}</TableCell>
+                <TableCell>{platform.time}</TableCell>
+                <TableCell className="text-right">
+                  <Dialog
+                    onOpenChange={(open) => {
+                      setSelectedPlatform(open ? platform : null);
+                    }}
+                  >
+                    <DialogTrigger asChild>
+                      <Button variant="outline">Select</Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[425px] bg-card/90 backdrop-blur-xl border-border/50">
+                      {selectedPlatform && (
+                        <>
+                          <DialogHeader>
+                            <DialogTitle>
+                              {selectedPlatform.name} Route Details
+                            </DialogTitle>
+                            <DialogDescription>
+                              A summary of the selected route.
+                            </DialogDescription>
+                          </DialogHeader>
+                          <div className="grid gap-3 py-4 text-sm">
                             <div className="flex justify-between items-center">
-                              <span className="font-medium">Gas Fees:</span>
-                              <span>{selectedPlatform.gasFees}</span>
-                            </div>
-                            <div className="flex justify-between items-center">
-                              <span className="font-medium">Routing Fees:</span>
-                              <span>{selectedPlatform.routingFees}</span>
-                            </div>
-                            <div className="flex justify-between items-center">
-                              <span className="font-medium">Methods:</span>
-                              <span className="text-right">
-                                {selectedPlatform.methods}
+                              <span className="text-muted-foreground">
+                                Fee:
                               </span>
+                              <span>{selectedPlatform.fee}</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-muted-foreground">
+                                Est. Time:
+                              </span>
+                              <span>{selectedPlatform.time}</span>
+                            </div>
+                            <div className="flex justify-between items-center">
+                              <span className="text-muted-foreground">
+                                Success Rate:
+                              </span>
+                              <span>{selectedPlatform.successRate}</span>
+                            </div>
+                            <div className="border-t border-border/50 pt-3 mt-2 grid gap-3">
+                              <div className="flex justify-between items-center">
+                                <span className="text-muted-foreground">
+                                  Gas Fees:
+                                </span>
+                                <span>{selectedPlatform.gasFees}</span>
+                              </div>
+                              <div className="flex justify-between items-center">
+                                <span className="text-muted-foreground">
+                                  Routing Fees:
+                                </span>
+                                <span>{selectedPlatform.routingFees}</span>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <DialogFooter>
-                          <InitializeTransaction
-                            onClick={handleInitializeTransaction}
-                          />
-                        </DialogFooter>
-                      </>
-                    )}
-                  </DialogContent>
-                </Dialog>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+                          <DialogFooter>
+                            <InitializeTransaction
+                              onClick={handleInitializeTransaction}
+                            />
+                          </DialogFooter>
+                        </>
+                      )}
+                    </DialogContent>
+                  </Dialog>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 };

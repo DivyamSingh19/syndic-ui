@@ -87,7 +87,7 @@ const RP = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center p-4">
-      <div className="flex flex-col items-center p-8 bg-background shadow-lg rounded-lg max-w-sm mx-auto">
+      <div className="flex flex-col items-center p-8 bg-card/80  shadow-lg rounded-lg max-w-sm mx-auto">
         <Shield size={48} className="text-indigo-600 mb-4" />
 
         <h2 className="mb-2 text-2xl font-bold text-gray-100">

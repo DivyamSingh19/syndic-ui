@@ -1,15 +1,13 @@
 //@ts-nocheck
 "use client";
 import React from "react";
-import axios from "axios";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import PlatformPin from "@/components/ui-elements/pins/PlatformPin";
 
 const Step3 = () => {
-  const router = useRouter();
   return (
-    <div className="flex-1 flex flex-col justify-center items-center">
+    // This wrapper takes up the full available space and centers the component.
+    <div className="w-full h-full flex flex-col items-center justify-center p-4">
+      
       <PlatformPin />
     </div>
   );
