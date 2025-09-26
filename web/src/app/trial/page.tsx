@@ -54,7 +54,7 @@ const page = () => {
   return (
     <div className="flex flex-col gap-4 items-center justify-center min-h-screen">
       <SelectorsCard/>
-      <CryptoSwapComponent/>
+      {/* <CryptoSwapComponent/> */}
       {/* <AboutSection/>
       <Features/> */}
       {/* <WorldMap
@@ -107,18 +107,18 @@ const page = () => {
       <Logo /> */}
       {/* <EditProfileForm/> */}
 
-      {/* <div className="flex justify-center gap-3">
+      <div className="flex justify-center gap-3">
         <CountrySelector />
         <FiatSelector />
         <CurrencySelector />
 
         <PhoneCodeSelector />
-      </div> */}
+      </div>
 {/*       
       <Wallet />
       <Back /> */}
       {/* <BestRoute /> */}
-      {/* <PlatformSelector /> */}
+      <PlatformSelector />
       {/* <PlatformPin /> */}
       {/* <PaymentSuccess
         amount="1,500"
