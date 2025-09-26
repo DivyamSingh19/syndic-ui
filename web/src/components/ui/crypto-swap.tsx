@@ -1,49 +1,46 @@
-'use client';
+"use client";
 
-import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { 
-  ArrowUpDown, 
-  Settings, 
-  ChevronDown, 
-  Zap, 
-  TrendingUp,
-  Wallet,
-  RefreshCw,
+import React, { useState, useRef, useEffect, RefObject } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  ArrowUpDown,
+  Settings,
+  ChevronDown,
+  Zap,
   CheckCircle,
   AlertCircle,
-  Loader2
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
+  Loader2,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 
-// Hook for click outside functionality
+// ---------------------------
+// Hook: useClickOutside
+// ---------------------------
 function useClickOutside<T extends HTMLElement = HTMLElement>(
-  ref: React.RefObject<T>,
+  ref: RefObject<T | null>, // allow null
   handler: (event: MouseEvent | TouchEvent) => void,
-  mouseEvent: 'mousedown' | 'mouseup' = 'mousedown'
+  mouseEvent: "mousedown" | "mouseup" = "mousedown"
 ): void {
   useEffect(() => {
     const listener = (event: MouseEvent | TouchEvent) => {
       const el = ref?.current;
-      const target = event.target;
-
-      if (!el || !target || el.contains(target as Node)) {
-        return;
-      }
-
+      if (!el || el.contains(event.target as Node)) return;
       handler(event);
     };
 
     document.addEventListener(mouseEvent, listener);
-    document.addEventListener('touchstart', listener);
+    document.addEventListener("touchstart", listener);
 
     return () => {
       document.removeEventListener(mouseEvent, listener);
-      document.removeEventListener('touchstart', listener);
+      document.removeEventListener("touchstart", listener);
     };
   }, [ref, handler, mouseEvent]);
 }
 
+// ---------------------------
+// Types
+// ---------------------------
 interface Token {
   symbol: string;
   name: string;
@@ -61,62 +58,69 @@ interface SwapState {
   toAmount: string;
   slippage: number;
   isLoading: boolean;
-  status: 'idle' | 'loading' | 'success' | 'error';
+  status: "idle" | "loading" | "success" | "error";
   error?: string;
 }
 
+// ---------------------------
+// Default tokens
+// ---------------------------
 const defaultTokens: Token[] = [
   {
-    symbol: 'ETH',
-    name: 'Ethereum',
-    icon: '⟠',
-    balance: '2.5847',
-    price: 2340.50,
+    symbol: "ETH",
+    name: "Ethereum",
+    icon: "⟠",
+    balance: "2.5847",
+    price: 2340.5,
     change24h: 5.2,
-    address: '0x0000000000000000000000000000000000000000'
+    address: "0x0000000000000000000000000000000000000000",
   },
   {
-    symbol: 'USDC',
-    name: 'USD Coin',
-    icon: '💵',
-    balance: '1,250.00',
-    price: 1.00,
+    symbol: "USDC",
+    name: "USD Coin",
+    icon: "💵",
+    balance: "1,250.00",
+    price: 1.0,
     change24h: 0.1,
-    address: '0xa0b86a33e6c3b4c6b6b6b6b6b6b6b6b6b6b6b6b6'
+    address: "0xa0b86a33e6c3b4c6b6b6b6b6b6b6b6b6b6b6b6b6",
   },
   {
-    symbol: 'UNI',
-    name: 'Uniswap',
-    icon: '🦄',
-    balance: '45.2',
+    symbol: "UNI",
+    name: "Uniswap",
+    icon: "🦄",
+    balance: "45.2",
     price: 8.45,
     change24h: -2.1,
-    address: '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984'
+    address: "0x1f9840a85d5af5bf1d1762f925bdaddc4201f984",
   },
   {
-    symbol: 'LINK',
-    name: 'Chainlink',
-    icon: '🔗',
-    balance: '120.5',
+    symbol: "LINK",
+    name: "Chainlink",
+    icon: "🔗",
+    balance: "120.5",
     price: 14.25,
     change24h: 3.8,
-    address: '0x514910771af9ca656af840dff83e8264ecf986ca'
-  }
+    address: "0x514910771af9ca656af840dff83e8264ecf986ca",
+  },
 ];
 
+// ---------------------------
+// Component
+// ---------------------------
 export function CryptoSwapComponent() {
-  const shouldReduceMotion = useReducedMotion();
   const [swapState, setSwapState] = useState<SwapState>({
     fromToken: defaultTokens[0],
     toToken: defaultTokens[1],
-    fromAmount: '',
-    toAmount: '',
+    fromAmount: "",
+    toAmount: "",
     slippage: 0.5,
     isLoading: false,
-    status: 'idle'
+    status: "idle",
   });
 
-  const [showTokenSelector, setShowTokenSelector] = useState<'from' | 'to' | null>(null);
+  const [showTokenSelector, setShowTokenSelector] = useState<
+    "from" | "to" | null
+  >(null);
   const [showSettings, setShowSettings] = useState(false);
   const [isSwapping, setIsSwapping] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -126,93 +130,102 @@ export function CryptoSwapComponent() {
   const tokenSelectorRef = useRef<HTMLDivElement>(null);
   const settingsRef = useRef<HTMLDivElement>(null);
 
+  // ---------------------------
+  // Click outside
+  // ---------------------------
   useClickOutside(tokenSelectorRef, () => setShowTokenSelector(null));
   useClickOutside(settingsRef, () => setShowSettings(false));
 
-  // Mouse tracking for glow effects
+  // ---------------------------
+  // Mouse tracking for glow
+  // ---------------------------
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      if (containerRef.current) {
-        const rect = containerRef.current.getBoundingClientRect();
-        setMousePosition({
-          x: e.clientX - rect.left,
-          y: e.clientY - rect.top
-        });
-      }
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      setMousePosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
     };
 
-    if (isHovering) {
-      document.addEventListener('mousemove', handleMouseMove);
-    }
-
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-    };
+    if (isHovering) document.addEventListener("mousemove", handleMouseMove);
+    return () => document.removeEventListener("mousemove", handleMouseMove);
   }, [isHovering]);
 
-  // Calculate exchange rate and amounts
+  // ---------------------------
+  // Update toAmount on fromAmount change
+  // ---------------------------
   useEffect(() => {
     if (swapState.fromAmount && !isNaN(Number(swapState.fromAmount))) {
-      const fromValue = Number(swapState.fromAmount) * swapState.fromToken.price;
+      const fromValue =
+        Number(swapState.fromAmount) * swapState.fromToken.price;
       const toAmount = (fromValue / swapState.toToken.price).toFixed(6);
-      setSwapState(prev => ({ ...prev, toAmount }));
+      setSwapState((prev) => ({ ...prev, toAmount }));
     } else {
-      setSwapState(prev => ({ ...prev, toAmount: '' }));
+      setSwapState((prev) => ({ ...prev, toAmount: "" }));
     }
-  }, [swapState.fromAmount, swapState.fromToken.price, swapState.toToken.price]);
+  }, [swapState.fromAmount, swapState.fromToken, swapState.toToken]);
 
+  // ---------------------------
+  // Handle token select
+  // ---------------------------
   const handleTokenSelect = (token: Token) => {
-    if (showTokenSelector === 'from') {
-      setSwapState(prev => ({ ...prev, fromToken: token }));
-    } else if (showTokenSelector === 'to') {
-      setSwapState(prev => ({ ...prev, toToken: token }));
-    }
+    if (showTokenSelector === "from")
+      setSwapState((prev) => ({ ...prev, fromToken: token }));
+    else if (showTokenSelector === "to")
+      setSwapState((prev) => ({ ...prev, toToken: token }));
     setShowTokenSelector(null);
   };
 
+  // ---------------------------
+  // Swap token positions
+  // ---------------------------
   const handleSwapTokens = () => {
     setIsSwapping(true);
     setTimeout(() => {
-      setSwapState(prev => ({
+      setSwapState((prev) => ({
         ...prev,
         fromToken: prev.toToken,
         toToken: prev.fromToken,
         fromAmount: prev.toAmount,
-        toAmount: prev.fromAmount
+        toAmount: prev.fromAmount,
       }));
       setIsSwapping(false);
     }, 300);
   };
 
+  // ---------------------------
+  // Execute swap
+  // ---------------------------
   const handleSwap = async () => {
     if (!swapState.fromAmount || Number(swapState.fromAmount) <= 0) return;
 
-    setSwapState(prev => ({ ...prev, status: 'loading', isLoading: true }));
+    setSwapState((prev) => ({ ...prev, status: "loading", isLoading: true }));
 
-    // Simulate swap transaction
     try {
-      await new Promise(resolve => setTimeout(resolve, 3000));
-      setSwapState(prev => ({ 
-        ...prev, 
-        status: 'success', 
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+      setSwapState((prev) => ({
+        ...prev,
+        status: "success",
         isLoading: false,
-        fromAmount: '',
-        toAmount: ''
+        fromAmount: "",
+        toAmount: "",
       }));
-      
-      setTimeout(() => {
-        setSwapState(prev => ({ ...prev, status: 'idle' }));
-      }, 2000);
-    } catch (error) {
-      setSwapState(prev => ({ 
-        ...prev, 
-        status: 'error', 
+      setTimeout(
+        () => setSwapState((prev) => ({ ...prev, status: "idle" })),
+        2000
+      );
+    } catch {
+      setSwapState((prev) => ({
+        ...prev,
+        status: "error",
         isLoading: false,
-        error: 'Swap failed. Please try again.'
+        error: "Swap failed. Please try again.",
       }));
     }
   };
 
+  // ---------------------------
+  // Framer Motion variants
+  // ---------------------------
   const containerVariants = {
     hidden: { opacity: 0, y: 20, scale: 0.95 },
     visible: {
@@ -220,38 +233,33 @@ export function CryptoSwapComponent() {
       y: 0,
       scale: 1,
       transition: {
-        type: 'spring',
+        type: "spring",
         stiffness: 300,
         damping: 30,
         staggerChildren: 0.1,
-        delayChildren: 0.1
-      }
-    }
-  };
+        delayChildren: 0.1,
+      },
+    },
+  } as const;
 
   const itemVariants = {
-    hidden: { opacity: 0, x: -20, filter: 'blur(4px)' },
+    hidden: { opacity: 0, x: -20, filter: "blur(4px)" },
     visible: {
       opacity: 1,
       x: 0,
-      filter: 'blur(0px)',
-      transition: {
-        type: 'spring',
-        stiffness: 400,
-        damping: 28,
-        mass: 0.6
-      }
-    }
-  };
+      filter: "blur(0px)",
+      transition: { type: "spring", stiffness: 400, damping: 28, mass: 0.6 },
+    },
+  } as const;
 
   const glowVariants = {
     idle: { opacity: 0 },
-    hover: { 
-      opacity: 1,
-      transition: { duration: 0.3 }
-    }
-  };
+    hover: { opacity: 1, transition: { duration: 0.3 } },
+  } as const;
 
+  // ---------------------------
+  // Render
+  // ---------------------------
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <motion.div
@@ -263,42 +271,40 @@ export function CryptoSwapComponent() {
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
       >
-        {/* Animated background glow */}
+        {/* Glow */}
         <motion.div
-          className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 rounded-3xl blur-xl"
+          className="absolute inset-0 rounded-3xl blur-xl"
           variants={glowVariants}
-          animate={isHovering ? 'hover' : 'idle'}
+          animate={isHovering ? "hover" : "idle"}
           style={{
-            background: isHovering 
+            background: isHovering
               ? `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, rgba(59, 130, 246, 0.3) 0%, rgba(147, 51, 234, 0.2) 50%, transparent 70%)`
-              : undefined
+              : undefined,
           }}
         />
 
-        {/* Main swap container */}
+        {/* Main swap card */}
         <motion.div
           className="relative bg-card/80 backdrop-blur-xl border border-border/50 rounded-3xl p-6 shadow-2xl"
           variants={itemVariants}
         >
           {/* Header */}
-          <motion.div 
-            className="flex items-center justify-between mb-6"
-            variants={itemVariants}
-          >
+          <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
               <motion.div
                 className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center"
                 whileHover={{ scale: 1.1, rotate: 5 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
               >
                 <Zap className="w-5 h-5 text-white" />
               </motion.div>
               <div>
                 <h1 className="text-xl font-bold text-foreground">Swap</h1>
-                <p className="text-sm text-muted-foreground">Trade tokens instantly</p>
+                <p className="text-sm text-muted-foreground">
+                  Trade tokens instantly
+                </p>
               </div>
             </div>
-            
             <motion.button
               className="p-2 rounded-xl bg-muted/50 hover:bg-muted transition-colors"
               whileHover={{ scale: 1.05 }}
@@ -307,13 +313,10 @@ export function CryptoSwapComponent() {
             >
               <Settings className="w-5 h-5 text-muted-foreground" />
             </motion.button>
-          </motion.div>
+          </div>
 
           {/* From Token */}
-          <motion.div
-            className="relative mb-2"
-            variants={itemVariants}
-          >
+          <motion.div className="relative mb-2" variants={itemVariants}>
             <div className="bg-muted/30 rounded-2xl p-4 border border-border/30">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-sm text-muted-foreground">From</span>
@@ -321,41 +324,51 @@ export function CryptoSwapComponent() {
                   Balance: {swapState.fromToken.balance}
                 </span>
               </div>
-              
               <div className="flex items-center gap-3">
                 <motion.button
                   className="flex items-center gap-2 bg-background/50 rounded-xl px-3 py-2 hover:bg-background/80 transition-colors"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={() => setShowTokenSelector('from')}
+                  onClick={() => setShowTokenSelector("from")}
                 >
                   <span className="text-2xl">{swapState.fromToken.icon}</span>
-                  <span className="font-semibold">{swapState.fromToken.symbol}</span>
+                  <span className="font-semibold">
+                    {swapState.fromToken.symbol}
+                  </span>
                   <ChevronDown className="w-4 h-4 text-muted-foreground" />
                 </motion.button>
-                
-                <input
-                  type="number"
-                  placeholder="0.0"
-                  value={swapState.fromAmount}
-                  onChange={(e) => setSwapState(prev => ({ ...prev, fromAmount: e.target.value }))}
-                  className="flex-1 bg-transparent text-right text-2xl font-semibold outline-none placeholder:text-muted-foreground"
-                />
+                <div className="flex-1 text-right">
+                  <input
+                    type="number"
+                    placeholder="0.0"
+                    value={swapState.fromAmount}
+                    onChange={(e) =>
+                      setSwapState((prev) => ({
+                        ...prev,
+                        fromAmount: e.target.value,
+                      }))
+                    }
+                    className="w-full bg-transparent text-2xl font-semibold outline-none placeholder:text-muted-foreground text-right"
+                  />
+                </div>
               </div>
-              
               <div className="flex justify-between items-center mt-2">
                 <span className="text-xs text-muted-foreground">
                   ${swapState.fromToken.price.toLocaleString()}
                 </span>
                 <span className="text-xs text-muted-foreground">
-                  ≈ ${(Number(swapState.fromAmount || 0) * swapState.fromToken.price).toFixed(2)}
+                  ≈ $
+                  {(
+                    Number(swapState.fromAmount || 0) *
+                    swapState.fromToken.price
+                  ).toFixed(2)}
                 </span>
               </div>
             </div>
           </motion.div>
 
           {/* Swap Button */}
-          <motion.div 
+          <motion.div
             className="flex justify-center -my-1 relative z-10"
             variants={itemVariants}
           >
@@ -364,7 +377,7 @@ export function CryptoSwapComponent() {
               whileHover={{ scale: 1.1, rotate: 180 }}
               whileTap={{ scale: 0.9 }}
               animate={{ rotate: isSwapping ? 180 : 0 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
               onClick={handleSwapTokens}
             >
               <ArrowUpDown className="w-5 h-5 text-white" />
@@ -372,10 +385,7 @@ export function CryptoSwapComponent() {
           </motion.div>
 
           {/* To Token */}
-          <motion.div
-            className="relative mb-6"
-            variants={itemVariants}
-          >
+          <motion.div className="relative mb-6" variants={itemVariants}>
             <div className="bg-muted/30 rounded-2xl p-4 border border-border/30">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-sm text-muted-foreground">To</span>
@@ -383,30 +393,32 @@ export function CryptoSwapComponent() {
                   Balance: {swapState.toToken.balance}
                 </span>
               </div>
-              
               <div className="flex items-center gap-3">
                 <motion.button
                   className="flex items-center gap-2 bg-background/50 rounded-xl px-3 py-2 hover:bg-background/80 transition-colors"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={() => setShowTokenSelector('to')}
+                  onClick={() => setShowTokenSelector("to")}
                 >
                   <span className="text-2xl">{swapState.toToken.icon}</span>
-                  <span className="font-semibold">{swapState.toToken.symbol}</span>
+                  <span className="font-semibold">
+                    {swapState.toToken.symbol}
+                  </span>
                   <ChevronDown className="w-4 h-4 text-muted-foreground" />
                 </motion.button>
-                
                 <div className="flex-1 text-right text-2xl font-semibold text-muted-foreground">
-                  {swapState.toAmount || '0.0'}
+                  {swapState.toAmount || "0.0"}
                 </div>
               </div>
-              
               <div className="flex justify-between items-center mt-2">
                 <span className="text-xs text-muted-foreground">
                   ${swapState.toToken.price.toLocaleString()}
                 </span>
                 <span className="text-xs text-muted-foreground">
-                  ≈ ${(Number(swapState.toAmount || 0) * swapState.toToken.price).toFixed(2)}
+                  ≈ $
+                  {(
+                    Number(swapState.toAmount || 0) * swapState.toToken.price
+                  ).toFixed(2)}
                 </span>
               </div>
             </div>
@@ -417,12 +429,19 @@ export function CryptoSwapComponent() {
             <motion.div
               className="bg-muted/20 rounded-xl p-3 mb-4 space-y-2"
               initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.3 }}
             >
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Rate</span>
-                <span>1 {swapState.fromToken.symbol} = {(swapState.toToken.price / swapState.fromToken.price).toFixed(6)} {swapState.toToken.symbol}</span>
+                <span>
+                  1 {swapState.fromToken.symbol} ={" "}
+                  {(
+                    swapState.fromToken.price / swapState.toToken.price
+                  ).toFixed(6)}{" "}
+                  {swapState.toToken.symbol}
+                </span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Slippage</span>
@@ -435,51 +454,57 @@ export function CryptoSwapComponent() {
             </motion.div>
           )}
 
-          {/* Swap Button */}
+          {/* Swap Execute Button */}
           <motion.button
             className={cn(
-              "w-full py-4 rounded-2xl font-semibold text-lg transition-all duration-300",
-              swapState.status === 'success' 
+              "w-full py-4 rounded-2xl font-semibold text-lg transition-all duration-300 flex items-center justify-center gap-2",
+              swapState.status === "success"
                 ? "bg-green-500 text-white"
-                : swapState.status === 'error'
+                : swapState.status === "error"
                 ? "bg-red-500 text-white"
-                : swapState.isLoading
-                ? "bg-muted text-muted-foreground cursor-not-allowed"
-                : !swapState.fromAmount || Number(swapState.fromAmount) <= 0
+                : swapState.isLoading ||
+                  !swapState.fromAmount ||
+                  Number(swapState.fromAmount) <= 0
                 ? "bg-muted text-muted-foreground cursor-not-allowed"
                 : "bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700"
             )}
-            whileHover={!swapState.isLoading && swapState.fromAmount ? { scale: 1.02 } : {}}
-            whileTap={!swapState.isLoading && swapState.fromAmount ? { scale: 0.98 } : {}}
-            disabled={swapState.isLoading || !swapState.fromAmount || Number(swapState.fromAmount) <= 0}
+            whileHover={
+              !swapState.isLoading && Number(swapState.fromAmount) > 0
+                ? { scale: 1.02 }
+                : {}
+            }
+            whileTap={
+              !swapState.isLoading && Number(swapState.fromAmount) > 0
+                ? { scale: 0.98 }
+                : {}
+            }
+            disabled={
+              swapState.isLoading ||
+              !swapState.fromAmount ||
+              Number(swapState.fromAmount) <= 0
+            }
             onClick={handleSwap}
             variants={itemVariants}
           >
-            <div className="flex items-center justify-center gap-2">
-              {swapState.isLoading ? (
-                <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                  Swapping...
-                </>
-              ) : swapState.status === 'success' ? (
-                <>
-                  <CheckCircle className="w-5 h-5" />
-                  Swap Successful!
-                </>
-              ) : swapState.status === 'error' ? (
-                <>
-                  <AlertCircle className="w-5 h-5" />
-                  Swap Failed
-                </>
-              ) : !swapState.fromAmount || Number(swapState.fromAmount) <= 0 ? (
-                'Enter an amount'
-              ) : (
-                <>
-                  <Zap className="w-5 h-5" />
-                  Swap Tokens
-                </>
-              )}
-            </div>
+            {swapState.isLoading ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin" /> Swapping...
+              </>
+            ) : swapState.status === "success" ? (
+              <>
+                <CheckCircle className="w-5 h-5" /> Swap Successful!
+              </>
+            ) : swapState.status === "error" ? (
+              <>
+                <AlertCircle className="w-5 h-5" /> Swap Failed
+              </>
+            ) : !swapState.fromAmount || Number(swapState.fromAmount) <= 0 ? (
+              "Enter an amount"
+            ) : (
+              <>
+                <Zap className="w-5 h-5" /> Swap Tokens
+              </>
+            )}
           </motion.button>
         </motion.div>
 
@@ -499,7 +524,7 @@ export function CryptoSwapComponent() {
                 initial={{ scale: 0.9, opacity: 0, y: 20 }}
                 animate={{ scale: 1, opacity: 1, y: 0 }}
                 exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
               >
                 <h3 className="text-lg font-semibold mb-4">Select Token</h3>
                 <div className="space-y-2 max-h-60 overflow-y-auto">
@@ -517,15 +542,22 @@ export function CryptoSwapComponent() {
                       <span className="text-2xl">{token.icon}</span>
                       <div className="flex-1 text-left">
                         <div className="font-semibold">{token.symbol}</div>
-                        <div className="text-sm text-muted-foreground">{token.name}</div>
+                        <div className="text-sm text-muted-foreground">
+                          {token.name}
+                        </div>
                       </div>
                       <div className="text-right">
                         <div className="font-semibold">{token.balance}</div>
-                        <div className={cn(
-                          "text-sm",
-                          token.change24h >= 0 ? "text-green-500" : "text-red-500"
-                        )}>
-                          {token.change24h >= 0 ? '+' : ''}{token.change24h}%
+                        <div
+                          className={cn(
+                            "text-sm",
+                            token.change24h >= 0
+                              ? "text-green-500"
+                              : "text-red-500"
+                          )}
+                        >
+                          {token.change24h >= 0 ? "+" : ""}
+                          {token.change24h}%
                         </div>
                       </div>
                     </motion.button>
@@ -552,7 +584,7 @@ export function CryptoSwapComponent() {
                 initial={{ scale: 0.9, opacity: 0, y: 20 }}
                 animate={{ scale: 1, opacity: 1, y: 0 }}
                 exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
               >
                 <h3 className="text-lg font-semibold mb-4">Swap Settings</h3>
                 <div className="space-y-4">
@@ -572,7 +604,12 @@ export function CryptoSwapComponent() {
                           )}
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
-                          onClick={() => setSwapState(prev => ({ ...prev, slippage: value }))}
+                          onClick={() =>
+                            setSwapState((prev) => ({
+                              ...prev,
+                              slippage: value,
+                            }))
+                          }
                         >
                           {value}%
                         </motion.button>

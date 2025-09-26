@@ -41,18 +41,20 @@ import WorldMap from "@/components/ui/world-map";
 import { motion } from "motion/react";
 import Features from "@/components/ui-elements/landing/features";
 import  AboutSection  from "@/components/ui-elements/landing/about";
+import { CryptoSwapComponent } from "@/components/ui/crypto-swap";
 
 const page = () => {
   // const [pin, setPin] = useState("  ");
-  const navItems = [
-    { name: "Home", url: "#", icon: Home },
-    { name: "Profile", url: "#", icon: User },
-    { name: "Settings", url: "#", icon: Settings },
-  ];
+  // const navItems = [
+  //   { name: "Home", url: "#", icon: Home },
+  //   { name: "Profile", url: "#", icon: User },
+  //   { name: "Settings", url: "#", icon: Settings },
+  // ];
   return (
     <div className="flex flex-col gap-4 items-center justify-center min-h-screen">
-      <AboutSection/>
-      <Features/>
+      <CryptoSwapComponent/>
+      {/* <AboutSection/>
+      <Features/> */}
       {/* <WorldMap
         dots={[
           {
