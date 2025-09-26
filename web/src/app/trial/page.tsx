@@ -40,7 +40,7 @@ import { Globe } from "@/components/magic-ui/globe";
 import WorldMap from "@/components/ui/world-map";
 import { motion } from "motion/react";
 import Features from "@/components/ui-elements/landing/features";
-import { AboutSection } from "@/components/ui-elements/landing/about";
+import  AboutSection  from "@/components/ui-elements/landing/about";
 
 const page = () => {
   // const [pin, setPin] = useState("  ");

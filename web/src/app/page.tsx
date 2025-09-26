@@ -15,24 +15,14 @@ import { Home, Info, HelpCircle, Sparkles } from "lucide-react";
 import Footer from "@/components/ui-elements/landing/footer";
 import { HeroSection } from "@/components/ui-elements/landing/hero";
 import FAQ from "@/components/ui-elements/landing/faq";
-import { motion } from "framer-motion";
 import Features from "@/components/ui-elements/landing/features";
-
-const headingVariants = {
-  hidden: { opacity: 0, y: -20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-};
-
-const lineVariants = {
-  hidden: { width: 0 },
-  visible: { width: "85%", transition: { duration: 0.8, delay: 0.2 } },
-};
+import AboutSection from "@/components/ui-elements/landing/about";
 
 const navItems = [
   { name: "Home", link: "#home", icon: Home },
   { name: "Features", link: "#features", icon: Sparkles },
-  { name: "FAQ", link: "#faq", icon: HelpCircle },
   { name: "About", link: "#about", icon: Info },
+  { name: "FAQ", link: "#faq", icon: HelpCircle },
 ];
 
 export default function Page() {
@@ -116,64 +106,23 @@ export default function Page() {
         </section>
 
         {/* Features Section */}
-        <section
-          id="features"
-          className="py-28 lg:py-36"
-        >
-          <div className="container mx-auto px-4">
-            <motion.div
-              className="flex flex-col items-center text-center mb-4"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-            >
-              <motion.h2
-                className="text-lg md:text-4xl font-bold text-center mb-8 text-gray-900 dark:text-white relative"
-                variants={headingVariants}
-              >
-                Innovative Payment Solutions
-                <motion.span
-                  className="block h-[3px] bg-blue-400 mx-auto mt-2 rounded-full"
-                  variants={lineVariants}
-                />
-              </motion.h2>
-            </motion.div>
+        <section id="features" className="py-28 lg:py-36">
+          <div className="container mx-auto max-w-8xl px-4">
             <Features />
-          </div>
-        </section>
-
-        {/* FAQ Section */}
-        <section id="faq" className="py-28 lg:py-36">
-          <div className="container mx-auto max-w-3xl px-4">
-            <motion.h3
-              className="text-lg md:text-4xl font-bold text-center mb-12 text-gray-900 dark:text-white relative"
-              variants={headingVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: false }}
-            >
-              Frequently Asked Questions
-              <motion.span
-                className="block h-[3px] bg-blue-400 mx-auto mt-2 rounded-full"
-                variants={lineVariants}
-              />
-            </motion.h3>
-            <FAQ />
           </div>
         </section>
 
         {/* About Section */}
         <section id="about" className="py-28 lg:py-36">
-          <div className="container mx-auto max-w-3xl px-4 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              About Syndic
-            </h2>
-            <p className="text-gray-600 dark:text-gray-300 text-lg md:text-xl leading-relaxed">
-              Syndic is building the future of global payments by making
-              transfers instant, affordable, and transparent. Our mission is to
-              remove barriers in cross-border money movement and empower people
-              everywhere.
-            </p>
+          <div className="container mx-auto max-w-6xl px-4">
+            <AboutSection />
+          </div>
+        </section>
+
+        {/* FAQ Section */}
+        <section id="faq" className="py-16 lg:py-40">
+          <div className="container mx-auto max-w-3xl px-4">
+            <FAQ />
           </div>
         </section>
       </main>
