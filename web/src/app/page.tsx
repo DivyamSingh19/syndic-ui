@@ -11,11 +11,12 @@ import {
   MobileNavToggle,
   MobileNavMenu,
 } from "@/components/ui-elements/landing/navbar";
-import { Home, Info, HelpCircle, Sparkles } from "lucide-react"; 
+import { Home, Info, HelpCircle, Sparkles } from "lucide-react";
 import Footer from "@/components/ui-elements/landing/footer";
 import { HeroSection } from "@/components/ui-elements/landing/hero";
 import FAQ from "@/components/ui-elements/landing/faq";
 import { motion } from "framer-motion";
+import Features from "@/components/ui-elements/landing/features";
 
 const headingVariants = {
   hidden: { opacity: 0, y: -20 },
@@ -92,10 +93,10 @@ export default function Page() {
                       setActiveTab(item.name);
                       toggleMobileMenu();
                     }}
-                    className={`flex items-center gap-2 ${
+                    className={`flex items-center gap-2 py-2 px-4 rounded-md transition-colors ${
                       item.name === activeTab
-                        ? "text-primary font-bold"
-                        : "text-foreground"
+                        ? "text-primary font-bold bg-primary/10 dark:bg-primary/20"
+                        : "text-foreground hover:text-primary hover:bg-primary/5 dark:hover:bg-primary/20"
                     }`}
                   >
                     {Icon && <Icon size={20} />}
@@ -108,27 +109,44 @@ export default function Page() {
         </Navbar>
 
         {/* Hero Section */}
-        <section id="home" className="relative py-20 lg:py-24">
+        <section id="home" className="relative pt-28 pb-32 lg:pt-32 lg:pb-40">
           <div className="container mx-auto px-4">
             <HeroSection />
           </div>
         </section>
 
-        {/* Features placeholder */}
-        <section id="features" className="py-20 lg:py-24">
-          <div className="container mx-auto px-4 text-center">
-            <h2 className="text-3xl font-bold mb-6">Features</h2>
-            <p className="text-gray-600 dark:text-gray-300">
-              Highlight Syndic’s key features here.
-            </p>
+        {/* Features Section */}
+        <section
+          id="features"
+          className="py-28 lg:py-36"
+        >
+          <div className="container mx-auto px-4">
+            <motion.div
+              className="flex flex-col items-center text-center mb-4"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
+              <motion.h2
+                className="text-lg md:text-4xl font-bold text-center mb-8 text-gray-900 dark:text-white relative"
+                variants={headingVariants}
+              >
+                Innovative Payment Solutions
+                <motion.span
+                  className="block h-[3px] bg-blue-400 mx-auto mt-2 rounded-full"
+                  variants={lineVariants}
+                />
+              </motion.h2>
+            </motion.div>
+            <Features />
           </div>
         </section>
 
         {/* FAQ Section */}
-        <section id="faq" className="py-20 lg:py-24">
+        <section id="faq" className="py-28 lg:py-36">
           <div className="container mx-auto max-w-3xl px-4">
             <motion.h3
-              className="text-lg md:text-4xl font-bold text-center mb-8 text-gray-900 dark:text-white relative"
+              className="text-lg md:text-4xl font-bold text-center mb-12 text-gray-900 dark:text-white relative"
               variants={headingVariants}
               initial="hidden"
               whileInView="visible"
@@ -145,10 +163,12 @@ export default function Page() {
         </section>
 
         {/* About Section */}
-        <section id="about" className="py-20 lg:py-24">
+        <section id="about" className="py-28 lg:py-36">
           <div className="container mx-auto max-w-3xl px-4 text-center">
-            <h2 className="text-3xl font-bold mb-6">About Syndic</h2>
-            <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+              About Syndic
+            </h2>
+            <p className="text-gray-600 dark:text-gray-300 text-lg md:text-xl leading-relaxed">
               Syndic is building the future of global payments by making
               transfers instant, affordable, and transparent. Our mission is to
               remove barriers in cross-border money movement and empower people
@@ -157,6 +177,7 @@ export default function Page() {
           </div>
         </section>
       </main>
+
       <Footer />
     </>
   );
