@@ -1,35 +1,37 @@
-import type { HTMLAttributes } from "react"
+import type { HTMLAttributes, ReactNode } from "react";
 
-const PHONE_WIDTH = 433
-const PHONE_HEIGHT = 882
-const SCREEN_X = 21.25
-const SCREEN_Y = 19.25
-const SCREEN_WIDTH = 389.5
-const SCREEN_HEIGHT = 843.5
-const SCREEN_RADIUS = 55.75
+const PHONE_WIDTH = 433;
+const PHONE_HEIGHT = 882;
+const SCREEN_X = 21.25;
+const SCREEN_Y = 19.25;
+const SCREEN_WIDTH = 389.5;
+const SCREEN_HEIGHT = 843.5;
+const SCREEN_RADIUS = 55.75;
 
 // Calculated percentages
-const LEFT_PCT = (SCREEN_X / PHONE_WIDTH) * 100
-const TOP_PCT = (SCREEN_Y / PHONE_HEIGHT) * 100
-const WIDTH_PCT = (SCREEN_WIDTH / PHONE_WIDTH) * 100
-const HEIGHT_PCT = (SCREEN_HEIGHT / PHONE_HEIGHT) * 100
-const RADIUS_H = (SCREEN_RADIUS / SCREEN_WIDTH) * 100
-const RADIUS_V = (SCREEN_RADIUS / SCREEN_HEIGHT) * 100
+const LEFT_PCT = (SCREEN_X / PHONE_WIDTH) * 100;
+const TOP_PCT = (SCREEN_Y / PHONE_HEIGHT) * 100;
+const WIDTH_PCT = (SCREEN_WIDTH / PHONE_WIDTH) * 100;
+const HEIGHT_PCT = (SCREEN_HEIGHT / PHONE_HEIGHT) * 100;
+const RADIUS_H = (SCREEN_RADIUS / SCREEN_WIDTH) * 100;
+const RADIUS_V = (SCREEN_RADIUS / SCREEN_HEIGHT) * 100;
 
 export interface Iphone15ProProps extends HTMLAttributes<HTMLDivElement> {
-  src?: string
-  videoSrc?: string
+  src?: string;
+  videoSrc?: string;
+  children?: ReactNode; // Add children
 }
 
 export function Iphone15Pro({
   src,
   videoSrc,
+  children,
   className,
   style,
   ...props
 }: Iphone15ProProps) {
-  const hasVideo = !!videoSrc
-  const hasMedia = hasVideo || !!src
+  const hasVideo = !!videoSrc;
+  const hasMedia = hasVideo || !!src;
 
   return (
     <div
@@ -40,6 +42,7 @@ export function Iphone15Pro({
       }}
       {...props}
     >
+      {/* Video / Image media */}
       {hasVideo && (
         <div
           className="pointer-events-none absolute z-0 overflow-hidden"
@@ -82,6 +85,28 @@ export function Iphone15Pro({
         </div>
       )}
 
+      {/* Screen children */}
+      {children && (
+        <div
+          className="absolute z-10 overflow-hidden"
+          style={{
+            left: `${LEFT_PCT}%`,
+            top: `${TOP_PCT}%`,
+            width: `${WIDTH_PCT}%`,
+            height: `${HEIGHT_PCT}%`,
+            borderRadius: `${RADIUS_H}% / ${RADIUS_V}%`,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            // Fill the screen
+            flexDirection: "column",
+          }}
+        >
+          <div style={{ width: "100%", height: "100%" }}>{children}</div>
+        </div>
+      )}
+
+      {/* SVG frame */}
       <svg
         viewBox={`0 0 ${PHONE_WIDTH} ${PHONE_HEIGHT}`}
         fill="none"
@@ -128,19 +153,6 @@ export function Iphone15Pro({
           mask={hasMedia ? "url(#screenPunch)" : undefined}
         />
 
-        <path
-          d="M154 48.5C154 38.2827 162.283 30 172.5 30H259.5C269.717 30 278 38.2827 278 48.5C278 58.7173 269.717 67 259.5 67H172.5C162.283 67 154 58.7173 154 48.5Z"
-          className="fill-[#F5F5F5] dark:fill-[#262626]"
-        />
-        <path
-          d="M249 48.5C249 42.701 253.701 38 259.5 38C265.299 38 270 42.701 270 48.5C270 54.299 265.299 59 259.5 59C253.701 59 249 54.299 249 48.5Z"
-          className="fill-[#F5F5F5] dark:fill-[#262626]"
-        />
-        <path
-          d="M254 48.5C254 45.4624 256.462 43 259.5 43C262.538 43 265 45.4624 265 48.5C265 51.5376 262.538 54 259.5 54C256.462 54 254 51.5376 254 48.5Z"
-          className="fill-[#E5E5E5] dark:fill-[#404040]"
-        />
-
         <defs>
           <mask id="screenPunch" maskUnits="userSpaceOnUse">
             <rect
@@ -173,5 +185,5 @@ export function Iphone15Pro({
         </defs>
       </svg>
     </div>
-  )
+  );
 }

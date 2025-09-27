@@ -43,7 +43,9 @@ import Features from "@/components/ui-elements/landing/features";
 import  AboutSection  from "@/components/ui-elements/landing/about";
 import { CryptoSwapComponent } from "@/components/ui/crypto-swap";
 import SelectorsCard from "@/components/ui-elements/selectors/SelectorsCard";
-
+import { Iphone15Pro } from "@/components/magic-ui/iphone-15-pro";
+import IncidentReportCard from "@/components/ui/incident-report";
+import FeaturesFloating from "@/components/ui-elements/landing/feat";
 const page = () => {
   // const [pin, setPin] = useState("  ");
   // const navItems = [
@@ -53,7 +55,45 @@ const page = () => {
   // ];
   return (
     <div className="flex flex-col gap-4 items-center justify-center min-h-screen">
-      <SelectorsCard/>
+      <FeaturesFloating />
+      {/* <div className="relative w-full h-screen flex justify-center items-center">
+        <Iphone15Pro
+          style={{
+            width: 200,
+            height: 386,
+            transform: "scale(1.8)",
+            transformOrigin: "top left",
+          }}
+        >
+          <IncidentReportCard />
+        </Iphone15Pro>  
+        <div className="absolute top-10 left-10 bg-purple-500 text-white p-3 rounded shadow-lg">
+          Floating 1
+        </div>
+        <div className="absolute bottom-20 right-16 bg-green-500 text-white p-3 rounded shadow-lg">
+          Floating 2
+        </div>
+        <div className="absolute top-1/2 right-1/4 bg-blue-500 text-white p-3 rounded shadow-lg">
+          Floating 3
+        </div>
+      </div> */}
+
+      {/* <Iphone15Pro
+        style={{
+          width: 200,
+          height: 386,
+          transform: "scale(1.8)",
+          transformOrigin: "top left",
+        }}
+      >
+        <IncidentReportCard />
+      </Iphone15Pro> */}
+
+      {/* <div className="w-[434px]">
+        <Iphone15Pro src="https://placehold.co/900x1600?text=Hello+World" />
+      </div>
+      <IncidentReportCard /> */}
+      {/* <SelectorsCard/> */}
       {/* <CryptoSwapComponent/> */}
       {/* <AboutSection/>
       <Features/> */}
@@ -107,18 +147,18 @@ const page = () => {
       <Logo /> */}
       {/* <EditProfileForm/> */}
 
-      <div className="flex justify-center gap-3">
+      {/* <div className="flex justify-center gap-3">
         <CountrySelector />
         <FiatSelector />
         <CurrencySelector />
 
         <PhoneCodeSelector />
-      </div>
-{/*       
+      </div> */}
+      {/*       
       <Wallet />
       <Back /> */}
       {/* <BestRoute /> */}
-      <PlatformSelector />
+      {/* <PlatformSelector /> */}
       {/* <PlatformPin /> */}
       {/* <PaymentSuccess
         amount="1,500"
