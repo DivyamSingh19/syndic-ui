@@ -40,7 +40,6 @@ export default function Page() {
   const handleLogin = () => setIsLoggedIn(true);
   const handleLogout = () => setIsLoggedIn(false);
 
-  // 👇 Add dashboard link dynamically for logged-in users
   const computedNavItems = isLoggedIn
     ? [
         ...navItems,
