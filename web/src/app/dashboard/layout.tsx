@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import DL from "@/components/layout/DashboardLayout"; // Assuming DL is your main dashboard structure with sidebar/header
+import DL from "@/components/layout/DashboardLayout";
 
 interface DashProps {
   children: ReactNode;
@@ -7,15 +7,9 @@ interface DashProps {
 
 const Dash: React.FC<DashProps> = ({ children }) => {
   return (
-    // This is the root container for every page.
-    // h-screen: Sets the height to 100% of the viewport height. This is the boundary.
-    // w-full: Sets the width to 100% of the parent.
-    // overflow-hidden: This is the key. It tells the browser to hide any content
-    // that overflows this container's boundaries, preventing a scrollbar from ever appearing.
-    <div className="h-screen w-full overflow-hidden bg-background text-white">
-      {/* The DashboardLayout (DL) and its children are now forced to live within this 
-        fixed-size, non-scrolling container.
-      */}
+    // On mobile (default): Allow natural scrolling with min-h-screen
+    // On lg screens and up: Lock to h-screen with overflow-hidden
+    <div className="min-h-screen w-full overflow-y-auto bg-background text-white lg:h-screen lg:overflow-hidden">
       <DL className="h-full w-full">{children}</DL>
     </div>
   );
