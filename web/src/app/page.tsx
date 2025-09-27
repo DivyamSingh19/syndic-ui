@@ -11,7 +11,13 @@ import {
   MobileNavToggle,
   MobileNavMenu,
 } from "@/components/ui-elements/landing/navbar";
-import { Home, Info, HelpCircle, Sparkles } from "lucide-react";
+import {
+  Home,
+  Info,
+  HelpCircle,
+  Sparkles,
+  LayoutDashboard,
+} from "lucide-react";
 import Footer from "@/components/ui-elements/landing/footer";
 import { HeroSection } from "@/components/ui-elements/landing/hero";
 import FAQ from "@/components/ui-elements/landing/faq";
@@ -34,6 +40,14 @@ export default function Page() {
   const handleLogin = () => setIsLoggedIn(true);
   const handleLogout = () => setIsLoggedIn(false);
 
+  // 👇 Add dashboard link dynamically for logged-in users
+  const computedNavItems = isLoggedIn
+    ? [
+        ...navItems,
+        { name: "Dashboard", link: "/dashboard", icon: LayoutDashboard },
+      ]
+    : navItems;
+
   return (
     <>
       <main className="flex flex-col">
@@ -45,7 +59,7 @@ export default function Page() {
           <NavBody isLoggedIn={isLoggedIn} onLogout={handleLogout}>
             <NavbarLogo />
             <NavItems
-              items={navItems}
+              items={computedNavItems}
               activeTab={activeTab}
               setActiveTab={setActiveTab}
             />
@@ -73,7 +87,7 @@ export default function Page() {
               onLogout={handleLogout}
               className="w-full"
             >
-              {navItems.map((item) => {
+              {computedNavItems.map((item) => {
                 const Icon = item.icon;
                 return (
                   <a
