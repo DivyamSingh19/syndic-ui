@@ -27,14 +27,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Calendar as CalendarIcon, Search } from "lucide-react";
+import { Calendar, Search } from "lucide-react";
 
 type Txn = {
   id: number;
   type: "sent" | "received";
   description: string;
   amount: number;
-  date: string; // ISO
+  date: string;
   status: "completed" | "pending" | "failed";
   reference: string;
   contact: string;
@@ -211,10 +211,10 @@ const PastTransactions = () => {
   };
 
   return (
-    <div className="h-full flex flex-col p-4 md:p-6 lg:p-8 space-y-6">
+    <div className="h-full w-full flex flex-col space-y-4 md:space-y-6">
       {/* Page Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 flex-shrink-0">
-        <h1 className="text-3xl font-bold tracking-tight">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-4 flex-shrink-0 px-4 md:px-0">
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
           Transaction History
         </h1>
         <div className="flex items-center gap-2 flex-wrap">
@@ -222,6 +222,7 @@ const PastTransactions = () => {
             variant={quickRange === "7d" ? "default" : "outline"}
             size="sm"
             onClick={() => setQuickRange("7d")}
+            className="text-xs h-8"
           >
             Last 7 days
           </Button>
@@ -229,6 +230,7 @@ const PastTransactions = () => {
             variant={quickRange === "30d" ? "default" : "outline"}
             size="sm"
             onClick={() => setQuickRange("30d")}
+            className="text-xs h-8"
           >
             Last 30 days
           </Button>
@@ -236,6 +238,7 @@ const PastTransactions = () => {
             variant={quickRange === "custom" ? "default" : "outline"}
             size="sm"
             onClick={() => setQuickRange("custom")}
+            className="text-xs h-8"
           >
             Custom
           </Button>
@@ -243,19 +246,21 @@ const PastTransactions = () => {
       </div>
 
       {/* Search & Filters */}
-      <div className="rounded-lg border p-4 grid gap-4 bg-[#17181c] flex-shrink-0">
+      <div className="rounded-lg border p-3 md:p-4 grid gap-3 md:gap-4 bg-[#17181c] flex-shrink-0 mx-4 md:mx-0">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 md:h-5 md:w-5 text-muted-foreground" />
           <Input
             placeholder="Search by contact, description, or reference..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="pl-10"
+            className="pl-9 md:pl-10 text-sm"
           />
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 md:gap-4">
           <div className="grid gap-2">
-            <Label htmlFor="from">From Date</Label>
+            <Label htmlFor="from" className="text-xs md:text-sm">
+              From Date
+            </Label>
             <div className="relative">
               <Input
                 id="from"
@@ -263,16 +268,18 @@ const PastTransactions = () => {
                 value={from}
                 onChange={(e) => setFrom(e.target.value)}
                 ref={fromRef}
-                className="pr-8 custom-date"
+                className="pr-8 custom-date text-sm"
               />
-              <CalendarIcon
+              <Calendar
                 className="absolute right-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground cursor-pointer"
                 onClick={() => fromRef.current?.showPicker?.()}
               />
             </div>
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="to">To Date</Label>
+            <Label htmlFor="to" className="text-xs md:text-sm">
+              To Date
+            </Label>
             <div className="relative">
               <Input
                 id="to"
@@ -280,18 +287,18 @@ const PastTransactions = () => {
                 value={to}
                 onChange={(e) => setTo(e.target.value)}
                 ref={toRef}
-                className="pr-8 custom-date"
+                className="pr-8 custom-date text-sm"
               />
-              <CalendarIcon
+              <Calendar
                 className="absolute right-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground cursor-pointer"
                 onClick={() => toRef.current?.showPicker?.()}
               />
             </div>
           </div>
           <div className="grid gap-2">
-            <Label>Type</Label>
+            <Label className="text-xs md:text-sm">Type</Label>
             <Select value={type} onValueChange={(v: any) => setType(v)}>
-              <SelectTrigger>
+              <SelectTrigger className="text-sm">
                 <SelectValue placeholder="All" />
               </SelectTrigger>
               <SelectContent>
@@ -302,9 +309,9 @@ const PastTransactions = () => {
             </Select>
           </div>
           <div className="grid gap-2">
-            <Label>Status</Label>
+            <Label className="text-xs md:text-sm">Status</Label>
             <Select value={status} onValueChange={(v: any) => setStatus(v)}>
-              <SelectTrigger>
+              <SelectTrigger className="text-sm">
                 <SelectValue placeholder="All" />
               </SelectTrigger>
               <SelectContent>
@@ -316,9 +323,9 @@ const PastTransactions = () => {
             </Select>
           </div>
           <div className="grid gap-2">
-            <Label>Method</Label>
+            <Label className="text-xs md:text-sm">Method</Label>
             <Select value={method} onValueChange={(v: any) => setMethod(v)}>
-              <SelectTrigger>
+              <SelectTrigger className="text-sm">
                 <SelectValue placeholder="All" />
               </SelectTrigger>
               <SelectContent>
@@ -333,121 +340,212 @@ const PastTransactions = () => {
         </div>
       </div>
 
-      {/* Table - UPDATED SECTION */}
-      <div className="rounded-lg border bg-[#17181c] flex-1 overflow-auto relative">
-        <Table>
-          <TableHeader>
-            {/* The sticky class keeps the header fixed to the top of the scroll container */}
-            <TableRow className="sticky top-0 z-10 bg-[#17181c] hover:bg-[#17181c]">
-              <TableHead className="w-[80px]">Sr No</TableHead>
-              <TableHead>Date & Time</TableHead>
-              <TableHead>Transaction Details</TableHead>
-              <TableHead>Type</TableHead>
-              <TableHead className="text-right">Amount</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Method</TableHead>
-              <TableHead className="w-[100px]">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {pageData.length > 0 ? (
-              pageData.map((t, idx) => (
-                <TableRow key={t.id}>
-                  <TableCell className="font-medium">
-                    {(page - 1) * pageSize + idx + 1}
-                  </TableCell>
-                  <TableCell>{formatDMY(t.date)}</TableCell>
-                  <TableCell>
-                    <div className="font-medium">{t.description}</div>
-                    <div className="text-sm text-muted-foreground">
-                      {t.contact}
-                    </div>
-                  </TableCell>
-                  <TableCell className="capitalize">{t.type}</TableCell>
-                  <TableCell
-                    className={`text-right font-semibold ${
-                      t.type === "received"
-                        ? "text-emerald-500"
-                        : "text-rose-500"
-                    }`}
-                  >
-                    {formatAmountINR(t.amount, t.type)}
-                  </TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={
-                        t.status === "completed"
-                          ? "default"
-                          : t.status === "pending"
-                          ? "secondary"
-                          : "destructive"
-                      }
-                      className="capitalize"
+      {/* Table with Vertical Scroll */}
+      <div className="flex-1 min-h-0 mx-4 md:mx-0">
+        <div className="rounded-lg border bg-[#17181c] h-full overflow-y-auto overflow-x-hidden scrollbar-thin">
+          <Table>
+            <TableHeader>
+              <TableRow className="sticky top-0 z-10 bg-[#17181c] hover:bg-[#17181c]">
+                <TableHead className="text-xs md:text-sm w-[60px] md:w-[80px]">
+                  Sr No
+                </TableHead>
+                <TableHead className="text-xs md:text-sm whitespace-nowrap">
+                  Date & Time
+                </TableHead>
+                <TableHead className="text-xs md:text-sm">
+                  Transaction Details
+                </TableHead>
+                <TableHead className="text-xs md:text-sm whitespace-nowrap">
+                  Type
+                </TableHead>
+                <TableHead className="text-right text-xs md:text-sm whitespace-nowrap">
+                  Amount
+                </TableHead>
+                <TableHead className="text-xs md:text-sm whitespace-nowrap">
+                  Status
+                </TableHead>
+                <TableHead className="text-xs md:text-sm whitespace-nowrap">
+                  Method
+                </TableHead>
+                <TableHead className="text-xs md:text-sm w-[80px] md:w-[100px]">
+                  Actions
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {pageData.length > 0 ? (
+                pageData.map((t, idx) => (
+                  <TableRow key={t.id}>
+                    <TableCell className="font-medium text-xs md:text-sm">
+                      {(page - 1) * pageSize + idx + 1}
+                    </TableCell>
+                    <TableCell className="text-xs md:text-sm whitespace-nowrap">
+                      {formatDMY(t.date)}
+                    </TableCell>
+                    <TableCell>
+                      <div className="font-medium text-xs md:text-sm truncate max-w-[150px] md:max-w-[250px]">
+                        {t.description}
+                      </div>
+                      <div className="text-xs text-muted-foreground truncate max-w-[150px] md:max-w-[250px]">
+                        {t.contact}
+                      </div>
+                    </TableCell>
+                    <TableCell className="capitalize text-xs md:text-sm">
+                      {t.type}
+                    </TableCell>
+                    <TableCell
+                      className={`text-right font-semibold text-xs md:text-sm whitespace-nowrap ${
+                        t.type === "received"
+                          ? "text-emerald-500"
+                          : "text-rose-500"
+                      }`}
                     >
-                      {t.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>{t.method}</TableCell>
-                  <TableCell>
-                    <Dialog onOpenChange={(open) => !open && setSelected(null)}>
-                      <DialogTrigger asChild>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => setSelected(t)}
-                        >
-                          View
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle>Transaction Details</DialogTitle>
-                          <DialogDescription>
-                            Detailed information for this transaction.
-                          </DialogDescription>
-                        </DialogHeader>
-                        <div className="grid gap-3 text-sm py-4">
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">
-                              Reference ID
-                            </span>
-                            <span>{selected?.reference}</span>
+                      {formatAmountINR(t.amount, t.type)}
+                    </TableCell>
+                    <TableCell>
+                      <Badge
+                        variant={
+                          t.status === "completed"
+                            ? "default"
+                            : t.status === "pending"
+                            ? "secondary"
+                            : "destructive"
+                        }
+                        className="capitalize text-xs"
+                      >
+                        {t.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-xs md:text-sm">
+                      {t.method}
+                    </TableCell>
+                    <TableCell>
+                      <Dialog
+                        onOpenChange={(open) => !open && setSelected(null)}
+                      >
+                        <DialogTrigger asChild>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => setSelected(t)}
+                            className="text-xs h-8 whitespace-nowrap"
+                          >
+                            View
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-[90vw] sm:max-w-md">
+                          <DialogHeader>
+                            <DialogTitle>Transaction Details</DialogTitle>
+                            <DialogDescription>
+                              Detailed information for this transaction.
+                            </DialogDescription>
+                          </DialogHeader>
+                          <div className="grid gap-3 text-sm py-4">
+                            <div className="flex justify-between gap-4">
+                              <span className="text-muted-foreground">
+                                Reference ID
+                              </span>
+                              <span className="font-medium">
+                                {selected?.reference}
+                              </span>
+                            </div>
+                            <div className="flex justify-between gap-4">
+                              <span className="text-muted-foreground">
+                                Date & Time
+                              </span>
+                              <span>
+                                {selected ? formatDMY(selected.date) : ""}
+                              </span>
+                            </div>
+                            <div className="flex justify-between gap-4">
+                              <span className="text-muted-foreground">
+                                Description
+                              </span>
+                              <span className="text-right">
+                                {selected?.description}
+                              </span>
+                            </div>
+                            <div className="flex justify-between gap-4">
+                              <span className="text-muted-foreground">
+                                Contact
+                              </span>
+                              <span className="font-medium">
+                                {selected?.contact}
+                              </span>
+                            </div>
+                            <div className="flex justify-between gap-4">
+                              <span className="text-muted-foreground">
+                                Type
+                              </span>
+                              <Badge variant="outline" className="capitalize">
+                                {selected?.type}
+                              </Badge>
+                            </div>
+                            <div className="flex justify-between gap-4">
+                              <span className="text-muted-foreground">
+                                Amount
+                              </span>
+                              <span
+                                className={`font-semibold ${
+                                  selected?.type === "received"
+                                    ? "text-emerald-500"
+                                    : "text-rose-500"
+                                }`}
+                              >
+                                {selected
+                                  ? formatAmountINR(
+                                      selected.amount,
+                                      selected.type
+                                    )
+                                  : ""}
+                              </span>
+                            </div>
+                            <div className="flex justify-between gap-4">
+                              <span className="text-muted-foreground">
+                                Method
+                              </span>
+                              <Badge variant="secondary">
+                                {selected?.method}
+                              </Badge>
+                            </div>
+                            <div className="flex justify-between gap-4">
+                              <span className="text-muted-foreground">
+                                Status
+                              </span>
+                              <Badge
+                                variant={
+                                  selected?.status === "completed"
+                                    ? "default"
+                                    : selected?.status === "pending"
+                                    ? "secondary"
+                                    : "destructive"
+                                }
+                                className="capitalize"
+                              >
+                                {selected?.status}
+                              </Badge>
+                            </div>
                           </div>
-                          {/* Add other details similarly */}
-                          <div className="flex justify-between">
-                            <span className="text-muted-foreground">
-                              Amount
-                            </span>
-                            <span>
-                              {selected
-                                ? formatAmountINR(
-                                    selected.amount,
-                                    selected.type
-                                  )
-                                : ""}
-                            </span>
-                          </div>
-                          {/* ... more details ... */}
-                        </div>
-                      </DialogContent>
-                    </Dialog>
+                        </DialogContent>
+                      </Dialog>
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={8} className="h-24 text-center text-sm">
+                    No results found.
                   </TableCell>
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={8} className="h-24 text-center">
-                  No results found.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+              )}
+            </TableBody>
+          </Table>
+        </div>
       </div>
 
       {/* Pagination */}
-      <div className="flex items-center justify-between flex-shrink-0">
-        <div className="text-sm text-muted-foreground">
+      <div className="flex items-center justify-between flex-shrink-0 px-4 md:px-0">
+        <div className="text-xs md:text-sm text-muted-foreground">
           Page {page} of {totalPages}
         </div>
         <div className="flex items-center gap-2">
@@ -456,6 +554,7 @@ const PastTransactions = () => {
             size="sm"
             onClick={() => setPage((p) => Math.max(1, p - 1))}
             disabled={page === 1}
+            className="text-xs h-8"
           >
             Previous
           </Button>
@@ -464,6 +563,7 @@ const PastTransactions = () => {
             size="sm"
             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
             disabled={page === totalPages}
+            className="text-xs h-8"
           >
             Next
           </Button>
@@ -481,6 +581,27 @@ const PastTransactions = () => {
         }
         input[type="date"].custom-date {
           color-scheme: dark;
+        }
+
+        .scrollbar-thin::-webkit-scrollbar {
+          width: 8px;
+          height: 8px;
+        }
+        .scrollbar-thin::-webkit-scrollbar-track {
+          background: #111827;
+          border-radius: 4px;
+        }
+        .scrollbar-thin::-webkit-scrollbar-thumb {
+          background: #374151;
+          border-radius: 4px;
+        }
+        .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+          background: #4b5563;
+        }
+
+        .scrollbar-thin {
+          scrollbar-width: thin;
+          scrollbar-color: #374151 #111827;
         }
       `}</style>
     </div>

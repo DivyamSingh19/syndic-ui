@@ -28,12 +28,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Calendar as CalendarIcon, Search } from "lucide-react";
+import { Calendar, Search } from "lucide-react";
 
 type FailedTxn = {
   id: string;
   reference: string;
-  date: string; // ISO
+  date: string;
   recipient: string;
   amount: number;
   method: "UPI" | "Card" | "Wallet" | "Bank";
@@ -89,7 +89,6 @@ const FailedTransactions = () => {
         reason: "Invalid UPI ID",
         status: "failed",
       },
-
     ],
     []
   );
@@ -141,31 +140,33 @@ const FailedTransactions = () => {
   };
 
   return (
-    <div className="h-full flex flex-col p-4 md:p-6 lg:p-8 space-y-6">
-      <div className="flex-shrink-0">
-        <h1 className="text-3xl font-bold tracking-tight">
+    <div className="h-full w-full flex flex-col space-y-4 md:space-y-6">
+      {/* Header */}
+      <div className="flex-shrink-0 px-4 md:px-0">
+        <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
           Failed Transactions
         </h1>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-xs md:text-sm text-muted-foreground mt-1">
           Review and manage all unsuccessful payments.
         </p>
       </div>
 
-      <div className="rounded-lg border p-4 grid gap-4 bg-[#17181c] flex-shrink-0">
+      {/* Filters */}
+      <div className="rounded-lg border p-3 md:p-4 grid gap-3 md:gap-4 bg-[#17181c] flex-shrink-0 mx-4 md:mx-0">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 md:h-5 md:w-5 text-muted-foreground" />
           <Input
             placeholder="Search by recipient or reference ID..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="pl-10"
+            className="pl-9 md:pl-10 text-sm"
           />
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
           <div className="grid gap-2">
-            <Label>Failure Reason</Label>
+            <Label className="text-xs md:text-sm">Failure Reason</Label>
             <Select value={reason} onValueChange={(v) => setReason(v)}>
-              <SelectTrigger>
+              <SelectTrigger className="text-sm">
                 <SelectValue placeholder="All" />
               </SelectTrigger>
               <SelectContent>
@@ -181,7 +182,9 @@ const FailedTransactions = () => {
             </Select>
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="from">From Date</Label>
+            <Label htmlFor="from" className="text-xs md:text-sm">
+              From Date
+            </Label>
             <div className="relative">
               <Input
                 id="from"
@@ -189,16 +192,18 @@ const FailedTransactions = () => {
                 value={from}
                 onChange={(e) => setFrom(e.target.value)}
                 ref={fromRef}
-                className="pr-8 custom-date"
+                className="pr-8 custom-date text-sm"
               />
-              <CalendarIcon
+              <Calendar
                 className="absolute right-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground cursor-pointer"
                 onClick={() => fromRef.current?.showPicker?.()}
               />
             </div>
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="to">To Date</Label>
+            <Label htmlFor="to" className="text-xs md:text-sm">
+              To Date
+            </Label>
             <div className="relative">
               <Input
                 id="to"
@@ -206,9 +211,9 @@ const FailedTransactions = () => {
                 value={to}
                 onChange={(e) => setTo(e.target.value)}
                 ref={toRef}
-                className="pr-8 custom-date"
+                className="pr-8 custom-date text-sm"
               />
-              <CalendarIcon
+              <Calendar
                 className="absolute right-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground cursor-pointer"
                 onClick={() => toRef.current?.showPicker?.()}
               />
@@ -217,92 +222,165 @@ const FailedTransactions = () => {
         </div>
       </div>
 
-      <div className="rounded-lg border bg-[#17181c] flex-1 overflow-auto relative">
-        <Table>
-          <TableHeader>
-            <TableRow className="sticky top-0 z-10 bg-[#17181c] hover:bg-[#17181c]">
-              <TableHead>Date & Time</TableHead>
-              <TableHead>Recipient</TableHead>
-              <TableHead>Amount</TableHead>
-              <TableHead>Reason & Status</TableHead>
-              <TableHead>Action</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {pageData.length > 0 ? (
-              pageData.map((t) => (
-                <TableRow key={t.id}>
-                  <TableCell>{dmy(t.date)}</TableCell>
-                  <TableCell className="font-medium">{t.recipient}</TableCell>
-                  <TableCell>{inr(t.amount)}</TableCell>
-                  <TableCell>
-                    <div className="flex flex-col gap-1">
-                      <span>{t.reason}</span>
-                      {/* Restored colorful status badges */}
-                      <Badge
-                        variant={
-                          t.status === "failed"
-                            ? "destructive"
-                            : t.status === "declined"
-                            ? "secondary"
-                            : "outline"
-                        }
-                        className="capitalize w-fit"
-                      >
-                        {t.status}
-                      </Badge>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    {/* Restored original Action column */}
-                    <Dialog onOpenChange={(open) => !open && setSelected(null)}>
-                      <DialogTrigger asChild>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => setSelected(t)}
-                        >
-                          Details
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle>Failure Details</DialogTitle>
-                          <DialogDescription>
-                            What happened and how to fix it.
-                          </DialogDescription>
-                        </DialogHeader>
-                        {/* Original simple modal content */}
-                        <div className="grid gap-3 text-sm">
-                          <div className="flex items-center justify-between">
-                            <span className="text-muted-foreground">Date</span>
-                            <span>{selected ? dmy(selected.date) : ""}</span>
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <span className="text-muted-foreground">
-                              Recipient
-                            </span>
-                            <span>{selected?.recipient}</span>
-                          </div>
-                        </div>
-                      </DialogContent>
-                    </Dialog>
-                  </TableCell>
+      {/* Table Container with Scrollbar */}
+      <div className="flex-1 min-h-0 mx-4 md:mx-0">
+        <div className="rounded-lg border bg-[#17181c] h-full overflow-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900">
+          <div className="min-w-[640px]">
+            <Table>
+              <TableHeader>
+                <TableRow className="sticky top-0 z-10 bg-[#17181c] hover:bg-[#17181c]">
+                  <TableHead className="text-xs md:text-sm">
+                    Date & Time
+                  </TableHead>
+                  <TableHead className="text-xs md:text-sm">
+                    Recipient
+                  </TableHead>
+                  <TableHead className="text-xs md:text-sm">Amount</TableHead>
+                  <TableHead className="text-xs md:text-sm">
+                    Reason & Status
+                  </TableHead>
+                  <TableHead className="text-xs md:text-sm">Action</TableHead>
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={5} className="h-24 text-center">
-                  No failed transactions match your filters.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+              </TableHeader>
+              <TableBody>
+                {pageData.length > 0 ? (
+                  pageData.map((t) => (
+                    <TableRow key={t.id}>
+                      <TableCell className="text-xs md:text-sm">
+                        {dmy(t.date)}
+                      </TableCell>
+                      <TableCell className="font-medium text-xs md:text-sm">
+                        {t.recipient}
+                      </TableCell>
+                      <TableCell className="text-xs md:text-sm">
+                        {inr(t.amount)}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex flex-col gap-1">
+                          <span className="text-xs md:text-sm">{t.reason}</span>
+                          <Badge
+                            variant={
+                              t.status === "failed"
+                                ? "destructive"
+                                : t.status === "declined"
+                                ? "secondary"
+                                : "outline"
+                            }
+                            className="capitalize w-fit text-xs"
+                          >
+                            {t.status}
+                          </Badge>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <Dialog
+                          onOpenChange={(open) => !open && setSelected(null)}
+                        >
+                          <DialogTrigger asChild>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => setSelected(t)}
+                              className="text-xs h-8"
+                            >
+                              Details
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-[90vw] sm:max-w-md">
+                            <DialogHeader>
+                              <DialogTitle>Failure Details</DialogTitle>
+                              <DialogDescription>
+                                What happened and how to fix it.
+                              </DialogDescription>
+                            </DialogHeader>
+                            <div className="grid gap-3 text-sm">
+                              <div className="flex items-center justify-between">
+                                <span className="text-muted-foreground">
+                                  Reference
+                                </span>
+                                <span className="font-medium">
+                                  {selected?.reference}
+                                </span>
+                              </div>
+                              <div className="flex items-center justify-between">
+                                <span className="text-muted-foreground">
+                                  Date
+                                </span>
+                                <span>
+                                  {selected ? dmy(selected.date) : ""}
+                                </span>
+                              </div>
+                              <div className="flex items-center justify-between">
+                                <span className="text-muted-foreground">
+                                  Recipient
+                                </span>
+                                <span className="font-medium">
+                                  {selected?.recipient}
+                                </span>
+                              </div>
+                              <div className="flex items-center justify-between">
+                                <span className="text-muted-foreground">
+                                  Amount
+                                </span>
+                                <span className="font-semibold">
+                                  {selected ? inr(selected.amount) : ""}
+                                </span>
+                              </div>
+                              <div className="flex items-center justify-between">
+                                <span className="text-muted-foreground">
+                                  Method
+                                </span>
+                                <Badge variant="outline">
+                                  {selected?.method}
+                                </Badge>
+                              </div>
+                              <div className="flex items-center justify-between">
+                                <span className="text-muted-foreground">
+                                  Reason
+                                </span>
+                                <span className="text-right max-w-[60%]">
+                                  {selected?.reason}
+                                </span>
+                              </div>
+                              <div className="flex items-center justify-between">
+                                <span className="text-muted-foreground">
+                                  Status
+                                </span>
+                                <Badge
+                                  variant={
+                                    selected?.status === "failed"
+                                      ? "destructive"
+                                      : selected?.status === "declined"
+                                      ? "secondary"
+                                      : "outline"
+                                  }
+                                  className="capitalize"
+                                >
+                                  {selected?.status}
+                                </Badge>
+                              </div>
+                            </div>
+                          </DialogContent>
+                        </Dialog>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={5} className="h-24 text-center text-sm">
+                      No failed transactions match your filters.
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </div>
       </div>
 
-      <div className="flex items-center justify-between flex-shrink-0">
-        <div className="text-sm text-muted-foreground">
+      {/* Pagination */}
+      <div className="flex items-center justify-between flex-shrink-0 px-4 md:px-0">
+        <div className="text-xs md:text-sm text-muted-foreground">
           Page {page} of {totalPages}
         </div>
         <div className="inline-flex gap-2">
@@ -311,6 +389,7 @@ const FailedTransactions = () => {
             size="sm"
             onClick={() => setPage((p) => Math.max(1, p - 1))}
             disabled={page === 1}
+            className="text-xs h-8"
           >
             Prev
           </Button>
@@ -319,6 +398,7 @@ const FailedTransactions = () => {
             size="sm"
             onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
             disabled={page === totalPages}
+            className="text-xs h-8"
           >
             Next
           </Button>
@@ -336,6 +416,29 @@ const FailedTransactions = () => {
         }
         input[type="date"].custom-date {
           color-scheme: dark;
+        }
+
+        /* Custom scrollbar styles */
+        .scrollbar-thin::-webkit-scrollbar {
+          width: 8px;
+          height: 8px;
+        }
+        .scrollbar-thin::-webkit-scrollbar-track {
+          background: #111827;
+          border-radius: 4px;
+        }
+        .scrollbar-thin::-webkit-scrollbar-thumb {
+          background: #374151;
+          border-radius: 4px;
+        }
+        .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+          background: #4b5563;
+        }
+
+        /* Firefox scrollbar */
+        .scrollbar-thin {
+          scrollbar-width: thin;
+          scrollbar-color: #374151 #111827;
         }
       `}</style>
     </div>
