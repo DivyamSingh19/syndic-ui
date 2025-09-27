@@ -33,20 +33,21 @@ export function HeroSection() {
               {/* Primary CTA */}
               <Button
                 asChild
+                variant="default"
                 className="w-full sm:w-auto px-6 py-3 text-base font-semibold rounded-xl shadow-md bg-accent-foreground text-white transition-transform hover:scale-105"
               >
-                <a href="#">Get started</a>
+                <a href="/register">
+                  Get started<span aria-hidden="true">→</span>
+                </a>
               </Button>
 
               {/* Secondary CTA */}
               <Button
                 asChild
                 variant="outline"
-                className="w-full sm:w-auto px-6 py-3 text-base font-semibold rounded-xl border-2 border-gray-900 dark:border-gray-100 bg-transparent text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-transform hover:scale-105"
+                className="w-full sm:w-auto px-6 py-3 text-base font-semibold rounded-xl border-1 border-gray-900 dark:border-gray-100 bg-transparent text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-transform hover:scale-105"
               >
-                <a href="#">
-                  Learn more <span aria-hidden="true">→</span>
-                </a>
+                <a href="#">Learn more</a>
               </Button>
             </div>
           </div>

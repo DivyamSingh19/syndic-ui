@@ -170,7 +170,7 @@ export function RegisterForm({
       <div className="text-center text-sm">
         Already have an account?
         <a
-          href="#"
+          href="/login"
           className="underline underline-offset-4"
           onClick={(e) => {
             e.preventDefault();

@@ -33,7 +33,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`${inter} ${anton} antialiased`}>
+      <body className={`${inter.className}  antialiased`}>
         {children}
         <Toaster richColors position="top-right" />
       </body>

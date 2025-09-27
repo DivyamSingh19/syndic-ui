@@ -1,6 +1,6 @@
 import { GalleryVerticalEnd } from "lucide-react";
-
 import { RegisterForm } from "@/components/ui-elements/forms/RegisterForm";
+import Image from "next/image"
 
 export default function RegisterPage() {
   return (
@@ -14,10 +14,17 @@ export default function RegisterPage() {
       </div>
       <div className="bg-muted relative hidden lg:block">
         <img
-          src="/placeholder.svg"
+          src="/images/r.jpg"
           alt="Image"
-          className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+          width={500}
+          height={300}
+          className="absolute inset-0 h-full w-full object-cover"
         />
+        <div className="absolute inset-0 flex items-center justify-center bg-black/20 text-center">
+          <h1 className="text-5xl font-mono text-white drop-shadow-lg">
+            Start With Excellence
+          </h1>
+        </div>
       </div>
     </div>
   );

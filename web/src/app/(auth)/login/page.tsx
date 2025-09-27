@@ -14,10 +14,17 @@ export default function LoginPage() {
       </div>
       <div className="bg-muted relative hidden lg:block">
         <img
-          src="/placeholder.svg"
+          src="/images/l.png"
           alt="Image"
-          className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+          width={500}
+          height={300}
+          className="absolute inset-0 h-full w-full object-cover"
         />
+        <div className="absolute inset-0 flex items-center justify-center bg-black/20 text-center">
+          <h1 className="text-5xl font-mono text-white drop-shadow-lg">
+           Built On The Best
+          </h1>
+        </div>
       </div>
     </div>
   );
