@@ -5,7 +5,6 @@ import {
   NavBody,
   NavItems,
   NavbarLogo,
-  NavbarButton,
   MobileNav,
   MobileNavHeader,
   MobileNavToggle,
@@ -23,6 +22,8 @@ import { HeroSection } from "@/components/ui-elements/landing/hero";
 import FAQ from "@/components/ui-elements/landing/faq";
 import Features from "@/components/ui-elements/landing/features";
 import AboutSection from "@/components/ui-elements/landing/about";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 const navItems = [
   { name: "Home", link: "#home", icon: Home },
@@ -32,7 +33,7 @@ const navItems = [
 ];
 
 export default function Page() {
-  const [activeTab, setActiveTab] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<string | null>("Home");
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -49,24 +50,23 @@ export default function Page() {
 
   return (
     <>
-      <main className="flex flex-col">
+      <main className="flex flex-col bg-white dark:bg-black">
         <Navbar
           isLoggedIn={isLoggedIn}
           onLogin={handleLogin}
           onLogout={handleLogout}
         >
-          <NavBody isLoggedIn={isLoggedIn} onLogout={handleLogout}>
+          <NavBody
+            isLoggedIn={isLoggedIn}
+            onLogin={handleLogin}
+            onLogout={handleLogout}
+          >
             <NavbarLogo />
             <NavItems
               items={computedNavItems}
               activeTab={activeTab}
               setActiveTab={setActiveTab}
             />
-            {isLoggedIn ? (
-              <NavbarButton onClick={handleLogout}>Logout</NavbarButton>
-            ) : (
-              <NavbarButton onClick={handleLogin}>Login</NavbarButton>
-            )}
           </NavBody>
           <MobileNav>
             <MobileNavHeader>
@@ -79,60 +79,56 @@ export default function Page() {
             <MobileNavMenu
               isOpen={isMobileMenuOpen}
               onClose={toggleMobileMenu}
-              activeTab={activeTab}
-              setActiveTab={setActiveTab}
               isLoggedIn={isLoggedIn}
               onLogin={handleLogin}
               onLogout={handleLogout}
-              className="w-full"
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
             >
               {computedNavItems.map((item) => {
                 const Icon = item.icon;
                 return (
-                  <a
+                  <Link
                     key={item.name}
                     href={item.link}
                     onClick={() => {
                       setActiveTab(item.name);
                       toggleMobileMenu();
                     }}
-                    className={`flex items-center gap-2 py-2 px-4 rounded-md transition-colors ${
-                      item.name === activeTab
+                    className={cn(
+                      "flex w-full max-w-xs items-center justify-center gap-4 rounded-lg px-4 text-lg font-medium transition-colors",
+                      activeTab === item.name
                         ? "text-primary font-bold bg-primary/10 dark:bg-primary/20"
                         : "text-foreground hover:text-primary hover:bg-primary/5 dark:hover:bg-primary/20"
-                    }`}
+                    )}
                   >
                     {Icon && <Icon size={20} />}
-                    {item.name}
-                  </a>
+                    <span className="flex-1 text-center">{item.name}</span>
+                  </Link>
                 );
               })}
             </MobileNavMenu>
           </MobileNav>
         </Navbar>
 
-        {/* Hero Section */}
         <section id="home" className="relative pt-28 pb-32 lg:pt-32 lg:pb-40">
           <div className="container mx-auto px-4">
             <HeroSection />
           </div>
         </section>
 
-        {/* Features Section */}
         <section id="features" className="py-28 lg:py-36">
           <div className="container mx-auto max-w-8xl px-4">
             <Features />
           </div>
         </section>
 
-        {/* About Section */}
         <section id="about" className="py-28 lg:py-36">
           <div className="container mx-auto max-w-6xl px-4">
             <AboutSection />
           </div>
         </section>
 
-        {/* FAQ Section */}
         <section id="faq" className="py-16 lg:py-40">
           <div className="container mx-auto max-w-3xl px-4">
             <FAQ />

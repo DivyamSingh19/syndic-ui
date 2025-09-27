@@ -100,7 +100,7 @@ const LocationForm = () => {
   const onSubmit = (data: FormData) => {
     console.log("Form data submitted:", data);
     toast.success("Address saved successfully!");
-    router.push("/onboarding/platformpin");
+    router.push("/onboarding/setup-pin");
   };
 
   return (

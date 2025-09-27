@@ -7,7 +7,7 @@ import {
   AnimatePresence,
   useScroll,
   useMotionValueEvent,
-} from "motion/react";
+} from "framer-motion";
 
 import React, { useRef, useState } from "react";
 import { LucideIcon } from "lucide-react";
@@ -41,6 +41,7 @@ interface NavBodyProps {
   className?: string;
   visible?: boolean;
   isLoggedIn: boolean;
+  onLogin: () => void;
   onLogout: () => void;
 }
 
@@ -102,20 +103,15 @@ export const Navbar = ({
           propsToPass.visible = visible;
         }
 
-        if (child.type === NavBody) {
+        if (child.type === NavBody || child.type === MobileNavMenu) {
           propsToPass.isLoggedIn = isLoggedIn;
+          propsToPass.onLogin = onLogin;
           propsToPass.onLogout = onLogout;
         }
 
         if (child.type === NavItems || child.type === MobileNavMenu) {
           propsToPass.activeTab = activeTab;
           propsToPass.setActiveTab = setActiveTab;
-        }
-
-        if (child.type === MobileNavMenu) {
-          propsToPass.isLoggedIn = isLoggedIn;
-          propsToPass.onLogin = onLogin;
-          propsToPass.onLogout = onLogout;
         }
 
         return React.cloneElement(child, propsToPass);
@@ -125,8 +121,14 @@ export const Navbar = ({
 };
 
 // --- NAV BODY (DESKTOP NAV) ---
-
-export const NavBody = ({ children, className, visible }: NavBodyProps) => {
+export const NavBody = ({
+  children,
+  className,
+  visible,
+  isLoggedIn,
+  onLogin,
+  onLogout,
+}: NavBodyProps) => {
   return (
     <motion.div
       animate={{
@@ -145,7 +147,29 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
         className
       )}
     >
-      {children}
+      {/* Children (Logo and NavItems) go here */}
+      <div className="flex flex-1 items-center">{children}</div>
+
+      {/* Login/Logout/Profile Buttons are now handled inside this component */}
+      <div className="flex items-center space-x-2">
+        {isLoggedIn ? (
+          <>
+            <NavbarButton
+              onClick={() => console.log("Profile clicked")}
+              variant="primary"
+            >
+              Profile
+            </NavbarButton>
+            <NavbarButton onClick={onLogout} variant="primary">
+              Logout
+            </NavbarButton>
+          </>
+        ) : (
+          <NavbarButton onClick={onLogin} variant="primary">
+            Login
+          </NavbarButton>
+        )}
+      </div>
     </motion.div>
   );
 };
@@ -210,7 +234,7 @@ export const MobileNav = ({ children, className }: MobileNavProps) => {
   return (
     <div
       className={cn(
-        "sticky top-0 z-50 mx-auto flex w-full flex-col items-center justify-between px-0 py-2 lg:hidden",
+        "sticky top-0 z-50 mx-auto flex w-full flex-col items-center justify-between px-4 py-2 lg:hidden", // Added px-4
         "bg-white dark:bg-neutral-950 shadow-sm", // always solid
         className
       )}
@@ -219,7 +243,6 @@ export const MobileNav = ({ children, className }: MobileNavProps) => {
     </div>
   );
 };
-
 
 // --- MOBILE NAV HEADER ---
 
@@ -266,16 +289,44 @@ export const MobileNavMenu = ({
         exit={{ x: "100%" }}
         transition={{ type: "spring", stiffness: 200, damping: 25 }}
         className={cn(
-          "fixed top-0 right-0 z-50 flex h-full w-full flex-col px-6 py-8 shadow-lg",
-          "bg-white dark:bg-neutral-950", // always opaque
+          // w-full on small screens, w-1/2 on md+ screens
+          "fixed top-0 right-0 z-50 flex h-full flex-col px-6 py-6 shadow-lg w-full md:w-1/2",
+          "bg-white dark:bg-neutral-950",
           className
         )}
       >
-        <button className="absolute top-4 right-4" onClick={onClose}>
-          <IconX size={24} className="text-foreground" />
-        </button>
-        <div className="flex flex-col gap-10 py-10">
-          {children}
+        {/* Header with close button + border */}
+        <div className="flex items-center justify-end pb-4 border-b border-neutral-200 dark:border-neutral-800">
+          <button onClick={onClose}>
+            <IconX size={24} className="text-foreground" />
+          </button>
+        </div>
+
+        {/* Nav Links */}
+        <div className="flex-1 flex flex-col items-center justify-center py-10 gap-4 space-y-5">
+          {React.Children.map(children, (child) => {
+            if (!React.isValidElement(child)) return child;
+            const el = child as React.ReactElement<any>;
+            return React.cloneElement(el, {
+              className: cn(
+                el.props.className,
+                "w-full flex justify-center items-center text-left px-4 py-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+              ),
+            });
+          })}
+        </div>
+
+        {/* Bottom Section - profile + login/logout */}
+        <div className="flex flex-col gap-4 mt-auto border-t border-neutral-200 dark:border-neutral-800 pt-6">
+          <NavbarButton
+            onClick={() => {
+              console.log("Profile clicked");
+              onClose();
+            }}
+          >
+            Profile
+          </NavbarButton>
+
           {isLoggedIn ? (
             <NavbarButton
               onClick={() => {
@@ -309,22 +360,17 @@ export const MobileNavToggle = ({
 }: {
   isOpen: boolean;
   onClick: () => void;
-}) =>
-  isOpen ? (
-    <IconX className="text-black dark:text-white" onClick={onClick} />
-  ) : (
-    <IconMenu2 className="text-black dark:text-white" onClick={onClick} />
-  );
+}) => <button onClick={onClick}>{isOpen ? <IconX /> : <IconMenu2 />}</button>;
 
 // --- LOGO ---
 
 export const NavbarLogo = () => (
-  <a
+  <Link
     href="/"
-    className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal"
+    className="relative z-20 flex items-center space-x-2 text-sm font-normal"
   >
     <span className="font-medium text-black dark:text-white">Syndic</span>
-  </a>
+  </Link>
 );
 
 // --- NAVBAR BUTTON ---
@@ -344,11 +390,11 @@ export const NavbarButton = ({
   onClick?: () => void;
 }) => {
   const baseStyles =
-    "px-4 py-2 rounded-md bg-white text-black text-sm font-bold relative cursor-pointer hover:-translate-y-0.5 transition duration-200 inline-block text-center";
+    "px-4 py-2 rounded-full text-sm font-bold relative cursor-pointer hover:-translate-y-0.5 transition duration-200 inline-block text-center";
   const variantStyles = {
     primary:
-      "shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,0.1)_inset]",
-    secondary: "bg-transparent shadow-none dark:text-white",
+      "bg-black text-white dark:bg-white dark:text-black shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05)]",
+    secondary: "bg-transparent text-black dark:text-white",
     dark: "bg-black text-white shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05)]",
     gradient:
       "bg-gradient-to-b from-blue-500 to-blue-700 text-white shadow-[0px_2px_0px_0px_rgba(255,255,255,0.3)_inset]",
@@ -358,9 +404,9 @@ export const NavbarButton = ({
 
   if (href) {
     return (
-      <a href={href} className={classes} {...rest}>
+      <Link href={href} className={classes} {...rest}>
         {children}
-      </a>
+      </Link>
     );
   }
 
